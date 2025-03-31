@@ -1,0 +1,34 @@
+<header class="header" id="header">
+  <nav class="nav container">
+    <div>
+      <a routerLink="/" class="nav__logo">
+        <!-- <img src=[] alt="Logo image"> -->
+        Gourmet Greet
+      </a>
+    </div>
+
+    <div class="nav__menu" id="nav-menu">
+      <ul class="nav__list">
+        <li class="nav__item">
+          <a [routerLink]="['/']" class="nav__link">
+            <i class="ri-arrow-right-up-line"></i>
+            <span>Home</span>
+          </a>
+        </li>
+        <li class="nav__item" >
+          <a [routerLink]="['/login']" class="nav__link">
+            <i class="ri-arrow-right-up-line"></i>
+            <span>Recipes</span>
+          </a>
+        </li>
+            <li class="nav__item" >
+            <a [routerLink]="['/login']" class="nav__link">
+              <i class="ri-arrow-right-up-line"></i>
+              <span>Login</span>
+            </a>
+          </li>
+      </ul>
+
+    </div>
+  </nav>
+</header>

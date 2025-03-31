@@ -1,0 +1,14 @@
+import { Component } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
+import { NavbarComponent } from "./fragments/navbar/navbar.component";
+import { FooterComponent } from './fragments/footer/footer.component';
+
+@Component({
+  selector: 'app-root',
+  imports: [RouterOutlet, NavbarComponent,FooterComponent],
+  templateUrl: './app.component.html',
+  styleUrl: './app.component.css'
+})
+export class AppComponent {
+  title = 'gourmet-greet-frontend';
+}

@@ -1,0 +1,10 @@
+<div class="recipes">
+  @if (recipes.length > 0) {
+  <h1>What our community is cooking!</h1>
+  <div class="cards">
+    @for (recipe of recipes; track $index) {
+    <app-recipe-card [recipe]="recipe"></app-recipe-card>
+    }
+  </div>
+  }
+</div>

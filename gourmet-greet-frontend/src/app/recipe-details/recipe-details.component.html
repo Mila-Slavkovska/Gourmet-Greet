@@ -1,0 +1,48 @@
+<div id="recipe-details">
+  <img class="image" src="/pizza.webp" alt="Recipe" />
+  <h3 class="title">{{ recipe?.title }}</h3>
+  <div class="description">
+    {{ recipe?.description }}
+  </div>
+  <div class="categories-card">
+    <div class="categories-tags">
+      <span class="category-tag">#Italian</span>
+      <span class="category-tag">#Vegetarian</span>
+      <span class="category-tag">#Quick</span>
+    </div>
+  </div>
+  <div class="info-card">
+    <span
+      ><i class="ri-user-3-line"></i> Servings: {{ recipe?.servings }}
+    </span>
+    <span><i class="ri-time-line"></i> {{ recipe?.cookingTime }} min</span>
+    <span>
+      <i class="ri-star-fill"></i> {{ recipe?.rating }} ({{
+        recipe?.numberOfReviews
+      }}
+      reviews)
+    </span>
+  </div>
+  <div class="ingredients-card">
+    <ul>
+      @for( ingredient of recipe?.ingredients; track ingredient) {
+      <li>
+        {{ ingredient }}
+      </li>
+      }
+    </ul>
+  </div>
+
+  <div class="steps-card">
+    <ul>
+      @for ( step of recipe?.steps; let index = $index; track step ) {
+      <li class="step-item">
+        <div class="step-number">Step {{ index + 1 }}</div>
+        <div class="step-content">{{ step }}</div>
+      </li>
+      }
+    </ul>
+  </div>
+  <app-reviews class="reviews" [reviews]="recipe?.reviewDtos"></app-reviews>
+  <app-review-form id="review-form"></app-review-form>
+</div>

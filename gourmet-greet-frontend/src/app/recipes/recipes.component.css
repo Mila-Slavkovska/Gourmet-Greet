@@ -1,0 +1,20 @@
+.recipes{
+  padding: 3vh 8vw;
+}
+h1{
+  margin-bottom: 1em;
+  text-align: center;
+  color: brown;
+}
+.cards{
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(25em, 24%));
+  gap: 1.4em;
+}
+
+@media (max-width: 570px) {
+  .cards {
+      grid-template-columns: repeat(auto-fit, minmax(15em, 100%));
+      justify-content: center;
+  }
+}

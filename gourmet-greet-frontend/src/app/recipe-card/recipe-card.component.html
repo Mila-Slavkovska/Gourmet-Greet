@@ -1,0 +1,21 @@
+<div class="card">
+  <img class="image" src="/pizza.webp" alt="Recipe" />
+  <div class="card-content">
+    <h3 class="title">{{ recipe?.title }}</h3>
+    <p class="rating">
+      <i class="ri-star-fill"></i> {{ recipe?.rating }} ({{
+        recipe?.numberOfReviews
+      }}
+      reviews)
+    </p>
+    <p>
+      <span
+        ><i class="ri-user-3-line"></i> Servings: {{ recipe?.servings }}
+      </span>
+      <span><i class="ri-time-line"></i> {{ recipe?.cookingTime }} min</span>
+    </p>
+    <button class="primaryButton" [routerLink]="['/recipes/', recipe?.id]">
+      View Recipe
+    </button>
+  </div>
+</div>

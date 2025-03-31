@@ -1,0 +1,38 @@
+<div id="search-page">
+  <div class="search-bar">
+    <input type="text" class="search-input" placeholder="Search by title..." />
+    <button class="search-button">Search</button>
+  </div>
+
+  <div class="advanced-search-toggle" (click)="toggleAdvancedSearch()">
+    <button>
+      @if (showAdvancedSearch) { Hide Advanced Search } @else { Show Advanced
+      Search }
+    </button>
+  </div>
+
+  @if (showAdvancedSearch) {
+  <div class="advanced-search">
+    <div class="advanced-search-fields">
+      <label>Ingredients</label>
+      <input type="text" placeholder="Search by ingredients" />
+
+      <label>Number of Servings</label>
+      <input type="number" placeholder="Enter number of servings" />
+
+      <label>Cooking Time (in minutes)</label>
+      <input type="number" placeholder="Enter cooking time" />
+    </div>
+
+    <div class="sort-options">
+      <label>Sort by:</label>
+      <select>
+        <option value="rating">Rating</option>
+        <option value="cookingTime">Cooking Time</option>
+        <option value="servings">Number of Servings</option>
+      </select>
+    </div>
+  </div>
+  }
+  <div class="recipe-results"></div>
+</div>

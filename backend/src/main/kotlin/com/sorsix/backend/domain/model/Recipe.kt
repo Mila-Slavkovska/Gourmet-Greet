@@ -17,7 +17,14 @@ data class Recipe(
     @ElementCollection(fetch = FetchType.EAGER) @CollectionTable(
         name = "recipe_ingredients",
         joinColumns = [JoinColumn(name = "recipe_id")]
-    ) @Column(name = "ingredient", nullable = false) val ingredients: MutableList<String> = mutableListOf(),
+    ) @Column(name = "ingredient", nullable = false)
+    val ingredients: MutableList<String> = mutableListOf(),
+
+    @ElementCollection(fetch = FetchType.EAGER) @CollectionTable(
+        name = "recipe_steps",
+        joinColumns = [JoinColumn(name = "recipe_id")]
+    ) @Column(name = "steps", nullable = false)
+    val steps: MutableList<String> = mutableListOf(),
 
     @ManyToMany(
         fetch = FetchType.EAGER,
@@ -55,6 +62,7 @@ data class Recipe(
             ingredients = this.ingredients,
             cookingTime = this.cookingTime,
             servings = this.servings,
+            steps = this.steps
         )
     }
 }

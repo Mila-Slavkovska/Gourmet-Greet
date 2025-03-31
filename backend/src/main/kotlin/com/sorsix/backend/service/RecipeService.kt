@@ -36,7 +36,8 @@ class RecipeService(
             servings = recipeDto.servings,
             categories = categories.toMutableList(),
             images = mutableListOf(),
-            poster = 0
+            poster = 0,
+            steps = recipeDto.steps.toMutableList(),
         )
         return _recipeRepository.save(recipe)
     }
@@ -56,6 +57,7 @@ class RecipeService(
             title = recipeDto.title.ifBlank { recipe.title },
             description = recipeDto.description.ifBlank { recipe.description },
             ingredients = if (recipeDto.ingredients.isNotEmpty()) recipeDto.ingredients.toMutableList() else recipe.ingredients,
+            steps = if (recipeDto.steps.isNotEmpty()) recipeDto.steps.toMutableList() else recipe.steps,
             cookingTime = if (recipeDto.cookingTime > 0) recipeDto.cookingTime else recipe.cookingTime,
             servings = if (recipeDto.servings > 0) recipeDto.servings else recipe.servings,
             categories = categories.toMutableList(),

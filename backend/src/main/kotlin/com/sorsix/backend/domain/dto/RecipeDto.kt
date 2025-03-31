@@ -14,5 +14,6 @@ data class RecipeDto(
     val servings: Int = 0,
     val ownerId: Long,
     val ingredients: List<String> = emptyList(),
+    val steps: List<String> = emptyList()
 
 )

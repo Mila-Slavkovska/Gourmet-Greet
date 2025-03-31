@@ -9,5 +9,6 @@ data class RecipeAddDto(
     val cookingTime: Int,
     val servings: Int,
     val poster: Long = 0,
-    val images: List<Long> = emptyList()
+    val images: List<Long> = emptyList(),
+    val steps: List<String> = emptyList()
 )

@@ -17,4 +17,8 @@ export class RecipeService {
   getRecipeById(id: number): Observable<Recipe | undefined> {
     return of(mockRecipes.find(recipe => recipe.id == id));
   }
+
+  getAllRecipes(): Observable<Recipe[]> {
+   return of(mockRecipes);
+  }
 }

@@ -1,0 +1,17 @@
+<div id="auth-container">
+  <div class="auth-card">
+    <h2 class="auth-title">Register</h2>
+    <form>
+      <input type="text" placeholder="First Name" required />
+      <input type="text" placeholder="Last Name" required />
+      <input type="text" placeholder="Phone Number" required />
+      <input type="email" placeholder="Email" required />
+      <input type="password" placeholder="Password" required />
+      <input type="password" placeholder="Repeat Password" required />
+      <button type="submit">Register</button>
+    </form>
+    <p class="switch-auth">
+      Already have an account? <a [routerLink]="['/login']">Login</a>
+    </p>
+  </div>
+</div>

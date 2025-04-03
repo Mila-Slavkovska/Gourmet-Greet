@@ -77,5 +77,30 @@ class RecipeService(
         return true
     }
 
+    fun search(title: String, cookingTime: Int, servings: Int, categoryIds: List<Long>): List<Recipe> {
+        var recipes = if (title.isNotBlank()) {
+            _recipeRepository.findByTitleContainsIgnoreCase(title)
+        } else {
+            getAllRecipes()
+        }
+
+        cookingTime.takeIf { it > 0 }?.let { time ->
+            recipes = recipes.filter { it.cookingTime == time }
+        }
+
+        servings.takeIf { it > 0 }?.let { size ->
+            recipes = recipes.filter { it.servings == size }
+        }
+
+        categoryIds.takeIf { it.isNotEmpty() }?.let { ids ->
+            recipes = recipes
+                .filter { recipe ->
+                    ids.all { categoryId -> recipe.categories.any { it.id == categoryId } }
+                }
+        }
+
+        return recipes
+    }
+
 
 }

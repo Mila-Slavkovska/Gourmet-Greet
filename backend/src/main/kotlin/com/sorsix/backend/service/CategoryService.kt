@@ -19,6 +19,7 @@ class CategoryService(
 ) {
     fun getAllCategories(): List<Category> = _categoryRepository.findAll()
     fun getCategoryById(id: Long): Category? = _categoryRepository.findByIdOrNull(id)
+    fun getCategoriesByIds(ids: List<Long>): List<Category> = _categoryRepository.findAllById(ids)
     fun createCategory(categoryDto: CategoryAddDto): Category? = Category(
         name = categoryDto.name,
         categoryType = CategoryType.valueOf(categoryDto.categoryType)

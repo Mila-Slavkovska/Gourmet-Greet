@@ -9,7 +9,6 @@
 
 .review-section h4 {
   font-size: 1.4em;
-  /* color: var(--primary-color); */
   text-align: center;
   margin-bottom: 1em;
 }
@@ -63,7 +62,7 @@ textarea {
 }
 
 .submit-btn {
-background-color: var(--home-page-title-color);
+  background-color: var(--home-page-title-color);
   color: #fff;
   padding: 0.8em;
   border: none;
@@ -75,4 +74,3 @@ background-color: var(--home-page-title-color);
 .submit-btn:hover {
   background-color: var(--dark-red-button-color);
 }
-

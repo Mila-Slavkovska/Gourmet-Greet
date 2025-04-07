@@ -3,22 +3,46 @@ import { inject, Injectable } from '@angular/core';
 import { Recipe } from './interfaces/recipe.interface';
 import { Observable, of } from 'rxjs';
 import { mockRecipes } from './mock-data/mock-recipes';
+import { Review } from './interfaces/review.interface';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class RecipeService {
+  httpClient = inject(HttpClient);
 
-  httpClient = inject(HttpClient)
-  getHighestRatedRecipes(page: number = 0, size: number = 6): Observable<Recipe[]> {
-    return of(mockRecipes.slice(0,6))
+  getHighestRatedRecipesMock(
+    page: number = 0,
+    size: number = 6
+  ): Observable<Recipe[]> {
+    return of(mockRecipes.slice(0, 6));
   }
 
-  getRecipeById(id: number): Observable<Recipe | undefined> {
-    return of(mockRecipes.find(recipe => recipe.id == id));
+  getRecipeByIdMock(id: number): Observable<Recipe | undefined> {
+    return of(mockRecipes.find((recipe) => recipe.id == id));
   }
 
   getAllRecipes(): Observable<Recipe[]> {
-   return of(mockRecipes);
+    return of(mockRecipes);
+  }
+
+  getHighestRatedRecipes(
+    page: number = 0,
+    size: number = 6
+  ): Observable<Recipe[]> {
+    return this.httpClient.get<Recipe[]>(`/api/recipes/top-rated`);
+  }
+
+  getRecipeById(id: number): Observable<Recipe | undefined> {
+    return this.httpClient.get<Recipe>(`/api/recipes/${id}`);
+  }
+
+  getFullRecipeImageUrl(recipeId: number, imageId: number): string {
+    const baseUrl = 'http://localhost:8080/api/recipes';
+    return `${baseUrl}/${recipeId}/image/${imageId}`;
+  }
+
+  createReviewForRecipe(reviewData: Partial<Review>): Observable<Review> {
+    return this.httpClient.post<Review>(`/api/reviews`, reviewData);
   }
 }

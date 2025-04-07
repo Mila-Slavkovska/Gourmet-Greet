@@ -3,10 +3,10 @@
   <h3>Reviews</h3>
   @for(review of reviews; track review.id) {
   <div class="review-card">
-    <p class="reviewer-name">
-      <strong>{{ review.reviewerName }}</strong>
-    </p>
-    <p class="review-rating">⭐ {{ review.rating }}/5</p>
+    <span class="reviewer-name">
+      <strong>{{ review.authorName }}</strong>
+    </span>
+    <span class="review-rating">⭐ {{ review.grade }}/5</span>
     <p class="review-comment">"{{ review.comment }}"</p>
   </div>
   }

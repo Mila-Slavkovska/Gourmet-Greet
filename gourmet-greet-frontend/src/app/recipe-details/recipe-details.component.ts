@@ -1,32 +1,90 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { Recipe } from '../interfaces/recipe.interface';
+import { Component, OnInit, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { RecipeService } from '../recipe.service';
+import { CategoryService } from '../category.service';
+import { Recipe } from '../interfaces/recipe.interface';
 import { ReviewsComponent } from "../reviews/reviews.component";
 import { ReviewFormComponent } from '../review-form/review-form.component';
+import { NgClass } from '@angular/common';
+import { ReviewNotifierService } from '../review-notifier.service';
 
 @Component({
   selector: 'app-recipe-details',
-  imports: [ReviewsComponent,ReviewsComponent,ReviewFormComponent],
   templateUrl: './recipe-details.component.html',
-  styleUrl: './recipe-details.component.css',
+  styleUrls: ['./recipe-details.component.css'],
+  imports: [ReviewsComponent, ReviewFormComponent, NgClass],
 })
 export class RecipeDetailsComponent implements OnInit {
   recipe?: Recipe;
-  route = inject(ActivatedRoute);
-  recipeService = inject(RecipeService);
+  categoryNames: string[] = [];
   id?: number;
+  currentImageIndex: number = 0;
+
+  private route = inject(ActivatedRoute);
+  private recipeService = inject(RecipeService);
+  private categoryService = inject(CategoryService);
+  private reviewNotifierService = inject(ReviewNotifierService)
+
   ngOnInit(): void {
     this.route.params.subscribe((params) => {
       this.id = +params['id'];
-      this.loadRecipe();
+      if (this.id) {
+        this.loadRecipe();
+        this.reviewNotifierService.reviewSubmitted$.subscribe(
+          () => this.loadRecipe()
+        );
+      }
     });
   }
+
   loadRecipe(): void {
     if (this.id) {
-      this.recipeService
-        .getRecipeById(this.id)
-        .subscribe((recipe) => (this.recipe = recipe));
+      this.recipeService.getRecipeById(this.id).subscribe(recipe => {
+        this.recipe = recipe;
+        if (recipe?.categoryIds.length) {
+          this.loadCategories(recipe.categoryIds);
+        }
+      });
     }
+  }
+
+  private loadCategories(categoryIds: number[]): void {
+    this.categoryService.getCategoriesByIds(categoryIds).subscribe(categories => {
+      this.categoryNames = categories.map(c => c.name);
+    });
+  }
+
+  getPosterImage(): string {
+    const { id, posterId } = this.recipe || {};
+    if (id && posterId) {
+      return this.recipeService.getFullRecipeImageUrl(id, posterId);
+    }
+    return './default-recipe-poster-image.jpg';
+  }
+
+  prevImage(): void {
+    if (this.recipe?.galleryImageIds?.length) {
+      this.currentImageIndex =
+        (this.currentImageIndex - 1 + this.recipe.galleryImageIds.length) % this.recipe.galleryImageIds.length;
+    }
+  }
+
+  nextImage(): void {
+    if (this.recipe?.galleryImageIds?.length) {
+      this.currentImageIndex =
+        (this.currentImageIndex + 1) % this.recipe.galleryImageIds.length;
+    }
+  }
+
+  getFullImageUrl(imageId: number | undefined): string {
+    if(this.id && imageId) {
+      return this.recipeService.getFullRecipeImageUrl(this.id, imageId);
+    }
+     return './default-recipe-poster-image.jpg';
+
+  }
+
+  goToImage(index: number): void {
+    this.currentImageIndex = index;
   }
 }

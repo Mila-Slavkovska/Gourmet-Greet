@@ -10,8 +10,8 @@ export const mockRecipes: Recipe[] = [
     posterId: 101,
     galleryImageIds: [201, 202, 203],
     reviewDtos: [
-      { id: 1, reviewerName: "Alice", comment: "Delicious and easy to make!", rating: 5 },
-      { id: 2, reviewerName: "Bob", comment: "A bit too salty for my taste.", rating: 3.5 }
+      { id: 1, authorName: "Alice", comment: "Delicious and easy to make!", grade: 5,authorId: 1, date: new Date(Date.now()), recipeId: 1 },
+      { id: 2, authorName: "Bob", comment: "A bit too salty for my taste.", grade: 3.5, authorId: 1, date:  new Date(Date.now()), recipeId: 1 }
     ],
     categoryIds: [1, 2],
     cookingTime: 30,
@@ -35,8 +35,8 @@ export const mockRecipes: Recipe[] = [
     posterId: 102,
     galleryImageIds: [204, 205],
     reviewDtos: [
-      { id: 3, reviewerName: "Charlie", comment: "Authentic taste and very spicy!", rating: 5 },
-      { id: 4, reviewerName: "David", comment: "Could use more coconut milk.", rating: 4 }
+      { id: 3, authorName: "Charlie", comment: "Authentic taste and very spicy!", grade: 2, authorId: 1, date: new Date(Date.now()), recipeId: 2 },
+      { id: 4, authorName: "David", comment: "Could use more coconut milk.", grade: 4, authorId: 1, date: new Date(Date.now()), recipeId: 2 }
     ],
     categoryIds: [3, 4],
     cookingTime: 45,

@@ -16,6 +16,11 @@ class CategoryController(
     @GetMapping
     fun getAllCategories(): List<Category> = _categoryService.getAllCategories()
 
+    @GetMapping("/ids")
+    fun getCategoriesByIds(@RequestParam ids: List<Long>): List<Category> {
+        return _categoryService.getCategoriesByIds(ids)
+    }
+
     @GetMapping("/{id}")
     fun getCategoryById(@PathVariable id: Long): ResponseEntity<Category> =
         _categoryService.getCategoryById(id)?.let { ResponseEntity.ok(it) }

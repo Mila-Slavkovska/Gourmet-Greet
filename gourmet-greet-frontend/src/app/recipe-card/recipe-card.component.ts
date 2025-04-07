@@ -1,11 +1,11 @@
 import { Component, Input } from '@angular/core';
 import { Recipe } from '../interfaces/recipe.interface';
-import { mockRecipes } from '../mock-data/mock-recipes';
 import { RouterLink } from '@angular/router';
+import { DecimalPipe } from '@angular/common';
 
 @Component({
   selector: 'app-recipe-card',
-  imports: [RouterLink],
+  imports: [RouterLink, DecimalPipe],
   templateUrl: './recipe-card.component.html',
   styleUrl: './recipe-card.component.css'
 })

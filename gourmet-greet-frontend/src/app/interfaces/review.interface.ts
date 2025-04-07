@@ -1,8 +1,11 @@
 export interface Review {
   id: number;
-  reviewerName: string;
+  grade: number;
+  authorName: string;
+  authorId: number;
   comment: string;
-  rating: number;
+  date: Date;
+  recipeId: number;
 }
 
 

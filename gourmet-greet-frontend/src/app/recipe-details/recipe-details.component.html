@@ -1,16 +1,18 @@
 <div id="recipe-details">
-  <img class="image" src="/pizza.webp" alt="Recipe" />
+  <img [src]="getPosterImage()" class="image" alt="{{ recipe?.title }}" />
   <h3 class="title">{{ recipe?.title }}</h3>
   <div class="description">
     {{ recipe?.description }}
   </div>
+  @if(categoryNames.length > 0) {
   <div class="categories-card">
     <div class="categories-tags">
-      <span class="category-tag">#Italian</span>
-      <span class="category-tag">#Vegetarian</span>
-      <span class="category-tag">#Quick</span>
+      @for( category of categoryNames; track category) {
+      <span class="category-tag">#{{ categoryNames }}</span>
+      }
     </div>
   </div>
+  }
   <div class="info-card">
     <span
       ><i class="ri-user-3-line"></i> Servings: {{ recipe?.servings }}
@@ -44,5 +46,38 @@
     </ul>
   </div>
   <app-reviews class="reviews" [reviews]="recipe?.reviewDtos"></app-reviews>
-  <app-review-form id="review-form"></app-review-form>
+  @if(recipe) {
+    <app-review-form id="review-form" [recipeId]="recipe.id"></app-review-form>
+  }
+  @if (recipe?.galleryImageIds?.length) {
+  <div class="gallery-carousel">
+    <h4 class="gallery-title">Image Gallery</h4>
+    <div class="carousel-container">
+      <button class="carousel-button prev" (click)="prevImage()">
+        &#10094;
+      </button>
+      <div class="carousel">
+        <div class="carousel-track">
+          <img
+            class="carousel-image"
+            [src]="getFullImageUrl(recipe?.galleryImageIds?.[currentImageIndex])"
+            alt="Gallery image"
+          />
+        </div>
+      </div>
+      <button class="carousel-button next" (click)="nextImage()">
+        &#10095;
+      </button>
+    </div>
+    <div class="pagination-dots">
+      @for (img of recipe?.galleryImageIds; track img; let i = $index) {
+      <span
+        (click)="goToImage(i)"
+        [ngClass]="{ dot: true, active: i === currentImageIndex }"
+      >
+      </span>
+      }
+    </div>
+  </div>
+  }
 </div>

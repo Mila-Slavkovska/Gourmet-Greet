@@ -3,7 +3,8 @@
   <div class="card-content">
     <h3 class="title">{{ recipe?.title }}</h3>
     <p class="rating">
-      <i class="ri-star-fill"></i> {{ recipe?.rating }} ({{
+      <i class="ri-star-fill"></i> {{ recipe?.rating | number: '1.1-1' }}
+      ({{
         recipe?.numberOfReviews
       }}
       reviews)

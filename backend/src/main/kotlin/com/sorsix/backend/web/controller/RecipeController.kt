@@ -113,4 +113,9 @@ class RecipeController(
         return filteredRecipes
     }
 
+    @GetMapping("/top-rated")
+    fun getTopRatedRecipes(): List<RecipeDto> {
+        return _recipeService.getTopRatedRecipes().map{ it.toDto() }
+    }
+
 }

@@ -5,8 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository
 
 interface RecipeRepository : JpaRepository<Recipe, Long> {
     fun findByTitleContainsIgnoreCase(title: String): List<Recipe>
-    fun findByCookingTime(cookingTimeMinutes: Int): List<Recipe>
-    fun findByServings(cookingTimeMinutes: Int): List<Recipe>
-    fun findTop8ByOrderByRatingDesc(): List<Recipe>
-
+    fun findTop9ByOrderByRatingDesc(): List<Recipe>
 }

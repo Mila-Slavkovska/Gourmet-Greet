@@ -14,4 +14,9 @@ export class CategoryService {
     const params = new HttpParams().set('ids', ids.join(','));
     return this.httpClient.get<Category[]>('/api/categories/ids', { params });
   }
+
+  getCategoriesByType(type: string): Observable<Category[]> {
+    const params = new HttpParams().set('type', type);
+    return this.httpClient.get<Category[]>(`api/categories/by-type`,{params})
+  }
 }

@@ -1,12 +1,13 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { RecipeService } from '../recipe.service';
 import { CategoryService } from '../category.service';
 import { Recipe } from '../interfaces/recipe.interface';
-import { ReviewsComponent } from "../reviews/reviews.component";
+import { ReviewsComponent } from '../reviews/reviews.component';
 import { ReviewFormComponent } from '../review-form/review-form.component';
 import { NgClass } from '@angular/common';
 import { ReviewNotifierService } from '../review-notifier.service';
+import { filter } from 'rxjs';
 
 @Component({
   selector: 'app-recipe-details',
@@ -21,17 +22,27 @@ export class RecipeDetailsComponent implements OnInit {
   currentImageIndex: number = 0;
 
   private route = inject(ActivatedRoute);
+  private router = inject(Router);
   private recipeService = inject(RecipeService);
   private categoryService = inject(CategoryService);
-  private reviewNotifierService = inject(ReviewNotifierService)
+  private reviewNotifierService = inject(ReviewNotifierService);
 
   ngOnInit(): void {
+    this.router.events
+      .pipe(filter((event) => event instanceof NavigationEnd))
+      .subscribe(() => {
+        window.scroll({
+          top: 0,
+          behavior: 'smooth',
+        });
+      });
+
     this.route.params.subscribe((params) => {
       this.id = +params['id'];
       if (this.id) {
         this.loadRecipe();
-        this.reviewNotifierService.reviewSubmitted$.subscribe(
-          () => this.loadRecipe()
+        this.reviewNotifierService.reviewSubmitted$.subscribe(() =>
+          this.loadRecipe()
         );
       }
     });
@@ -39,7 +50,7 @@ export class RecipeDetailsComponent implements OnInit {
 
   loadRecipe(): void {
     if (this.id) {
-      this.recipeService.getRecipeById(this.id).subscribe(recipe => {
+      this.recipeService.getRecipeById(this.id).subscribe((recipe) => {
         this.recipe = recipe;
         if (recipe?.categoryIds.length) {
           this.loadCategories(recipe.categoryIds);
@@ -49,9 +60,11 @@ export class RecipeDetailsComponent implements OnInit {
   }
 
   private loadCategories(categoryIds: number[]): void {
-    this.categoryService.getCategoriesByIds(categoryIds).subscribe(categories => {
-      this.categoryNames = categories.map(c => c.name);
-    });
+    this.categoryService
+      .getCategoriesByIds(categoryIds)
+      .subscribe((categories) => {
+        this.categoryNames = categories.map((c) => c.name);
+      });
   }
 
   getPosterImage(): string {
@@ -65,7 +78,8 @@ export class RecipeDetailsComponent implements OnInit {
   prevImage(): void {
     if (this.recipe?.galleryImageIds?.length) {
       this.currentImageIndex =
-        (this.currentImageIndex - 1 + this.recipe.galleryImageIds.length) % this.recipe.galleryImageIds.length;
+        (this.currentImageIndex - 1 + this.recipe.galleryImageIds.length) %
+        this.recipe.galleryImageIds.length;
     }
   }
 
@@ -77,11 +91,10 @@ export class RecipeDetailsComponent implements OnInit {
   }
 
   getFullImageUrl(imageId: number | undefined): string {
-    if(this.id && imageId) {
+    if (this.id && imageId) {
       return this.recipeService.getFullRecipeImageUrl(this.id, imageId);
     }
-     return './default-recipe-poster-image.jpg';
-
+    return './default-recipe-poster-image.jpg';
   }
 
   goToImage(index: number): void {

@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
-import { RecipeCardComponent } from '../recipe-card/recipe-card.component';
 import { RecipesComponent } from "../recipes/recipes.component";
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-home',
-  imports: [RecipesComponent],
+  imports: [RecipesComponent, RouterLink],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })

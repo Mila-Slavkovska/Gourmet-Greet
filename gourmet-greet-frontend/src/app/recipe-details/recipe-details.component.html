@@ -47,9 +47,8 @@
   </div>
   <app-reviews class="reviews" [reviews]="recipe?.reviewDtos"></app-reviews>
   @if(recipe) {
-    <app-review-form id="review-form" [recipeId]="recipe.id"></app-review-form>
-  }
-  @if (recipe?.galleryImageIds?.length) {
+  <app-review-form id="review-form" [recipeId]="recipe.id"></app-review-form>
+  } @if (recipe?.galleryImageIds?.length) {
   <div class="gallery-carousel">
     <h4 class="gallery-title">Image Gallery</h4>
     <div class="carousel-container">
@@ -57,7 +56,10 @@
         &#10094;
       </button>
       <div class="carousel">
-        <div class="carousel-track">
+        <div
+          class="carousel-track"
+          [style.backgroundImage]="'url(' + getFullImageUrl(recipe?.galleryImageIds?.[currentImageIndex]) + ')'"
+        >
           <img
             class="carousel-image"
             [src]="getFullImageUrl(recipe?.galleryImageIds?.[currentImageIndex])"

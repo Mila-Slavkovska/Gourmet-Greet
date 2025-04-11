@@ -3,7 +3,7 @@ package com.sorsix.backend.web.controller
 import org.springframework.http.MediaType
 import com.sorsix.backend.domain.dto.RecipeAddDto
 import com.sorsix.backend.domain.dto.RecipeDto
-import com.sorsix.backend.domain.model.Recipe
+import com.sorsix.backend.domain.dto.RecipeSearchDto
 import com.sorsix.backend.service.ImageService
 import com.sorsix.backend.service.RecipeService
 import org.springframework.http.HttpStatus
@@ -102,17 +102,43 @@ class RecipeController(
             .body(image)
     }
 
+//    @GetMapping("/search")
+//    fun searchByAll(
+//        @RequestParam(required = false) title: String = "",
+//        @RequestParam(required = false) cookingTime: Int = 0,
+//        @RequestParam(required = false) servings: Int = 0,
+//        @RequestParam(required = false) categoryIds: List<Long> = emptyList(),
+//        @RequestParam(required = false) ingredients: List<String> = emptyList()
+//    ): List<RecipeDto> {
+//        val filteredRecipes = _recipeService.search(title, cookingTime, servings, categoryIds,ingredients).map { it.toDto() }
+//        return filteredRecipes
+//    }
+
+    //TODO return total results, in order to show/hide Load More button on FE
     @GetMapping("/search")
     fun searchByAll(
-        @RequestParam(required = false) title: String = "",
-        @RequestParam(required = false) cookingTime: Int = 0,
-        @RequestParam(required = false) servings: Int = 0,
-        @RequestParam(required = false) categoryIds: List<Long> = emptyList()
-    ): List<RecipeDto> {
-        val filteredRecipes = _recipeService.search(title, cookingTime, servings, categoryIds).map { it.toDto() }
-        return filteredRecipes
-    }
+            @RequestParam(required = false) title: String = "",
+            @RequestParam(required = false) cookingTime: Int = 0,
+            @RequestParam(required = false) servings: Int = 0,
+            @RequestParam(required = false) categoryIds: List<Long> = emptyList(),
+            @RequestParam(required = false) ingredients: List<String> = emptyList(),
+            @RequestParam(required = false, defaultValue = "0") page: Int,
+            @RequestParam(required = false, defaultValue = "9") pageSize: Int
+        ): RecipeSearchDto {
+        val allFilteredRecipes = _recipeService.search(title, cookingTime, servings, categoryIds, ingredients)
+        val totalCount = allFilteredRecipes.size
 
+        val paginatedRecipes = allFilteredRecipes
+//            .drop(page * pageSize)
+            .take(pageSize)
+            .map { it.toDto() }
+
+        return RecipeSearchDto(
+            recipes = paginatedRecipes,
+            totalResults = totalCount
+        )
+        }
+    
     @GetMapping("/top-rated")
     fun getTopRatedRecipes(): List<RecipeDto> {
         return _recipeService.getTopRatedRecipes().map{ it.toDto() }

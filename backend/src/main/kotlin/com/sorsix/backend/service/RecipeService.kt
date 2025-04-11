@@ -19,7 +19,7 @@ class RecipeService(
     fun getAllRecipes(): List<Recipe> = _recipeRepository.findAll()
     fun getRecipeById(id: Long): Recipe? = _recipeRepository.findByIdOrNull(id)
 
-    fun getTopRatedRecipes(): List<Recipe> = _recipeRepository.findTop8ByOrderByRatingDesc()
+    fun getTopRatedRecipes(): List<Recipe> = _recipeRepository.findTop9ByOrderByRatingDesc()
     //TODO: add the owner of the recipe
     fun createRecipe(
         recipeDto: RecipeAddDto
@@ -78,7 +78,7 @@ class RecipeService(
         return true
     }
 
-    fun search(title: String, cookingTime: Int, servings: Int, categoryIds: List<Long>): List<Recipe> {
+    fun search(title: String, cookingTime: Int, servings: Int, categoryIds: List<Long>,ingredients:List<String>): List<Recipe> {
         var recipes = if (title.isNotBlank()) {
             _recipeRepository.findByTitleContainsIgnoreCase(title)
         } else {
@@ -96,11 +96,20 @@ class RecipeService(
         categoryIds.takeIf { it.isNotEmpty() }?.let { ids ->
             recipes = recipes
                 .filter { recipe ->
-                    ids.all { categoryId -> recipe.categories.any { it.id == categoryId } }
+                    recipe.categories.any { it.id in ids }
                 }
         }
 
-        return recipes
+        ingredients.takeIf { it.isNotEmpty() }?.let { inputIngredients ->
+            recipes = recipes.filter { recipe ->
+                inputIngredients.any { inputIng ->
+                    recipe.ingredients.any { it.equals(inputIng, ignoreCase = true) }
+                }
+            }
+        }
+
+
+        return recipes.sortedBy { it.title }
     }
 
 

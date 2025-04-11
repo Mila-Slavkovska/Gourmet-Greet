@@ -1,6 +1,7 @@
 package com.sorsix.backend.web.controller
 
 import com.sorsix.backend.domain.dto.CategoryAddDto
+import com.sorsix.backend.domain.enum.CategoryType
 import com.sorsix.backend.domain.model.Category
 import com.sorsix.backend.service.CategoryService
 import org.springframework.http.HttpStatus
@@ -20,6 +21,9 @@ class CategoryController(
     fun getCategoriesByIds(@RequestParam ids: List<Long>): List<Category> {
         return _categoryService.getCategoriesByIds(ids)
     }
+
+    @GetMapping("/by-type")
+    fun getCategoriesByType(@RequestParam type: CategoryType): List<Category> =  _categoryService.getCategoriesByCategoryType(type)
 
     @GetMapping("/{id}")
     fun getCategoryById(@PathVariable id: Long): ResponseEntity<Category> =

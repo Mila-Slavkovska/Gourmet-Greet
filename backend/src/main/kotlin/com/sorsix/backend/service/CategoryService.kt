@@ -18,8 +18,13 @@ class CategoryService(
 
 ) {
     fun getAllCategories(): List<Category> = _categoryRepository.findAll()
+
     fun getCategoryById(id: Long): Category? = _categoryRepository.findByIdOrNull(id)
+
     fun getCategoriesByIds(ids: List<Long>): List<Category> = _categoryRepository.findAllById(ids)
+
+    fun getCategoriesByCategoryType(categoryType: CategoryType) = _categoryRepository.findAllByCategoryType(categoryType)
+
     fun createCategory(categoryDto: CategoryAddDto): Category? = Category(
         name = categoryDto.name,
         categoryType = CategoryType.valueOf(categoryDto.categoryType)
@@ -53,5 +58,4 @@ class CategoryService(
         _recipeRepository.save(recipe)
         return recipe
     }
-
 }

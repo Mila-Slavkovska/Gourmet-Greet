@@ -1,7 +1,8 @@
-import { Component, Input } from '@angular/core';
+import { Component, inject, Input } from '@angular/core';
 import { Recipe } from '../interfaces/recipe.interface';
 import { RouterLink } from '@angular/router';
 import { DecimalPipe } from '@angular/common';
+import { RecipeService } from '../recipe.service';
 
 @Component({
   selector: 'app-recipe-card',
@@ -11,6 +12,16 @@ import { DecimalPipe } from '@angular/common';
 })
 export class RecipeCardComponent {
   @Input() recipe?: Recipe;
+  recipeService = inject(RecipeService)
+  image: string = ""
 
+  ngOnInit(): void {
+    if(this.recipe && this.recipe.posterId) {
+      this.image = this.recipeService.getFullRecipeImageUrl(this.recipe.id, this.recipe.posterId);
+    }
+    else {
+      this.image = './default-recipe-poster-image.jpg';
+    }
+  }
 
 }

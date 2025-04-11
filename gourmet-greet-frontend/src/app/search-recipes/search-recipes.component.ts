@@ -1,102 +1,227 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { forkJoin, Subject } from 'rxjs';
+
 import { RecipeService } from '../recipe.service';
+import { CategoryService } from '../category.service';
 import { Recipe } from '../interfaces/recipe.interface';
+import { Category } from '../interfaces/category.interface';
 import { RecipeCardComponent } from '../recipe-card/recipe-card.component';
-import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  ReactiveFormsModule,
-} from '@angular/forms';
+import { ViewportScroller } from '@angular/common';
 
 @Component({
   selector: 'app-search-recipes',
-  imports: [RecipeCardComponent, ReactiveFormsModule],
+  standalone: true,
+  imports: [ReactiveFormsModule, RecipeCardComponent],
   templateUrl: './search-recipes.component.html',
-  styleUrl: './search-recipes.component.css',
+  styleUrls: ['./search-recipes.component.css'],
 })
 export class SearchRecipesComponent implements OnInit {
-  showAdvancedSearch: boolean = false;
+  showAdvancedSearch = false;
+
   recipeService = inject(RecipeService);
+  categoryService = inject(CategoryService);
+
   allRecipes: Recipe[] = [];
 
-  skillLevels = ['Beginner', 'Intermediate', 'Advanced'];
-  recipeCategories = [
-    'Breakfast',
-    'Lunch',
-    'Dinner',
-    'Snack',
-    'Appetizer',
-    'Dessert',
-  ];
-  dietaryOptions = [
-    'Vegetarian',
-    'Vegan',
-    'High-Protein',
-    'Glutern-Free',
-    'Sugar-Free',
-    'Keto',
-  ];
+  skillLevels: Category[] = [];
+  recipeCategories: Category[] = [];
+  dietaryOptions: Category[] = [];
 
-  selectedSkillLevel: string | null = null;
-  selectedRecipeCategory: string | null = null;
-  selectedDietary: string | null = null;
+  subject: Subject<number> = new Subject();
+
+  private viewportScroller = inject(ViewportScroller);
+
+  private scrollPosition: [number, number] = [0, 0];
+
+  currentPage = 0;
+  pageSize = 9;
+  hasMore = false;
+
+  selectedSkillLevels: Category[] = [];
+  selectedRecipeCategories: Category[] = [];
+  selectedDietaries: Category[] = [];
   selectedIngredients: string[] = [];
-  ingredientForm: FormGroup = new FormGroup({
-    ingredient: new FormControl(),
+
+  recipesLoaded = false;
+
+  form: FormGroup = new FormGroup({
+    title: new FormControl(''),
+    ingredient: new FormControl(''),
+    cookingTime: new FormControl(''),
+    numberOfServings: new FormControl(''),
+    skillLevels: new FormControl([]),
+    recipeCategories: new FormControl([]),
+    ingredients: new FormControl([]),
+    dietaryOptions: new FormControl([]),
   });
-
-  addIngredient() {
-    const ingredientControl = this.ingredientForm.get('ingredient');
-    if (!ingredientControl) return;
-
-    const value = ingredientControl.value?.trim();
-
-    if (value) {
-      this.selectedIngredients.push(value);
-      ingredientControl.reset();
-    }
-  }
-
-  removeIngredient(ingredient: string) {
-    const index = this.selectedIngredients.indexOf(ingredient);
-    if (index > -1) {
-      this.selectedIngredients.splice(index, 1);
-    }
-  }
+  activatedRoute = inject(ActivatedRoute);
+  router = inject(Router);
 
   ngOnInit(): void {
+    this.subject.subscribe((pageSize) => {
+      this.loadRecipes({ pageSize });
+    });
+
+    forkJoin({
+      dietary: this.categoryService.getCategoriesByType('DIETARY'),
+      recipe: this.categoryService.getCategoriesByType('RECIPE_TYPE'),
+      skill: this.categoryService.getCategoriesByType('SKILL_LEVEL'),
+    }).subscribe(({ dietary, recipe, skill }) => {
+      this.dietaryOptions = dietary;
+      this.recipeCategories = recipe;
+      this.skillLevels = skill;
+      this.patchFormValues();
+    });
+
+    this.activatedRoute.queryParams.subscribe((params) => {
+      this.loadRecipes(params);
+    });
+  }
+
+  patchFormValues() {
+    this.form.patchValue({ ...this.activatedRoute.snapshot.queryParams });
+
+    const queryParams = this.activatedRoute.snapshot.queryParams;
+    const selectedSkillLevelsIds = queryParams['skillLevels']
+      ? queryParams['skillLevels'].split(',')
+      : [];
+    const selectedRecipeCategoriesIds = queryParams['recipeCategories']
+      ? queryParams['recipeCategories'].split(',')
+      : [];
+    const selectedDietariesIds = queryParams['dietaryOptions']
+      ? queryParams['dietaryOptions'].split(',')
+      : [];
+    const selectedIngredients = queryParams['ingredients']
+      ? queryParams['ingredients'].split(',')
+      : [];
+
+    this.selectedSkillLevels = this.skillLevels.filter((level) =>
+      selectedSkillLevelsIds.includes(level.id.toString())
+    );
+    this.selectedRecipeCategories = this.recipeCategories.filter((category) =>
+      selectedRecipeCategoriesIds.includes(category.id.toString())
+    );
+    this.selectedDietaries = this.dietaryOptions.filter((diet) =>
+      selectedDietariesIds.includes(diet.id.toString())
+    );
+
+    this.selectedIngredients = selectedIngredients;
+  }
+
+  cleanQueryParams(params: { [key: string]: any }): { [key: string]: any } {
+    const cleanedParams: { [key: string]: any } = {};
+    for (const [key, value] of Object.entries(params)) {
+      if (value && value !== undefined && value !== null && value !== '') {
+        cleanedParams[key] = value;
+      }
+    }
+    return cleanedParams;
+  }
+
+  updateUrlParams() {
+    const params: any = {
+      title: this.form.get('title')?.value,
+      ingredient: this.form.get('ingredient')?.value,
+      cookingTime: this.form.get('cookingTime')?.value,
+      numberOfServings: this.form.get('numberOfServings')?.value,
+      skillLevels: this.selectedSkillLevels.map((l) => l.id).join(','),
+      recipeCategories: this.selectedRecipeCategories
+        .map((c) => c.id)
+        .join(','),
+      dietaryOptions: this.selectedDietaries.map((d) => d.id).join(','),
+      ingredients: this.selectedIngredients.join(','),
+      pageSize: 9,
+    };
+
+    const cleanedParams = this.cleanQueryParams(params);
+
+    this.router.navigate([], {
+      relativeTo: this.activatedRoute,
+      queryParams: cleanedParams,
+    });
+  }
+
+  onSearchSubmit() {
+    if (this.showAdvancedSearch) {
+      this.toggleAdvancedSearch();
+    }
+    this.updateUrlParams();
+  }
+
+  loadMore() {
+    this.pageSize += 9;
+    this.subject.next(this.pageSize);
+  }
+
+  loadRecipes(queryParams: any) {
+    const oldQueryParams = this.cleanQueryParams(this.form.value);
+
     this.recipeService
-      .getAllRecipes()
-      .subscribe((recipes) => (this.allRecipes = recipes));
+      .getFilteredRecipes({
+        ...oldQueryParams,
+        ...queryParams,
+        page: 1,
+        size: +(queryParams.pageSize ?? 9),
+      })
+      .subscribe((recipes) => {
+        this.allRecipes = recipes.recipes;
+        this.hasMore = this.allRecipes.length < recipes.totalResults;
+      });
   }
 
   toggleAdvancedSearch() {
     this.showAdvancedSearch = !this.showAdvancedSearch;
   }
 
-  selectSkillLevel(level: string) {
-    this.selectedSkillLevel = this.selectedSkillLevel === level ? null : level;
+  addIngredient() {
+    const ingredientControl = this.form.get('ingredient');
+    const value = ingredientControl?.value?.trim();
+    if (value && !this.selectedIngredients.includes(value)) {
+      this.selectedIngredients.push(value);
+      ingredientControl?.reset();
+    }
   }
 
-  selectRecipeCategory(category: string) {
-    this.selectedRecipeCategory =
-      this.selectedRecipeCategory === category ? null : category;
+  removeIngredient(ingredient: string) {
+    this.selectedIngredients = this.selectedIngredients.filter(
+      (i) => i !== ingredient
+    );
   }
 
-  selectDietary(diet: string) {
-    this.selectedDietary = this.selectedDietary === diet ? null : diet;
+  selectSkillLevel(level: Category) {
+    const index = this.selectedSkillLevels.findIndex((d) => d.id === level.id);
+    index > -1
+      ? this.selectedSkillLevels.splice(index, 1)
+      : this.selectedSkillLevels.push(level);
   }
 
-  clearSkillLevel() {
-    this.selectedSkillLevel = null;
+  selectRecipeCategory(category: Category) {
+    const index = this.selectedRecipeCategories.findIndex(
+      (d) => d.id === category.id
+    );
+    index > -1
+      ? this.selectedRecipeCategories.splice(index, 1)
+      : this.selectedRecipeCategories.push(category);
   }
 
-  clearRecipeCategory() {
-    this.selectedRecipeCategory = null;
+  selectDietary(diet: Category) {
+    const index = this.selectedDietaries.findIndex((d) => d.id === diet.id);
+    index > -1
+      ? this.selectedDietaries.splice(index, 1)
+      : this.selectedDietaries.push(diet);
   }
 
-  clearDietary() {
-    this.selectedDietary = null;
+  isSkillLevelSelected(level: Category): boolean {
+    return this.selectedSkillLevels.some((d) => d.id === level.id);
+  }
+
+  isRecipeCategorySelected(cat: Category): boolean {
+    return this.selectedRecipeCategories.some((d) => d.id === cat.id);
+  }
+
+  isDietarySelected(diet: Category): boolean {
+    return this.selectedDietaries.some((d) => d.id === diet.id);
   }
 }

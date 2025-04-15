@@ -1,3 +1,4 @@
 #profile {
+    margin-top: var(--header-height);
     padding: 3vh 8vw;
 }

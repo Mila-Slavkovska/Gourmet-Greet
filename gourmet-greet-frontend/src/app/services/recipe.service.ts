@@ -1,10 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { Recipe } from './interfaces/recipe.interface';
+import { Recipe } from '../interfaces/recipe.interface';
 import { Observable, of } from 'rxjs';
-import { mockRecipes } from './mock-data/mock-recipes';
-import { Review } from './interfaces/review.interface';
-import { RecipeSearch } from './interfaces/recipe-search.interface';
+import { mockRecipes } from '../mock-data/mock-recipes';
+import { Review } from '../interfaces/review.interface';
+import { RecipeSearch } from '../interfaces/recipe-search.interface';
 
 @Injectable({
   providedIn: 'root',

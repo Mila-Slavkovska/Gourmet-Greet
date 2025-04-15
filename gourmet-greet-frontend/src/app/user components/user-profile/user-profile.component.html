@@ -1,5 +1,5 @@
 <div id="profile">
     <app-user-details [user]="user"/>
-    <app-user-recipes/>
-    <app-user-recipes/>
+    <app-user-recipes [recipes]="user?.ownedRecipeIds"type="Owned"/>
+    <app-user-recipes [recipes]="user?.favoritesIds" type="Favourites"/>
 </div>

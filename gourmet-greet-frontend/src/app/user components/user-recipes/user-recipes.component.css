@@ -1,0 +1,98 @@
+.recipyList {
+    width: 80%;
+    margin: auto;
+    background-color: var(--off-white);
+    border-radius: var(--border-radius);
+    padding: 3rem;
+    font-family: "Poppins", sans-serif;
+    box-shadow: 0 2px 6px var(--box-shadow-color);
+    margin-top: 4rem;
+}
+
+.view-all {
+    display: flex;
+    justify-content: end;
+    padding: 1rem;
+    color: var(--accent-color);
+    font-weight: 500;
+    font-size: large;
+}
+
+.view-link {
+    position: relative;
+    color: var(--accent-color);
+    padding: 0.5rem 1rem;
+    text-decoration: none;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    transition: color 0.3s ease;
+}
+
+.view-link::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -75%;
+    width: 50%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.2);
+    transform: skewX(-25deg);
+    transition: left 0.5s ease;
+    pointer-events: none;
+}
+
+.view-link:hover::after {
+    left: 125%;
+}
+
+.view-link:hover {
+    color: var(--dark-red-button-color);
+    cursor: pointer;
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateX(0); }
+    50% { transform: translateX(5px); }
+}
+
+.view-link:hover{
+    animation: bounce 0.5s;
+}
+
+.line {
+    padding: 0.01rem 0.2rem;
+    margin-right: 0.5rem;
+    border-radius: 1rem;
+}
+
+.owned {
+    background-color: var(--user-icon-hover);
+}
+
+.favourite {
+    background-color: var(--star-color);
+}
+
+.cards {
+    display: flex;
+}
+
+.card {
+    width: 50%;
+    margin: 1rem;
+    flex-grow: 1;
+}
+
+@media (max-width: 1000px) {
+    .cards {
+        flex-direction: column;
+    }
+
+    .card {
+        width: 100%;
+    }
+
+    .view-all {
+        justify-content: center;
+    }
+}

@@ -10,6 +10,7 @@ import { User } from '../../interfaces/user.interface';
 })
 export class UserDetailsComponent {
   //TODO: Find number of reviews for every user
+  //TODO: Add upgrade button on user
   @Input() user?: User
   numReviews = 0
 }

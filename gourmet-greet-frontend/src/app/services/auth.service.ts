@@ -11,8 +11,8 @@ export class AuthService {
   
   private loggedInUser: User | null = null
 
-  setUser() {
-    this.loggedInUser = mockUsers[1]
+  setUser(id: number) {
+    this.loggedInUser = mockUsers[id]
   }
 
   getUser(): User | null {

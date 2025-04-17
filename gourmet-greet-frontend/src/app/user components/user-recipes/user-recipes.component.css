@@ -77,6 +77,11 @@
     display: flex;
 }
 
+.cards p {
+    padding: 2rem 1rem;
+    font-size: large;
+}
+
 .card {
     width: 50%;
     margin: 1rem;

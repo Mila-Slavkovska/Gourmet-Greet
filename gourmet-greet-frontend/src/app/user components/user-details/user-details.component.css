@@ -110,3 +110,31 @@
 h4 {
     color: var(--people-icon-color)
 }
+
+button[mat-menu-item]:hover {
+    background-color: var(--lighter-color);
+}
+
+::ng-deep .cdk-overlay-pane {
+    margin-top: 0.5rem;
+    background-color: white;
+    border-radius: var(--border-radius);
+}
+
+#header {
+    display: flex;
+    justify-content: space-between;
+}
+
+#header button {
+    background-color: var(--user-icon-hover);
+    color: white;
+    font-size: medium;
+    border: none;
+    border-radius: var(--border-radius);
+    padding: 1rem;
+}
+
+#header button:hover {
+    filter: brightness(110%);
+}

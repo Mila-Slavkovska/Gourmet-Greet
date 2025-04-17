@@ -1,10 +1,14 @@
 <div class="recipyList">
     <h1><span class="line" [ngClass]="type === 'Owned' ? 'owned' : 'favourite'"></span> {{type}}</h1>
     <div class="cards">
-        @for (recipe of recipes?.slice(0, 3); track $index){
-            <div class="card">
-                <app-recipe-card [recipe]="getRecipe(recipe)"></app-recipe-card>
-            </div>
+        @if (recipes?.length){
+            @for (recipe of recipes?.slice(0, 3); track $index){
+                <div class="card">
+                    <app-recipe-card [recipe]="getRecipe(recipe)"></app-recipe-card>
+                </div>
+            }
+        } @else {
+            <p>No recepies found!</p>
         }
     </div>
     <div class="view-all">

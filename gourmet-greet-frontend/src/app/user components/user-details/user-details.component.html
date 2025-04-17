@@ -1,9 +1,22 @@
 <div id="details">
-    <h1><span class="line"></span> User details</h1>
+    <div id="header">
+        <h1><span class="line"></span> User details</h1>
+        <button>Upgrade to Chef</button>
+    </div>
     <div id="user">
-        <div id="userIcon" class="icon">
+        <div id="userIcon" class="icon" mat-icon-button [matMenuTriggerFor]="menu">
             <i class="ri-user-3-fill"></i>
         </div>
+        <mat-menu #menu="matMenu">
+            <button mat-menu-item>
+              <mat-icon>edit</mat-icon>
+              <span>Edit</span>
+            </button>
+            <button mat-menu-item>
+              <mat-icon>logout</mat-icon>
+              <span>Logout</span>
+            </button>
+          </mat-menu>
         <div>
             <h2>{{user?.email}}</h2>
             <div id="info">

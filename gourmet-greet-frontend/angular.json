@@ -27,6 +27,7 @@
               }
             ],
             "styles": [
+              "src/custom-theme.scss",
               "node_modules/remixicon/fonts/remixicon.css",
               "src/styles.css"
             ],

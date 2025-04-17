@@ -1,10 +1,12 @@
-import { Component, inject, Input, OnInit } from '@angular/core';
-import { AuthService } from '../../services/auth.service';
+import { Component, Input } from '@angular/core';
+import {MatIconModule} from '@angular/material/icon';
+import {MatMenuModule} from '@angular/material/menu';
+import {MatButtonModule} from '@angular/material/button';
 import { User } from '../../interfaces/user.interface';
 
 @Component({
   selector: 'app-user-details',
-  imports: [],
+  imports: [MatButtonModule, MatMenuModule, MatIconModule],
   templateUrl: './user-details.component.html',
   styleUrl: './user-details.component.css'
 })

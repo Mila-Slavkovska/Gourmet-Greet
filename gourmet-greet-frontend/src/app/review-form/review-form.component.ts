@@ -5,7 +5,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { RecipeService } from '../recipe.service';
+import { RecipeService } from '../services/recipe.service';
 import { Review } from '../interfaces/review.interface';
 import { ReviewNotifierService } from '../review-notifier.service';
 

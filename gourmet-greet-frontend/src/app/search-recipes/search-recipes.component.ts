@@ -3,8 +3,8 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { forkJoin, Subject } from 'rxjs';
 
-import { RecipeService } from '../recipe.service';
-import { CategoryService } from '../category.service';
+import { RecipeService } from '../services/recipe.service';
+import { CategoryService } from '../services/category.service';
 import { Recipe } from '../interfaces/recipe.interface';
 import { Category } from '../interfaces/category.interface';
 import { RecipeCardComponent } from '../recipe-card/recipe-card.component';

@@ -4,6 +4,7 @@ import { RecipeDetailsComponent } from './recipe-details/recipe-details.componen
 import { SearchRecipesComponent } from './search-recipes/search-recipes.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
+import { UserProfileComponent } from './user components/user-profile/user-profile.component';
 
 export const routes: Routes = [
   {
@@ -25,6 +26,10 @@ export const routes: Routes = [
   {
     path: 'search',
     component: SearchRecipesComponent
+  },
+  {
+    path: 'profile/:id',
+    component: UserProfileComponent
   },
   {
     path: '**',

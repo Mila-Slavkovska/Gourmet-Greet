@@ -1,0 +1,67 @@
+<div id="details">
+    <div id="header">
+        <h1><span class="line"></span> User details</h1>
+        <button>Upgrade to Chef</button>
+    </div>
+    <div id="user">
+        <div id="userIcon" class="icon" mat-icon-button [matMenuTriggerFor]="menu">
+            <i class="ri-user-3-fill"></i>
+        </div>
+        <mat-menu #menu="matMenu">
+            <button mat-menu-item>
+              <mat-icon>edit</mat-icon>
+              <span>Edit</span>
+            </button>
+            <button mat-menu-item>
+              <mat-icon>logout</mat-icon>
+              <span>Logout</span>
+            </button>
+          </mat-menu>
+        <div>
+            <h2>{{user?.email}}</h2>
+            <div id="info">
+                <div>
+                    <h4>Role</h4>
+                    <p>{{user?.userRole}}</p>
+                </div>
+                <div>
+                    <h4>Name</h4>
+                    <p>{{user?.firstName}} {{user?.lastName}}</p>
+                </div>
+                <div>
+                    <h4>Phone Number</h4>
+                    <p>{{user?.phoneNumber}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="stats">
+        <div>
+            <div class="icon">
+                <i class="ri-ball-pen-fill"></i>
+            </div>
+            <div>
+                <h3>{{user?.ownedRecipeIds?.length}}</h3>
+                <p>Posted Recipes</p>
+            </div>
+        </div>
+        <div>
+            <div class="icon">
+                <i class="ri-heart-3-fill"></i>
+            </div>
+            <div>
+                <h3>{{user?.favoritesIds?.length}}</h3>
+                <p>Favourites</p>
+            </div>
+        </div>
+        <div>
+            <div class="icon">
+                <i class="ri-discuss-fill"></i>
+            </div>
+            <div>
+                <h3>{{numReviews}}</h3>
+                <p>Reviews</p>
+            </div>
+        </div>
+    </div>
+</div>

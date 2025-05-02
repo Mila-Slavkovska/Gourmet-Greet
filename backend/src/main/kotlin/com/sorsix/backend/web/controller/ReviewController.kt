@@ -7,6 +7,7 @@ import com.sorsix.backend.service.UserService
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.http.ResponseEntity
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.bind.annotation.*
 
 @CrossOrigin
@@ -20,9 +21,7 @@ class ReviewController(
     @PostMapping
     fun createReview(@RequestBody reviewDto: ReviewDto): ResponseEntity<Any> {
         try {
-            //TODO: change the user
-            //            val user = userService.getUserFromAuthentication(SecurityContextHolder.getContext().authentication)
-            val user = _userService.getAllUsers()[0]
+            val user = _userService.getUserFromAuthentication(SecurityContextHolder.getContext().authentication)
             val updatedReviewDto = reviewDto.copy(authorId = user.id, authorName = user.getFullName())
             val savedReview = _reviewService.save(updatedReviewDto)
             return ResponseEntity.ok(savedReview.toDto())

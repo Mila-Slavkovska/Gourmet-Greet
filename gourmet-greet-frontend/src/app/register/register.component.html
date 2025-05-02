@@ -1,15 +1,121 @@
 <div id="auth-container">
   <div class="auth-card">
     <h2 class="auth-title">Register</h2>
-    <form>
-      <input type="text" placeholder="First Name" required />
-      <input type="text" placeholder="Last Name" required />
-      <input type="text" placeholder="Phone Number" required />
-      <input type="email" placeholder="Email" required />
-      <input type="password" placeholder="Password" required />
-      <input type="password" placeholder="Repeat Password" required />
+
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+      <input
+        type="text"
+        formControlName="firstName"
+        placeholder="First Name"
+        [class.invalid]="submitted && registerForm.get('firstName')?.errors"
+      />
+      @if(submitted && registerForm.get('firstName')?.errors) {
+      <div class="error-message">First name is required</div>
+      }
+
+      <input
+        type="text"
+        formControlName="lastName"
+        placeholder="Last Name"
+        [class.invalid]="submitted && registerForm.get('lastName')?.errors"
+      />
+      @if(submitted && registerForm.get('lastName')?.errors) {
+      <div class="error-message">Last name is required</div>
+      }
+
+      <input
+        type="text"
+        formControlName="phoneNumber"
+        placeholder="Phone Number"
+        [class.invalid]="submitted && registerForm.get('phoneNumber')?.errors"
+        (input)="formatPhoneNumber($event)"
+      />
+      @if(submitted && registerForm.get('phoneNumber')?.errors) {
+      <div class="error-message">
+        @if(registerForm.get('phoneNumber')?.errors?.['required']) {
+          <span>Phone number is required</span>
+        }
+        @if(registerForm.get('phoneNumber')?.errors?.['invalidPhoneNumber']) {
+          <span>Phone number must start with 07 or +389</span>
+        }
+      </div>
+      }
+
+      <input
+        type="email"
+        formControlName="email"
+        placeholder="Email"
+        [class.invalid]="submitted && registerForm.get('email')?.errors"
+      />
+      @if(submitted && registerForm.get('email')?.errors) {
+      <div class="error-message">
+        @if(registerForm.get('email')?.errors?.['required']) {
+          <span>Email is required</span>
+        }
+        @if(registerForm.get('email')?.errors?.['email']) {
+          <span>Please enter a valid email</span>
+        }
+      </div>
+      }
+
+      <input
+        type="password"
+        formControlName="password"
+        placeholder="Password"
+        [class.invalid]="submitted && registerForm.get('password')?.errors"
+      />
+      @if(submitted && registerForm.get('password')?.errors) {
+      <div class="error-message password-errors">
+        @if(registerForm.get('password')?.errors?.['required']) {
+          <div>Password is required</div>
+        }
+        @if(registerForm.get('password')?.errors?.['minLength']) {
+          <div>Password must be at least 8 characters</div>
+        }
+        @if(registerForm.get('password')?.errors?.['missingUpper']) {
+          <div>Password must contain at least one uppercase letter (A-Z)</div>
+        }
+        @if(registerForm.get('password')?.errors?.['missingLower']) {
+          <div>Password must contain at least one lowercase letter (a-z)</div>
+        }
+        @if(registerForm.get('password')?.errors?.['missingNumber']) {
+          <div>Password must contain at least one number (0-9)</div>
+        }
+        @if(registerForm.get('password')?.errors?.['missingSpecial']) {
+          <div>Password must contain at least one special character</div>
+        }
+      </div>
+      }
+      <div class="password-strength">
+        <div
+          class="password-strength-bar"
+          [class.weak]="passwordStrength === 'weak'"
+          [class.medium]="passwordStrength === 'medium'"
+          [class.strong]="passwordStrength === 'strong'"
+        ></div>
+      </div>
+
+      <input
+        type="password"
+        formControlName="repeatPassword"
+        placeholder="Repeat Password"
+        [class.invalid]="submitted && (registerForm.get('repeatPassword')?.errors || registerForm.errors?.['passwordMismatch'])"
+      />
+
+      @if(submitted && (registerForm.get('repeatPassword')?.errors || registerForm.errors?.['passwordMismatch'])) {
+        @if(registerForm.get('repeatPassword')?.errors?.['required']) {
+          <span class="error-message">Please repeat your password</span>
+        }
+        @if(registerForm.errors?.['passwordMismatch']) {
+          <span class="error-message">Passwords do not match</span>
+        }
+      }
       <button type="submit">Register</button>
+      @if(errorMessage) {
+        <div class="error-message"> {{errorMessage}}</div>
+      }
     </form>
+
     <p class="switch-auth">
       Already have an account? <a [routerLink]="['/login']">Login</a>
     </p>

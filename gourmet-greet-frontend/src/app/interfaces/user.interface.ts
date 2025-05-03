@@ -4,7 +4,7 @@ export interface User {
   firstName: string,
   lastName: string,
   phoneNumber: string,
-  role: string,
+  userRole: string,
   favoriteRecipes: number[],
   ownedRecipes: number []
 }

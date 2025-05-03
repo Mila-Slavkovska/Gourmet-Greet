@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice
 @ControllerAdvice
 class GlobalExceptionHandler {
 
-    @ExceptionHandler(ConstraintViolationException::class)
+    @ExceptionHandler(ConstraintViolationException::class, IllegalArgumentException::class)
     fun handleConstraintViolationException(ex: ConstraintViolationException): ResponseEntity<Map<String, List<String>>> {
         val errors = ex.constraintViolations
             .map { it.message }

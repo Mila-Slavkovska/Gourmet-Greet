@@ -22,7 +22,13 @@ class AuthenticationService(
 ) {
     @Transactional
     fun register(request: RegisterRequest): AuthenticationResponse {
+        if (repository.existsByEmail(request.email)) {
+            throw IllegalArgumentException("Email '${request.email}' is already in use.")
+        }
 
+        if (repository.existsByPhoneNumber(request.phoneNumber)) {
+            throw IllegalArgumentException("Phone number '${request.phoneNumber}' is already in use.")
+        }
         val user = User(
             firstName = request.firstName,
             lastName = request.lastName,

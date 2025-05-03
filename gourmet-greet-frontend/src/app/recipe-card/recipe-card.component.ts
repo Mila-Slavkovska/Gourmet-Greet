@@ -2,7 +2,7 @@ import { Component, inject, Input } from '@angular/core';
 import { Recipe } from '../interfaces/recipe.interface';
 import { RouterLink } from '@angular/router';
 import { DecimalPipe } from '@angular/common';
-import { RecipeService } from '../recipe.service';
+import { RecipeService } from '../services/recipe.service';
 
 @Component({
   selector: 'app-recipe-card',

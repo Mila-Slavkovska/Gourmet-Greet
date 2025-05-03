@@ -13,6 +13,9 @@
   --people-icon-color: gray;
   --dark-red-button-color: darkred;
   --advanced-search-color: #f8f9fa;
+  --icon-background: #b6b3b3;
+  --user-icon-hover: #2e7d32;
+  --box-shadow-color: rgba(0, 0, 0, 0.1);
 
   /*========== Font and typography ==========*/
   font-family: "Poppins", sans-serif;
@@ -53,3 +56,6 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 button {
   cursor: pointer;
 }
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

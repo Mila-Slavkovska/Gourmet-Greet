@@ -1,0 +1,140 @@
+#details, #user, #stats, #info, #stats > div {
+    display: flex;
+}
+
+#details {
+    flex-direction: column;
+    width: 80%;
+    margin: auto;
+    background-color: var(--off-white);
+    border-radius: var(--border-radius);
+    padding: 3rem;
+    font-family: "Poppins", sans-serif;
+    box-shadow: 0 2px 6px var(--box-shadow-color);
+}
+
+#user > div:last-child {
+    width: 100%;
+}
+
+#info {
+    width: 80%;
+    justify-content: space-between;
+}
+
+#user{
+    margin-top: 1rem;
+    margin-bottom: 3rem;
+}
+
+#stats {
+    margin: auto;
+}
+
+#stats > div {
+    border-radius: var(--border-radius);
+    box-shadow: 0 2px 6px var(--box-shadow-color);
+    background-color: var(--background-color);
+    padding: 1rem;
+    min-width: 12rem;
+    margin-inline: 1rem;
+}
+
+@media (max-width: 600px) {
+    #details {
+        text-align: center;
+        width: 100%;
+        padding: 1.5rem;
+    }
+    #user {
+        flex-direction: column;
+    }
+    #info {
+        width: 100%;
+    }
+}
+
+@media (max-width: 1100px) {
+    #stats {
+        flex-direction: column;
+        width: 90%;
+    }
+    #stats > div {
+        width: 100%;
+        margin-top: 1rem;
+    }
+}
+
+#userIcon {
+    padding: 1rem;
+    margin-right: 2.5rem;
+    cursor: pointer;
+    box-shadow: 0 2px 6px var(--box-shadow-color);
+    transition: background-color 0.2s;
+}
+
+#userIcon:hover {
+    background-color: var(--user-icon-hover);
+  }
+
+.ri-user-3-fill{
+    font-size: 3rem;
+    vertical-align: middle;
+}
+
+.line {
+    padding: 0.01rem 0.2rem;
+    margin-right: 0.5rem;
+    border-radius: 1rem;
+    background-color: var(--accent-color);
+}
+
+.icon {
+    background-color: var(--icon-background);
+    color: var( --off-white);
+    border-radius: 50%;
+    align-self: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#stats .icon {
+    background-color: var(--navbar-color);
+    color: var( --off-white);
+    padding: 0.5rem;
+    margin-right: 1.5rem;
+    font-size: 1.5rem;
+}
+
+h4 {
+    color: var(--people-icon-color)
+}
+
+button[mat-menu-item]:hover {
+    background-color: var(--lighter-color);
+}
+
+::ng-deep .cdk-overlay-pane {
+    margin-top: 0.5rem;
+    background-color: white;
+    border-radius: var(--border-radius);
+}
+
+#header {
+    display: flex;
+    justify-content: space-between;
+}
+
+#header button {
+    background-color: var(--user-icon-hover);
+    color: white;
+    font-size: medium;
+    border: none;
+    border-radius: var(--border-radius);
+    padding: 1rem;
+}
+
+#header button:hover {
+    filter: brightness(110%);
+}

@@ -21,12 +21,22 @@
             <span>Recipes</span>
           </a>
         </li>
+          @if(loggedIn()) {
             <li class="nav__item" >
-            <a [routerLink]="['/login']" class="nav__link">
-              <i class="ri-arrow-right-up-line"></i>
-              <span>Login</span>
-            </a>
-          </li>
+              <a [routerLink]="['/']" class="nav__link" (click)="logout()">
+                <i class="ri-arrow-right-up-line"></i>
+                <span>Log out</span>
+              </a>
+            </li>
+          }
+          @else {
+            <li class="nav__item" >
+              <a [routerLink]="['/login']" class="nav__link">
+                <i class="ri-arrow-right-up-line"></i>
+                <span>Login</span>
+              </a>
+            </li>
+          }
       </ul>
 
     </div>

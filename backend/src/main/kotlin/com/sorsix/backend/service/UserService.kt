@@ -9,6 +9,9 @@ import com.sorsix.backend.repository.UserRepository
 import jakarta.transaction.Transactional
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
+import org.springframework.security.core.Authentication
+import org.springframework.security.core.userdetails.UserDetails
+import org.springframework.security.core.userdetails.UsernameNotFoundException
 
 //TODO: only admin users should have permission
 @Service
@@ -28,7 +31,7 @@ class UserService(
             firstName = userDTO.firstName,
             lastName = userDTO.lastName,
             email = userDTO.email,
-            password = userDTO.password,
+            userPassword = userDTO.password,
             phoneNumber = userDTO.phoneNumber,
             role = UserRole.valueOf(userDTO.userRole)
         )
@@ -58,6 +61,13 @@ class UserService(
         _userRepository.delete(user)
 
         return user
+    }
+
+    @Transactional
+    fun getUserFromAuthentication(authentication: Authentication): User {
+        val userDetails: UserDetails = authentication.principal as UserDetails
+        return _userRepository.findByEmail(userDetails.username)
+            ?: throw UsernameNotFoundException("User not found")
     }
 }
 

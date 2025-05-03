@@ -7,6 +7,7 @@ import com.sorsix.backend.domain.model.User
 import com.sorsix.backend.service.UserService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.bind.annotation.*
 
 @CrossOrigin
@@ -39,5 +40,15 @@ class UserController(
     fun deleteUser(@PathVariable id: Long): ResponseEntity<User> {
         _userService.deleteUserById(id)
         return ResponseEntity.noContent().build()
+    }
+
+    @GetMapping("/self")
+    fun getUserDetails(): ResponseEntity<Any> {
+        return try {
+            val user = _userService.getUserFromAuthentication(SecurityContextHolder.getContext().authentication)
+            ResponseEntity.ok(user.toSimpleDto())
+        } catch (e: Exception) {
+            ResponseEntity.badRequest().body(mapOf("error" to e.message))
+        }
     }
 }

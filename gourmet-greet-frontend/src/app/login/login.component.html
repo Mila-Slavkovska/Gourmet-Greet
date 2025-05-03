@@ -1,9 +1,29 @@
 <div id="auth-container">
   <div class="auth-card">
     <h2 class="auth-title">Login</h2>
-    <form>
-      <input type="email" placeholder="Email" required />
-      <input type="password" placeholder="Password" required />
+    <form [formGroup]="loginForm" (submit)="onSubmit()">
+      <input
+        type="email"
+        placeholder="Email"
+        formControlName="email"
+        [class.invalid]="submitted && loginForm.get('email')?.errors"
+        required
+      />
+      @if(submitted && loginForm.get('email')?.errors) {
+      <div class="error-message">Email is required</div>
+      }
+      <input
+        type="password"
+        placeholder="Password"
+        formControlName="password"
+        [class.invalid]="submitted && loginForm.get('password')?.errors"
+        required
+      />
+      @if(submitted && loginForm.get('password')?.errors) {
+      <div class="error-message">Password is required</div>
+      } @if (errorMessage) {
+      <small class="error-message">Invalid username or password</small>
+      }
       <button type="submit">Login</button>
     </form>
     <p class="switch-auth">

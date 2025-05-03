@@ -1,0 +1,90 @@
+#create {
+    margin-top: var(--header-height);
+    padding: 3vh 8vw;
+}
+
+form {
+    width: fit-content;
+    padding: 5vh 4vw;
+    margin: auto;
+    border: 1px solid #e0e0e0;
+    border-radius: var(--border-radius);
+    background-color: var(--advanced-search-color);
+    box-shadow: 0px 2px 8px var(--box-shadow-color);
+}
+
+form > div {
+    margin-bottom: 2.5rem;
+}
+
+.right-align {
+    text-align: right;
+}
+
+h2, h3 {
+    font-weight: 600;
+    color: #444;
+    font-family: "Poppins", sans-serif;
+}
+
+h3:not(:first-of-type) {
+    padding-top: 1rem;
+}
+
+.custom-checkbox {
+    border: 1px solid var(--navbar-color);
+    border-radius: var(--border-radius);
+    padding: 0rem 0.5rem;
+    margin: 0.5rem;
+    background-color: white;
+}
+
+::ng-deep .custom-checkbox.mat-mdc-checkbox-checked{
+    background-color: var(--navbar-color);
+}
+
+::ng-deep .custom-checkbox .mdc-label {
+    color: var(--navbar-color);
+}
+
+::ng-deep .custom-checkbox.mat-mdc-checkbox-checked .mdc-label {
+    color: white;
+}
+
+::ng-deep .custom-checkbox.mat-mdc-checkbox-checked .mdc-checkbox__background {
+    background-color: #4caf50 !important;
+    border-color: #4caf50 !important;
+}
+
+::ng-deep .custom-checkbox.mat-mdc-checkbox-checked .mdc-checkbox__checkmark {
+    color: white !important;
+}
+
+button {
+    padding: 0.5em 1em;
+    background-color: var(--navbar-color);
+    color: white;
+    font-size: 1.2em;
+    border: none;
+    border-radius: var(--border-radius);
+}
+
+.add {
+    background-color: #4caf50;
+}
+
+.remove {
+    height: 100%;
+    vertical-align: middle;
+}
+
+.add-items {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin-bottom: 2.5rem;
+}
+
+.add-items h2 {
+    padding-right: 0.5rem;
+}

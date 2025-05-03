@@ -5,6 +5,7 @@ import { SearchRecipesComponent } from './search-recipes/search-recipes.componen
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { UserProfileComponent } from './user components/user-profile/user-profile.component';
+import { RecipeFormComponent } from './recipe-form/recipe-form.component';
 
 export const routes: Routes = [
   {
@@ -26,6 +27,10 @@ export const routes: Routes = [
   {
     path: 'search',
     component: SearchRecipesComponent
+  },
+  {
+    path: 'recipe/add',
+    component: RecipeFormComponent
   },
   {
     path: 'profile/:id',

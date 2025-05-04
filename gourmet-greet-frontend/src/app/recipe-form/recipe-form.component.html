@@ -89,11 +89,9 @@
                     <mat-form-field class="field">
                         <mat-label>Step</mat-label>
                         <textarea matInput [formControlName]="i" rows="2" cols="100"></textarea>
-                        <!-- <input matInput [formControlName]="i" /> -->
                     </mat-form-field>
                     <button class="remove" type="button" (click)="removeStep(i)">-</button>
                 </div>
-                <!-- <input [formControlName]="i" /> -->
             </div>
             </div>
         </div>
@@ -101,7 +99,6 @@
         <div>
             <h2>Media</h2>
             <div>
-                <!-- <label>Poster Image </label> -->
                 <input
                     type="file"
                     #posterInput
@@ -117,12 +114,8 @@
             @if(posterPreviewUrl){
                 <img [src]="posterPreviewUrl" style="max-width: 200px; margin-top: 10px;" />
             }
-            
-            <!-- <label>Poster</label>
-            <input type="number" formControlName="poster" />
-            <br/>
     
-            <label>Gallery</label>
+            <!-- <label>Gallery</label>
             <input formControlName="images" /> -->
         </div>
     

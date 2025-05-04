@@ -29,9 +29,7 @@ export class RecipeService {
   }
 
   createRecipe(recipe: RecipeAddDto){
-    return this.httpClient.post('/api/recipes', recipe).subscribe(response => {
-      console.log('Recipe created:', response);
-    });
+    return this.httpClient.post('/api/recipes', recipe);
   }
 
   getHighestRatedRecipes(

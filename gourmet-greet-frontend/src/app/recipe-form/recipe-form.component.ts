@@ -9,7 +9,7 @@ import { MatIconModule } from '@angular/material/icon';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import { CategoryService } from '../services/category.service';
 import { Category } from '../interfaces/category.interface';
-import { forkJoin } from 'rxjs';
+import { forkJoin, switchMap } from 'rxjs';
 import { RecipeAddDto } from '../interfaces/recipe-add.interface';
 import { UserService } from '../user.service';
 import { RecipeService } from '../services/recipe.service';
@@ -42,7 +42,6 @@ export class RecipeFormComponent implements OnInit {
       categories: this.fb.array([]),
       cookingTime: [0],
       servings: [0],
-      // poster: [],
       images: this.fb.array([])
     });
   }
@@ -106,18 +105,15 @@ export class RecipeFormComponent implements OnInit {
       images: formValue.images
     };
 
-    this.userService.getUserDetails().subscribe({
-      next: (user) => {
-        recipeDto.ownerId = user.id 
-      },
-      error: (err) => {
-        console.error('Failed to get user details:', err);
-      }
+    this.userService.getUserDetails().pipe(
+      switchMap(user => {
+        recipeDto.ownerId = user.id
+        return this.recipeService.createRecipe(recipeDto)
+      })
+    ).subscribe({
+      next: (res) => console.log('Recipe created:', res),
+      error: (err) => console.error('Error:', err)
     });
-    
-    console.log(recipeDto)
-
-    this.recipeService.createRecipe(recipeDto)
   }
 
   onPosterSelected(event: Event) {

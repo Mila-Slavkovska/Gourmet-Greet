@@ -1,6 +1,7 @@
 package com.sorsix.backend.domain.dto
 
 
+
 data class RecipeAddDto(
     val title: String,
     val description: String,
@@ -8,6 +9,7 @@ data class RecipeAddDto(
     val categories: List<Long> = emptyList(),
     val cookingTime: Int,
     val servings: Int,
+    val ownerId: Long,
     val poster: Long = 0,
     val images: List<Long> = emptyList(),
     val steps: List<String> = emptyList()

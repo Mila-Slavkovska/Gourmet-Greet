@@ -5,6 +5,7 @@ import com.sorsix.backend.domain.model.Recipe
 import com.sorsix.backend.repository.CategoryRepository
 import com.sorsix.backend.repository.RecipeRepository
 import com.sorsix.backend.repository.ReviewRepository
+import com.sorsix.backend.repository.UserRepository
 import jakarta.transaction.Transactional
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
@@ -13,7 +14,8 @@ import org.springframework.stereotype.Service
 class RecipeService(
     private val _recipeRepository: RecipeRepository,
     private val _categoryRepository: CategoryRepository,
-    private val _reviewRepository: ReviewRepository
+    private val _reviewRepository: ReviewRepository,
+    private val _userRepository: UserRepository
 
 ) {
     fun getAllRecipes(): List<Recipe> = _recipeRepository.findAll()
@@ -29,12 +31,19 @@ class RecipeService(
                 RuntimeException("Category Not Found")
             }
         }
+        val users = _userRepository.findAll()
+        println("USERS: $recipeDto")
+        val owner = _userRepository.findById(recipeDto.ownerId).orElseThrow {
+            RuntimeException("User not found")
+        }
+
         val recipe = Recipe(
             title = recipeDto.title,
             description = recipeDto.description,
             ingredients = recipeDto.ingredients.toMutableList(),
             cookingTime = recipeDto.cookingTime,
             servings = recipeDto.servings,
+            owner = owner,
             categories = categories.toMutableList(),
             images = mutableListOf(),
             poster = 0,

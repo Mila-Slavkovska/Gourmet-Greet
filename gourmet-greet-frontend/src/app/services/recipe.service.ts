@@ -5,6 +5,7 @@ import { Observable, of } from 'rxjs';
 import { mockRecipes } from '../mock-data/mock-recipes';
 import { Review } from '../interfaces/review.interface';
 import { RecipeSearch } from '../interfaces/recipe-search.interface';
+import { RecipeAddDto } from '../interfaces/recipe-add.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -25,6 +26,12 @@ export class RecipeService {
 
   getAllRecipes(): Observable<Recipe[]> {
     return of(mockRecipes);
+  }
+
+  createRecipe(recipe: RecipeAddDto){
+    return this.httpClient.post('/api/recipes', recipe).subscribe(response => {
+      console.log('Recipe created:', response);
+    });
   }
 
   getHighestRatedRecipes(

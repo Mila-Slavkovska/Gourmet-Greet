@@ -1,5 +1,7 @@
 <div id="create">
     <form [formGroup]="recipeForm" (ngSubmit)="onSubmit()">
+        <h1>Create Recipe</h1>
+
         <div>
             <h2>General details</h2>
             <mat-form-field>
@@ -26,7 +28,7 @@
                 <input matInput type="number" class="right-align" formControlName="servings" />
             </mat-form-field>
         </div>
-    
+        <hr>
         <div>
             <h2>Categories</h2>
             <h3>Skill Level</h3>
@@ -57,7 +59,7 @@
                 </mat-checkbox>
             }
         </div>
-    
+        <hr>
         <div>
             <div class="add-items">
                 <h2>Ingredients </h2> 
@@ -65,15 +67,17 @@
             </div>
             <div formArrayName="ingredients">
                 <div *ngFor="let ing of ingredients.controls; let i = index">
-                    <mat-form-field>
-                        <mat-label>Ingredient</mat-label>
-                        <input matInput [formControlName]="i" />
-                    </mat-form-field>
-                    <button class="remove" type="button" (click)="removeIngredient(i)">-</button>
+                    <div class="item">
+                        <mat-form-field class="field">
+                            <mat-label>Ingredient</mat-label>
+                            <input matInput [formControlName]="i" />
+                        </mat-form-field>
+                        <button class="remove" type="button" (click)="removeIngredient(i)">-</button>
+                    </div>
                 </div>
             </div>
         </div>
-    
+        <hr>
         <div>
             <div class="add-items">
                 <h2>Steps </h2> 
@@ -81,20 +85,45 @@
             </div>
             <div formArrayName="steps">
             <div *ngFor="let step of steps.controls; let i = index">
-                <input [formControlName]="i" />
-                <button class="remove" type="button" (click)="removeStep(i)">-</button>
+                <div class="item">
+                    <mat-form-field class="field">
+                        <mat-label>Step</mat-label>
+                        <textarea matInput [formControlName]="i" rows="2" cols="100"></textarea>
+                        <!-- <input matInput [formControlName]="i" /> -->
+                    </mat-form-field>
+                    <button class="remove" type="button" (click)="removeStep(i)">-</button>
+                </div>
+                <!-- <input [formControlName]="i" /> -->
             </div>
             </div>
         </div>
-    
+        <hr>
         <div>
             <h2>Media</h2>
-            <label>Poster</label>
+            <div>
+                <!-- <label>Poster Image </label> -->
+                <input
+                    type="file"
+                    #posterInput
+                    (change)="onPosterSelected($event)"
+                    accept="image/*"
+                    hidden
+                />
+                <button mat-raised-button type="button" color="primary" (click)="posterInput.click()">
+                    <mat-icon>upload</mat-icon>
+                    Choose Poster
+                </button>
+            </div>
+            @if(posterPreviewUrl){
+                <img [src]="posterPreviewUrl" style="max-width: 200px; margin-top: 10px;" />
+            }
+            
+            <!-- <label>Poster</label>
             <input type="number" formControlName="poster" />
             <br/>
     
             <label>Gallery</label>
-            <input formControlName="images" />
+            <input formControlName="images" /> -->
         </div>
     
         <button type="submit">Create Recipe</button>

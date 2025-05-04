@@ -5,27 +5,33 @@ import { HttpClient } from '@angular/common/http';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import { CategoryService } from '../services/category.service';
 import { Category } from '../interfaces/category.interface';
 import { forkJoin } from 'rxjs';
 import { RecipeAddDto } from '../interfaces/recipe-add.interface';
 import { UserService } from '../user.service';
+import { RecipeService } from '../services/recipe.service';
 
 @Component({
   selector: 'app-recipe-form',
   templateUrl: './recipe-form.component.html',
   styleUrls: ['./recipe-form.component.css'],
-  imports: [MatFormFieldModule, MatInputModule, MatButtonModule, MatCheckboxModule, CommonModule, ReactiveFormsModule]
+  imports: [MatFormFieldModule, MatInputModule, MatButtonModule, MatCheckboxModule, MatIconModule, CommonModule, ReactiveFormsModule]
 })
 export class RecipeFormComponent implements OnInit {
   recipeForm: FormGroup;
   categoryService = inject(CategoryService);
   userService = inject(UserService)
+  recipeService = inject(RecipeService)
 
   skillLevels: Category[] = [];
   recipeCategories: Category[] = [];
   dietaryOptions: Category[] = [];
+
+  posterFile: File | null = null;
+  posterPreviewUrl: string | null = null;
 
   constructor(private fb: FormBuilder, private http: HttpClient) {
     this.recipeForm = this.fb.group({
@@ -36,8 +42,8 @@ export class RecipeFormComponent implements OnInit {
       categories: this.fb.array([]),
       cookingTime: [0],
       servings: [0],
-      poster: [0],
-      images: ['']
+      // poster: [],
+      images: this.fb.array([])
     });
   }
 
@@ -110,9 +116,20 @@ export class RecipeFormComponent implements OnInit {
     });
     
     console.log(recipeDto)
-    console.log(formValue.categories)
-    // this.http.post('/api/recipes', recipeDto).subscribe(response => {
-    //   console.log('Recipe created:', response);
-    // });
+
+    this.recipeService.createRecipe(recipeDto)
+  }
+
+  onPosterSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (!input.files?.length) return;
+  
+    this.posterFile = input.files[0];
+  
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.posterPreviewUrl = reader.result as string;
+    };
+    reader.readAsDataURL(this.posterFile);
   }
 }

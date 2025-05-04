@@ -21,7 +21,15 @@ form > div {
     text-align: right;
 }
 
-h2, h3 {
+hr {
+    margin-bottom: 2rem;
+}
+
+h1 {
+    text-align: center;
+}
+
+h1, h2, h3 {
     font-weight: 600;
     color: #444;
     font-family: "Poppins", sans-serif;
@@ -69,13 +77,12 @@ button {
     border-radius: var(--border-radius);
 }
 
-.add {
-    background-color: #4caf50;
+button:hover {
+    filter: brightness(105%);
 }
 
-.remove {
-    height: 100%;
-    vertical-align: middle;
+.add {
+    background-color: #4caf50;
 }
 
 .add-items {
@@ -84,6 +91,17 @@ button {
     text-align: center;
     margin-bottom: 2.5rem;
 }
+
+.item {
+    display: flex;
+    align-items: center;
+    gap: 10px; 
+}
+
+  
+  .remove {
+    margin-bottom: 1rem;
+  }
 
 .add-items h2 {
     padding-right: 0.5rem;

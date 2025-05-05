@@ -6,7 +6,7 @@ import { Recipe } from '../interfaces/recipe.interface';
 import { ReviewsComponent } from '../reviews/reviews.component';
 import { ReviewFormComponent } from '../review-form/review-form.component';
 import { NgClass } from '@angular/common';
-import { ReviewNotifierService } from '../review-notifier.service';
+import { ReviewNotifierService } from '../services/review-notifier.service';
 import { filter } from 'rxjs';
 
 @Component({

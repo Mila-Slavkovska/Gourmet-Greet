@@ -5,6 +5,7 @@ import { Observable, of } from 'rxjs';
 import { mockRecipes } from '../mock-data/mock-recipes';
 import { Review } from '../interfaces/review.interface';
 import { RecipeSearch } from '../interfaces/recipe-search.interface';
+import { TopIngredient } from '../interfaces/top-ingredient.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -63,5 +64,9 @@ export class RecipeService {
         pageSize: params.pageSize?.toString() || '9',
       },
     });
+  }
+
+  getTop10Ingredients(): Observable<TopIngredient[]> {
+    return this.httpClient.get<TopIngredient[]>(`/api/recipes/top-ingredients`);
   }
 }

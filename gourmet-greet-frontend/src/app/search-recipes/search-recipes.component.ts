@@ -9,6 +9,7 @@ import { Recipe } from '../interfaces/recipe.interface';
 import { Category } from '../interfaces/category.interface';
 import { RecipeCardComponent } from '../recipe-card/recipe-card.component';
 import { ViewportScroller } from '@angular/common';
+import { TopIngredient } from '../interfaces/top-ingredient.interface';
 
 @Component({
   selector: 'app-search-recipes',
@@ -28,6 +29,7 @@ export class SearchRecipesComponent implements OnInit {
   skillLevels: Category[] = [];
   recipeCategories: Category[] = [];
   dietaryOptions: Category[] = [];
+  ingredients: TopIngredient[] = [];
 
   subject: Subject<number> = new Subject();
 
@@ -68,10 +70,12 @@ export class SearchRecipesComponent implements OnInit {
       dietary: this.categoryService.getCategoriesByType('DIETARY'),
       recipe: this.categoryService.getCategoriesByType('RECIPE_TYPE'),
       skill: this.categoryService.getCategoriesByType('SKILL_LEVEL'),
-    }).subscribe(({ dietary, recipe, skill }) => {
+      topIngredients: this.recipeService.getTop10Ingredients()
+    }).subscribe(({ dietary, recipe, skill, topIngredients }) => {
       this.dietaryOptions = dietary;
       this.recipeCategories = recipe;
       this.skillLevels = skill;
+      this.ingredients = topIngredients;
       this.patchFormValues();
     });
 
@@ -213,6 +217,17 @@ export class SearchRecipesComponent implements OnInit {
       : this.selectedDietaries.push(diet);
   }
 
+
+  selectIngredient(ingredient: TopIngredient) {
+    const index = this.selectedIngredients.findIndex(
+      (d) => d === ingredient.ingredient
+    );
+    index > -1
+      ? this.selectedIngredients.splice(index, 1)
+      : this.selectedIngredients.push(ingredient.ingredient);
+  }
+
+
   isSkillLevelSelected(level: Category): boolean {
     return this.selectedSkillLevels.some((d) => d.id === level.id);
   }
@@ -223,5 +238,9 @@ export class SearchRecipesComponent implements OnInit {
 
   isDietarySelected(diet: Category): boolean {
     return this.selectedDietaries.some((d) => d.id === diet.id);
+  }
+
+  isIngredientSelected(ingredient: TopIngredient): boolean {
+    return this.selectedIngredients.some((d) => d === ingredient.ingredient);
   }
 }

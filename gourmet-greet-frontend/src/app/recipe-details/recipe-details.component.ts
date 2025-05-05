@@ -27,6 +27,8 @@ export class RecipeDetailsComponent implements OnInit {
   private categoryService = inject(CategoryService);
   private reviewNotifierService = inject(ReviewService);
 
+  isFavorite = false;
+
   ngOnInit(): void {
     this.router.events
       .pipe(filter((event) => event instanceof NavigationEnd))
@@ -46,6 +48,12 @@ export class RecipeDetailsComponent implements OnInit {
         );
       }
     });
+
+    if (this.loggedIn()) {
+      this.recipeService
+        .isFavourite(this.id || 0)
+        .subscribe((favourite) => (this.isFavorite = favourite));
+    }
   }
 
   loadRecipe(): void {
@@ -101,5 +109,27 @@ export class RecipeDetailsComponent implements OnInit {
 
   goToImage(index: number): void {
     this.currentImageIndex = index;
+  }
+
+  loggedIn() {
+    return localStorage.getItem('token') != null;
+  }
+
+  toggleFavorite() {
+    if (!this.id) return;
+
+    if (this.isFavorite) {
+      this.recipeService.removeFromFavorites(this.id).subscribe({
+        next: () => {
+          this.isFavorite = false;
+        },
+      });
+    } else {
+      this.recipeService.addToFavorites(this.id).subscribe({
+        next: () => {
+          this.isFavorite = true;
+        },
+      });
+    }
   }
 }

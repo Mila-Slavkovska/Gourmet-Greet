@@ -2,6 +2,7 @@ package com.sorsix.backend.service
 
 import com.sorsix.backend.domain.dto.RecipeAddDto
 import com.sorsix.backend.domain.model.Recipe
+import com.sorsix.backend.domain.model.User
 import com.sorsix.backend.repository.CategoryRepository
 import com.sorsix.backend.repository.RecipeRepository
 import com.sorsix.backend.repository.ReviewRepository
@@ -15,7 +16,8 @@ class RecipeService(
     private val _recipeRepository: RecipeRepository,
     private val _categoryRepository: CategoryRepository,
     private val _reviewRepository: ReviewRepository,
-    private val _userRepository: UserRepository
+    private val ingredientIndexService: IngredientIndexService,
+    private val userRepository: UserRepository
 
 ) {
     fun getAllRecipes(): List<Recipe> = _recipeRepository.findAll()
@@ -32,9 +34,8 @@ class RecipeService(
                 RuntimeException("Category Not Found")
             }
         }
-        val users = _userRepository.findAll()
-        println("USERS: $recipeDto")
-        val owner = _userRepository.findById(recipeDto.ownerId).orElseThrow {
+        val users = userRepository.findAll()
+        val owner = userRepository.findById(recipeDto.ownerId).orElseThrow {
             RuntimeException("User not found")
         }
 
@@ -50,7 +51,9 @@ class RecipeService(
             poster = 0,
             steps = recipeDto.steps.toMutableList(),
         )
-        return _recipeRepository.save(recipe)
+        val savedRecipe = _recipeRepository.save(recipe)
+        ingredientIndexService.updateIndex(savedRecipe)
+        return savedRecipe
     }
 
     fun editRecipe(
@@ -117,10 +120,23 @@ class RecipeService(
                 }
             }
         }
-
-
         return recipes.sortedBy { it.title }
     }
 
+    fun addRecipeToFavourites(user: User, recipeId: Long) {
+        val recipe = getRecipeById(recipeId) ?: return
+        user.favouriteRecipes.add(recipe)
+        userRepository.save(user)
+    }
 
+    fun removeFromFavourites(user: User, recipeId: Long) {
+        val recipe = getRecipeById(recipeId) ?: return
+        user.favouriteRecipes.remove(recipe)
+        userRepository.save(user)
+    }
+
+    fun isFavouriteRecipe(user: User, recipeId: Long): Boolean {
+        val recipe = getRecipeById(recipeId) ?: return false
+        return user.favouriteRecipes.contains(recipe)
+    }
 }

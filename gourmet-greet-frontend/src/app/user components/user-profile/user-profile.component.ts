@@ -5,7 +5,7 @@ import { AuthService } from '../../services/auth.service';
 import { User } from '../../interfaces/user.interface';
 import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
-import { UserService } from '../../user.service';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-user-profile',

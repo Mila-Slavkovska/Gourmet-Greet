@@ -65,6 +65,10 @@ data class Recipe(
             steps = this.steps
         )
     }
+
+    override fun toString(): String {
+        return "Recipe(id=$id, title='$title', description='$description', rating=$rating, numberOfReviews=$numberOfReviews, cookingTime=$cookingTime, servings=$servings, poster=$poster)"
+    }
 }
 
 

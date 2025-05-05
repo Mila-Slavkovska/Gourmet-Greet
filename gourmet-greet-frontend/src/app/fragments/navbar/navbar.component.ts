@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { UserService } from '../../user.service';
+import { UserService } from '../../services/user.service';
 import { User } from '../../interfaces/user.interface';
 
 @Component({
@@ -12,6 +12,7 @@ import { User } from '../../interfaces/user.interface';
 export class NavbarComponent {
   service = inject(UserService)
   currentUser?: User | null;
+
 
   ngOnInit(): void {
     this.service.currentUser$.subscribe((user) => {
@@ -26,5 +27,4 @@ export class NavbarComponent {
   logout() {
     this.service.logout();
   }
-
 }

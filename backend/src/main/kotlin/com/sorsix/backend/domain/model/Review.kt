@@ -28,4 +28,7 @@ data class Review(
             date = this.date
         )
     }
+    override fun toString(): String {
+        return "Review(id=$id, grade=$grade, authorId=${author?.id}, recipeId=${recipe.id}, comment='$comment', date=$date)"
+    }
 }

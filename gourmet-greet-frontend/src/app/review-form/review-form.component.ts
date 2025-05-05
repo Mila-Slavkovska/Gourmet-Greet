@@ -7,7 +7,7 @@ import {
 } from '@angular/forms';
 import { RecipeService } from '../services/recipe.service';
 import { Review } from '../interfaces/review.interface';
-import { ReviewService } from '../review-notifier.service';
+import { ReviewService } from '../services/review.service';
 
 @Component({
   selector: 'app-review-form',

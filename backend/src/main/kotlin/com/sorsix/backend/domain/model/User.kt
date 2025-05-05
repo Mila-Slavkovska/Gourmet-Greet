@@ -42,7 +42,7 @@ data class User(
         inverseJoinColumns = [JoinColumn(name = "recipe_id")]
     )
     @JsonIgnore
-    val favouriteRecipes: Set<Recipe> = emptySet(),
+    val favouriteRecipes: MutableSet<Recipe> = mutableSetOf(),
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "owner", cascade = [CascadeType.PERSIST, CascadeType.MERGE])
     @JsonIgnore
@@ -97,4 +97,8 @@ data class User(
     override fun isCredentialsNonExpired(): Boolean = true
 
     override fun isEnabled(): Boolean = true
+
+    override fun toString(): String {
+        return "User(id=$id, email='$email', firstName='$firstName', lastName='$lastName', phoneNumber='$phoneNumber', role=$role)"
+    }
 }

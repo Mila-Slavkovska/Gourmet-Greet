@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { User } from './interfaces/user.interface';
+import { User } from '../interfaces/user.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -24,7 +24,6 @@ export class UserService {
     return new Observable<User>((observer) => {
       this.httpClient.get<User>(`/api/users/self`).subscribe({
         next: (user) => {
-          console.log(user)
           this.setCurrentUser(user);
           observer.next(user);
           observer.complete();

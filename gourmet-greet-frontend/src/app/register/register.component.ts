@@ -152,8 +152,6 @@ export class RegisterComponent {
       password: this.registerForm.value.password,
       phoneNumber: this.registerForm.value.phoneNumber,
     };
-    console.log(registerRequest.phoneNumber);
-
     this.service.register(registerRequest).subscribe({
       next: (response) => {
         this.registrationSuccess.emit();

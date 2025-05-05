@@ -4,10 +4,14 @@ import org.springframework.http.MediaType
 import com.sorsix.backend.domain.dto.RecipeAddDto
 import com.sorsix.backend.domain.dto.RecipeDto
 import com.sorsix.backend.domain.dto.RecipeSearchDto
+import com.sorsix.backend.domain.dto.TopIngredientDto
 import com.sorsix.backend.service.ImageService
+import com.sorsix.backend.service.IngredientIndexService
 import com.sorsix.backend.service.RecipeService
+import com.sorsix.backend.service.UserService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.multipart.MultipartFile
 import java.io.IOException
@@ -18,6 +22,8 @@ import java.io.IOException
 class RecipeController(
     private val _recipeService: RecipeService,
     private val _imageService: ImageService,
+    private val ingredientIndexService: IngredientIndexService,
+    private val userService: UserService
 ) {
     @GetMapping
     fun getAllRecipes(): List<RecipeDto> = _recipeService.getAllRecipes().map { it.toDto() }
@@ -102,34 +108,20 @@ class RecipeController(
             .body(image)
     }
 
-//    @GetMapping("/search")
-//    fun searchByAll(
-//        @RequestParam(required = false) title: String = "",
-//        @RequestParam(required = false) cookingTime: Int = 0,
-//        @RequestParam(required = false) servings: Int = 0,
-//        @RequestParam(required = false) categoryIds: List<Long> = emptyList(),
-//        @RequestParam(required = false) ingredients: List<String> = emptyList()
-//    ): List<RecipeDto> {
-//        val filteredRecipes = _recipeService.search(title, cookingTime, servings, categoryIds,ingredients).map { it.toDto() }
-//        return filteredRecipes
-//    }
-
-    //TODO return total results, in order to show/hide Load More button on FE
     @GetMapping("/search")
     fun searchByAll(
-            @RequestParam(required = false) title: String = "",
-            @RequestParam(required = false) cookingTime: Int = 0,
-            @RequestParam(required = false) servings: Int = 0,
-            @RequestParam(required = false) categoryIds: List<Long> = emptyList(),
-            @RequestParam(required = false) ingredients: List<String> = emptyList(),
-            @RequestParam(required = false, defaultValue = "0") page: Int,
-            @RequestParam(required = false, defaultValue = "9") pageSize: Int
-        ): RecipeSearchDto {
+        @RequestParam(required = false) title: String = "",
+        @RequestParam(required = false) cookingTime: Int = 0,
+        @RequestParam(required = false) servings: Int = 0,
+        @RequestParam(required = false) categoryIds: List<Long> = emptyList(),
+        @RequestParam(required = false) ingredients: List<String> = emptyList(),
+        @RequestParam(required = false, defaultValue = "0") page: Int,
+        @RequestParam(required = false, defaultValue = "9") pageSize: Int
+    ): RecipeSearchDto {
         val allFilteredRecipes = _recipeService.search(title, cookingTime, servings, categoryIds, ingredients)
         val totalCount = allFilteredRecipes.size
 
         val paginatedRecipes = allFilteredRecipes
-//            .drop(page * pageSize)
             .take(pageSize)
             .map { it.toDto() }
 
@@ -137,11 +129,35 @@ class RecipeController(
             recipes = paginatedRecipes,
             totalResults = totalCount
         )
-        }
-    
+    }
+
     @GetMapping("/top-rated")
     fun getTopRatedRecipes(): List<RecipeDto> {
-        return _recipeService.getTopRatedRecipes().map{ it.toDto() }
+        return _recipeService.getTopRatedRecipes().map { it.toDto() }
+    }
+
+    @GetMapping("/top-ingredients")
+    fun getTopIngredients(): List<TopIngredientDto> = ingredientIndexService.getTop10Ingredients()
+
+    @PostMapping("/favourites/{recipeId}")
+    fun addToFavouriteRecipes(@PathVariable recipeId: Long): ResponseEntity<Unit> {
+        val user = userService.getUserFromAuthentication(SecurityContextHolder.getContext().authentication)
+        _recipeService.addRecipeToFavourites(user, recipeId)
+        return ResponseEntity.noContent().build()
+    }
+
+    @DeleteMapping("/favourites/{recipeId}")
+    fun removeFromFavouriteRecipes(@PathVariable recipeId: Long): ResponseEntity<Unit> {
+        val user = userService.getUserFromAuthentication(SecurityContextHolder.getContext().authentication)
+        _recipeService.removeFromFavourites(user, recipeId)
+        return ResponseEntity.noContent().build()
+    }
+
+    @GetMapping("/is-favourite/{recipeId}")
+    fun isFavouriteRecipe(@PathVariable recipeId: Long): ResponseEntity<Boolean> {
+        val user = userService.getUserFromAuthentication(SecurityContextHolder.getContext().authentication)
+        val isFavourite = _recipeService.isFavouriteRecipe(user, recipeId)
+        return ResponseEntity.ok(isFavourite)
     }
 
 }

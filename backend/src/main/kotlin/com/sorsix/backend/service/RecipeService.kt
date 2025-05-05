@@ -2,6 +2,7 @@ package com.sorsix.backend.service
 
 import com.sorsix.backend.domain.dto.RecipeAddDto
 import com.sorsix.backend.domain.model.Recipe
+import com.sorsix.backend.domain.model.User
 import com.sorsix.backend.repository.CategoryRepository
 import com.sorsix.backend.repository.RecipeRepository
 import com.sorsix.backend.repository.ReviewRepository
@@ -12,29 +13,30 @@ import org.springframework.stereotype.Service
 
 @Service
 class RecipeService(
-    private val _recipeRepository: RecipeRepository,
-    private val _categoryRepository: CategoryRepository,
-    private val _reviewRepository: ReviewRepository,
-    private val _userRepository: UserRepository
+    private val recipeRepository: RecipeRepository,
+    private val categoryRepository: CategoryRepository,
+    private val reviewRepository: ReviewRepository,
+    private val ingredientIndexService: IngredientIndexService,
+    private val userRepository: UserRepository
 
 ) {
-    fun getAllRecipes(): List<Recipe> = _recipeRepository.findAll()
+    fun getAllRecipes(): List<Recipe> = recipeRepository.findAll()
 
-    fun getRecipeById(id: Long): Recipe? = _recipeRepository.findByIdOrNull(id)
+    fun getRecipeById(id: Long): Recipe? = recipeRepository.findByIdOrNull(id)
 
-    fun getTopRatedRecipes(): List<Recipe> = _recipeRepository.findTop9ByOrderByRatingDesc()
+    fun getTopRatedRecipes(): List<Recipe> = recipeRepository.findTop9ByOrderByRatingDesc()
 
     fun createRecipe(
         recipeDto: RecipeAddDto
     ): Recipe {
         val categories = recipeDto.categories.map { category ->
-            _categoryRepository.findById(category).orElseThrow {
+            categoryRepository.findById(category).orElseThrow {
                 RuntimeException("Category Not Found")
             }
         }
-        val users = _userRepository.findAll()
+        val users = userRepository.findAll()
         println("USERS: $recipeDto")
-        val owner = _userRepository.findById(recipeDto.ownerId).orElseThrow {
+        val owner = userRepository.findById(recipeDto.ownerId).orElseThrow {
             RuntimeException("User not found")
         }
 
@@ -50,17 +52,19 @@ class RecipeService(
             poster = 0,
             steps = recipeDto.steps.toMutableList(),
         )
-        return _recipeRepository.save(recipe)
+        val savedRecipe = recipeRepository.save(recipe)
+        ingredientIndexService.updateIndex(savedRecipe)
+        return savedRecipe
     }
 
     fun editRecipe(
         id: Long, recipeDto: RecipeAddDto
     ): Recipe {
-        val recipe = _recipeRepository.findById(id).orElseThrow {
+        val recipe = recipeRepository.findById(id).orElseThrow {
             RuntimeException("Recipe Not Found")
         }
         val categories = recipeDto.categories.map { category ->
-            _categoryRepository.findById(category).orElseThrow {
+            categoryRepository.findById(category).orElseThrow {
                 RuntimeException("Category Not Found")
             }
         }
@@ -75,22 +79,22 @@ class RecipeService(
             images = if (recipeDto.images.isNotEmpty()) recipeDto.images.toMutableList() else recipe.images,
             poster = if (recipeDto.poster > 0) recipeDto.poster else recipe.poster
         )
-        return _recipeRepository.save(updatedRecipe)
+        return recipeRepository.save(updatedRecipe)
     }
 
     @Transactional
     fun deleteRecipeById(id: Long): Boolean {
-        val recipe = _recipeRepository.findById(id).orElse(null) ?: return false
+        val recipe = recipeRepository.findById(id).orElse(null) ?: return false
 
         recipe.removeOwner()
-        _reviewRepository.deleteByRecipe(recipe)
-        _recipeRepository.delete(recipe)
+        reviewRepository.deleteByRecipe(recipe)
+        recipeRepository.delete(recipe)
         return true
     }
 
     fun search(title: String, cookingTime: Int, servings: Int, categoryIds: List<Long>,ingredients:List<String>): List<Recipe> {
         var recipes = if (title.isNotBlank()) {
-            _recipeRepository.findByTitleContainsIgnoreCase(title)
+            recipeRepository.findByTitleContainsIgnoreCase(title)
         } else {
             getAllRecipes()
         }
@@ -117,10 +121,23 @@ class RecipeService(
                 }
             }
         }
-
-
         return recipes.sortedBy { it.title }
     }
 
+    fun addRecipeToFavourites(user: User, recipeId: Long) {
+        val recipe = getRecipeById(recipeId) ?: return
+        user.favouriteRecipes.add(recipe)
+        userRepository.save(user)
+    }
 
+    fun removeFromFavourites(user: User, recipeId: Long) {
+        val recipe = getRecipeById(recipeId) ?: return
+        user.favouriteRecipes.remove(recipe)
+        userRepository.save(user)
+    }
+
+    fun isFavouriteRecipe(user: User, recipeId: Long): Boolean {
+        val recipe = getRecipeById(recipeId) ?: return false
+        return user.favouriteRecipes.contains(recipe)
+    }
 }

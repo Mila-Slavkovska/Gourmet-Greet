@@ -6,6 +6,7 @@ import { mockRecipes } from '../mock-data/mock-recipes';
 import { Review } from '../interfaces/review.interface';
 import { RecipeSearch } from '../interfaces/recipe-search.interface';
 import { RecipeAddDto } from '../interfaces/recipe-add.interface';
+import { TopIngredient } from '../interfaces/top-ingredient.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -82,5 +83,20 @@ export class RecipeService {
     formData.append('file', image);
 
     return this.httpClient.post(`/api/recipes/${id}/upload-image`, formData)
+
+  getTop10Ingredients(): Observable<TopIngredient[]> {
+    return this.httpClient.get<TopIngredient[]>(`/api/recipes/top-ingredients`);
+  }
+
+  addToFavorites(recipeId: number): Observable<void> {
+    return this.httpClient.post<void>(`/api/recipes/favourites/${recipeId}`, null);
+  }
+
+  removeFromFavorites(recipeId: number): Observable<void> {
+    return this.httpClient.delete<void>(`/api/recipes/favourites/${recipeId}`);
+  }
+
+  isFavourite(recipeId: number): Observable<boolean> {
+    return this.httpClient.get<boolean>(`/api/recipes/is-favourite/${recipeId}`);
   }
 }

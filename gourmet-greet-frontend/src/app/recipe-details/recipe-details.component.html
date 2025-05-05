@@ -1,6 +1,11 @@
 <div id="recipe-details">
   <img [src]="getPosterImage()" class="image" alt="{{ recipe?.title }}" />
   <h3 class="title">{{ recipe?.title }}</h3>
+  @if(loggedIn()) {
+  <button class="favorite-btn" (click)="toggleFavorite()">
+    <i class="ri-heart-fill" [class.favorited]="isFavorite"></i>
+  </button>
+  }
   <div class="description">
     {{ recipe?.description }}
   </div>

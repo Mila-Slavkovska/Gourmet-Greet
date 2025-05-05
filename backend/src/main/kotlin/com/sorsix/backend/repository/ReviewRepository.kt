@@ -8,4 +8,6 @@ import org.springframework.data.jpa.repository.JpaRepository
 interface ReviewRepository : JpaRepository<Review, Long> {
     @Transactional
     fun deleteByRecipe(recipe: Recipe)
+    fun findAllByAuthorId(userId: Long): List<Review>
+
 }

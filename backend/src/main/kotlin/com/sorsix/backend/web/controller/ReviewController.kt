@@ -67,4 +67,11 @@ class ReviewController(
         _reviewService.deleteById(id, user)
         return ResponseEntity.noContent().build()
     }
+
+    @GetMapping("/for-user")
+    fun getNumberOfReviewsForUser(): ResponseEntity<Int> {
+        val user = _userService.getUserFromAuthentication(SecurityContextHolder.getContext().authentication)
+        val numberOfReviews = _reviewService.getNumberOfReviewsForUser(user)
+        return  ResponseEntity.ok(numberOfReviews)
+    }
 }

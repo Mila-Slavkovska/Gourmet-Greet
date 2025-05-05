@@ -1,12 +1,19 @@
-import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+ import { inject, Injectable } from '@angular/core';
+ import { Subject } from 'rxjs';
 
-@Injectable({ providedIn: 'root' })
-export class ReviewNotifierService {
-  private reviewSubmittedSource = new Subject<void>();
-  reviewSubmitted$ = this.reviewSubmittedSource.asObservable();
+ @Injectable({ providedIn: 'root' })
+ export class ReviewService {
+   private reviewSubmittedSource = new Subject<void>();
+   reviewSubmitted$ = this.reviewSubmittedSource.asObservable();
 
-  notifyReviewSubmitted() {
-    this.reviewSubmittedSource.next();
-  }
-}
+   httpClient = inject(HttpClient)
+
+   notifyReviewSubmitted() {
+     this.reviewSubmittedSource.next();
+   }
+
+   getNumberOfReviewsForUser() {
+     return this.httpClient.get<number>(`/api/reviews/for-user`);
+   }
+ }

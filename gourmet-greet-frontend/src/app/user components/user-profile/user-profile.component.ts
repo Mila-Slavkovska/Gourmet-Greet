@@ -5,6 +5,7 @@ import { AuthService } from '../../services/auth.service';
 import { User } from '../../interfaces/user.interface';
 import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
+import { UserService } from '../../user.service';
 
 @Component({
   selector: 'app-user-profile',
@@ -16,14 +17,13 @@ export class UserProfileComponent {
   authService = inject(AuthService)
   httpClient = inject(HttpClient)
   route:ActivatedRoute = inject(ActivatedRoute)
-  user?: User
+
+  userService = inject(UserService)
+  user?: User | null
 
   ngOnInit(): void {
-    this.route.paramMap.subscribe(params => {
-      const id = params.get('id') || 1;
-      console.log('Recipe ID:', id);
-      this.authService.setUser(+id)
-      this.user = this.authService.getUser() || undefined
+    this.userService.getUserDetails().subscribe((user) => {
+      this.user = user;
     });
   }
 }

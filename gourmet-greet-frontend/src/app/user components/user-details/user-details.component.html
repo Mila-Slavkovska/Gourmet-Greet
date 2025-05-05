@@ -1,8 +1,10 @@
 <div id="details">
     <div id="header">
         <h1><span class="line"></span> User details</h1>
+      @if(user?.role != "CHEF") {
         <button>Upgrade to Chef</button>
-    </div>
+      }
+      </div>
     <div id="user">
         <div id="userIcon" class="icon" mat-icon-button [matMenuTriggerFor]="menu">
             <i class="ri-user-3-fill"></i>
@@ -22,7 +24,7 @@
             <div id="info">
                 <div>
                     <h4>Role</h4>
-                    <p>{{user?.userRole}}</p>
+                    <p>{{user?.role}}</p>
                 </div>
                 <div>
                     <h4>Name</h4>

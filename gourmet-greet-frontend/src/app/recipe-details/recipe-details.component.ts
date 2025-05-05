@@ -6,8 +6,8 @@ import { Recipe } from '../interfaces/recipe.interface';
 import { ReviewsComponent } from '../reviews/reviews.component';
 import { ReviewFormComponent } from '../review-form/review-form.component';
 import { NgClass } from '@angular/common';
-import { ReviewNotifierService } from '../review-notifier.service';
 import { filter } from 'rxjs';
+import { ReviewService } from '../review-notifier.service';
 
 @Component({
   selector: 'app-recipe-details',
@@ -25,7 +25,7 @@ export class RecipeDetailsComponent implements OnInit {
   private router = inject(Router);
   private recipeService = inject(RecipeService);
   private categoryService = inject(CategoryService);
-  private reviewNotifierService = inject(ReviewNotifierService);
+  private reviewNotifierService = inject(ReviewService);
 
   ngOnInit(): void {
     this.router.events

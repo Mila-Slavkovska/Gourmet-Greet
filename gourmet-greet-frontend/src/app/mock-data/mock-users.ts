@@ -10,7 +10,7 @@ export const mockUsers: User[] = [
     phoneNumber: "+1234567890",
     favoriteRecipes: [1, 2, 3, 4],
     ownedRecipes: [],
-    userRole: "USER"
+    role: "USER"
   },
   {
     id: 2,
@@ -20,7 +20,7 @@ export const mockUsers: User[] = [
     phoneNumber: "+1987654321",
     favoriteRecipes: [5],
     ownedRecipes: [1, 3],
-    userRole: "CHEF"
+    role: "CHEF"
   },
   {
     id: 3,
@@ -30,6 +30,6 @@ export const mockUsers: User[] = [
     phoneNumber: "+1123456789",
     favoriteRecipes: [],
     ownedRecipes: [],
-    userRole: "ADMIN"
+    role: "ADMIN"
   },
 ];

@@ -7,7 +7,7 @@ import {
 } from '@angular/forms';
 import { RecipeService } from '../services/recipe.service';
 import { Review } from '../interfaces/review.interface';
-import { ReviewNotifierService } from '../review-notifier.service';
+import { ReviewService } from '../review-notifier.service';
 
 @Component({
   selector: 'app-review-form',
@@ -19,7 +19,7 @@ export class ReviewFormComponent {
   @Input() recipeId?: number;
 
   reviewService = inject(RecipeService);
-  reviewNotifierService = inject(ReviewNotifierService);
+  reviewNotifierService = inject(ReviewService);
 
   form = new FormGroup({
     grade: new FormControl<number>(1, [Validators.required]),

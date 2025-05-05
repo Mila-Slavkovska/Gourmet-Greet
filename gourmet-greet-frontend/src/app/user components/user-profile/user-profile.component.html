@@ -1,7 +1,10 @@
-<div id="profile">
+@if(user) {
+  <div id="profile">
     <app-user-details [user]="user"/>
-    @if (user?.userRole == "CHEF"){
-        <app-user-recipes [recipes]="user?.ownedRecipes"type="Owned"/>
+    @if (user.role == "CHEF"){
+        <app-user-recipes [recipes]="user.ownedRecipes"type="Owned"/>
     }
-    <app-user-recipes [recipes]="user?.favoriteRecipes" type="Favourites"/>
+    <app-user-recipes [recipes]="user.favoriteRecipes" type="Favourites"/>
 </div>
+
+}

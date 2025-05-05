@@ -63,7 +63,9 @@ export class RecipeDetailsComponent implements OnInit {
     this.categoryService
       .getCategoriesByIds(categoryIds)
       .subscribe((categories) => {
-        this.categoryNames = categories.map((c) => c.name);
+        this.categoryNames = categories.map((c) => {
+          return c.name
+        });
       });
   }
 

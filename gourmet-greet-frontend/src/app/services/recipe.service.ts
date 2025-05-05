@@ -29,7 +29,7 @@ export class RecipeService {
   }
 
   createRecipe(recipe: RecipeAddDto){
-    return this.httpClient.post('/api/recipes', recipe);
+    return this.httpClient.post<Recipe>('/api/recipes', recipe);
   }
 
   getHighestRatedRecipes(
@@ -68,5 +68,19 @@ export class RecipeService {
         pageSize: params.pageSize?.toString() || '9',
       },
     });
+  }
+
+  uploadPoster(id: number, poster: File){
+    const formData = new FormData();
+    formData.append('file', poster);
+
+    return this.httpClient.post(`/api/recipes/${id}/upload-poster-image`, formData)
+  }
+
+  uploadImage(id: number, image: File){
+    const formData = new FormData();
+    formData.append('file', image);
+
+    return this.httpClient.post(`/api/recipes/${id}/upload-image`, formData)
   }
 }

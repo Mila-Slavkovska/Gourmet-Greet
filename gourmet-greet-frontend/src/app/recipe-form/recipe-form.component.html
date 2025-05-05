@@ -98,7 +98,9 @@
         <hr>
         <div>
             <h2>Media</h2>
-            <div>
+            <h3>Poster</h3>
+            <p>This image will be used as the main visual for your recipe.</p>
+            <div id="poster">
                 <input
                     type="file"
                     #posterInput
@@ -112,13 +114,47 @@
                 </button>
             </div>
             @if(posterPreviewUrl){
-                <img [src]="posterPreviewUrl" style="max-width: 200px; margin-top: 10px;" />
+                <div class="poster-preview">
+                    <div class="imagePreview">
+                        <img class="preview" [src]="posterPreviewUrl"/>
+                        <button class="close" mat-icon-button color="warn" type="button" (click)="removePoster()">
+                            <mat-icon>close</mat-icon>
+                        </button>
+                    </div>
+                </div>
             }
-    
-            <!-- <label>Gallery</label>
-            <input formControlName="images" /> -->
+            
+            <h3>Gallery</h3>
+            <p>You can add multiple images to showcase your recipe.</p>
+            <div id="gallery">
+                <input
+                  type="file"
+                  multiple
+                  accept="image/*"
+                  #galleryInput
+                  (change)="onGallerySelected($event)"
+                  hidden
+                />
+                <button mat-raised-button type="button" color="primary" (click)="galleryInput.click()">
+                  <mat-icon>upload</mat-icon>
+                  Add Gallery Images
+                </button>
+              
+                <div class="gallery-preview">
+                  <ng-container *ngFor="let imageUrl of galleryPreviewUrls; let i = index">
+                    <div class="imagePreview">
+                      <img class="preview" [src]="imageUrl" />
+                      <button class="close" mat-icon-button color="warn" type="button" (click)="removeGalleryImage(i)">
+                        <mat-icon>close</mat-icon>
+                      </button>
+                    </div>
+                  </ng-container>
+                </div>
+              </div>
         </div>
-    
-        <button type="submit">Create Recipe</button>
+        
+        <div id="submit">
+            <button class="submit" type="submit">Create Recipe</button>
+        </div>
     </form>    
 </div>

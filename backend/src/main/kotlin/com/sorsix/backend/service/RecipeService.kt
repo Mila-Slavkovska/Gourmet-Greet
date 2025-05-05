@@ -19,10 +19,11 @@ class RecipeService(
 
 ) {
     fun getAllRecipes(): List<Recipe> = _recipeRepository.findAll()
+
     fun getRecipeById(id: Long): Recipe? = _recipeRepository.findByIdOrNull(id)
 
     fun getTopRatedRecipes(): List<Recipe> = _recipeRepository.findTop9ByOrderByRatingDesc()
-    //TODO: add the owner of the recipe
+
     fun createRecipe(
         recipeDto: RecipeAddDto
     ): Recipe {

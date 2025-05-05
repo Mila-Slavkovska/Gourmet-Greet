@@ -9,10 +9,12 @@ import { MatIconModule } from '@angular/material/icon';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import { CategoryService } from '../services/category.service';
 import { Category } from '../interfaces/category.interface';
-import { forkJoin, switchMap } from 'rxjs';
+import { forkJoin, map, mergeMap, Observable, of, switchMap } from 'rxjs';
 import { RecipeAddDto } from '../interfaces/recipe-add.interface';
 import { UserService } from '../user.service';
 import { RecipeService } from '../services/recipe.service';
+import { Recipe } from '../interfaces/recipe.interface';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-recipe-form',
@@ -23,8 +25,9 @@ import { RecipeService } from '../services/recipe.service';
 export class RecipeFormComponent implements OnInit {
   recipeForm: FormGroup;
   categoryService = inject(CategoryService);
-  userService = inject(UserService)
-  recipeService = inject(RecipeService)
+  userService = inject(UserService);
+  recipeService = inject(RecipeService);
+  router = inject(Router)
 
   skillLevels: Category[] = [];
   recipeCategories: Category[] = [];
@@ -32,6 +35,8 @@ export class RecipeFormComponent implements OnInit {
 
   posterFile: File | null = null;
   posterPreviewUrl: string | null = null;
+  galleryFiles: File[] = [];
+  galleryPreviewUrls: string[] = [];
 
   constructor(private fb: FormBuilder, private http: HttpClient) {
     this.recipeForm = this.fb.group({
@@ -41,8 +46,7 @@ export class RecipeFormComponent implements OnInit {
       steps: this.fb.array([]),
       categories: this.fb.array([]),
       cookingTime: [0],
-      servings: [0],
-      images: this.fb.array([])
+      servings: [0]
     });
   }
 
@@ -102,16 +106,38 @@ export class RecipeFormComponent implements OnInit {
     const recipeDto: RecipeAddDto = {
       ...formValue,
       categories: formValue.categories,
-      images: formValue.images
+      poster: 0,
+      images: []
     };
 
     this.userService.getUserDetails().pipe(
       switchMap(user => {
         recipeDto.ownerId = user.id
         return this.recipeService.createRecipe(recipeDto)
+      }),
+      switchMap((addedRecipe: Recipe) => {
+        const recipeId = addedRecipe.id
+
+        const uploadPoster$: Observable<any> = this.posterFile
+        ? this.recipeService.uploadPoster(recipeId, this.posterFile)
+        : of(null);
+
+        const uploadImages$: Observable<any[]> = this.galleryFiles.length > 0
+        ? forkJoin(
+          this.galleryFiles.map(file => this.recipeService.uploadImage(recipeId, file))
+        )
+        : of([])
+
+        return uploadPoster$.pipe(
+          mergeMap(() => uploadImages$),
+          map(() => addedRecipe)
+        );
       })
     ).subscribe({
-      next: (res) => console.log('Recipe created:', res),
+      next: (res) => {
+        console.log('Recipe created:', res);
+        this.router.navigate(['/recipes', res.id])
+      },
       error: (err) => console.error('Error:', err)
     });
   }
@@ -127,5 +153,32 @@ export class RecipeFormComponent implements OnInit {
       this.posterPreviewUrl = reader.result as string;
     };
     reader.readAsDataURL(this.posterFile);
+  }
+
+  removePoster() {
+    this.posterFile = null;
+    this.posterPreviewUrl = null;
+  }
+
+  onGallerySelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (!input.files?.length) return;
+  
+    Array.from(input.files).forEach(file => {
+      this.galleryFiles.push(file);
+  
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.galleryPreviewUrls.push(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    });
+  
+    input.value = '';
+  }
+  
+  removeGalleryImage(index: number) {
+    this.galleryFiles.splice(index, 1);
+    this.galleryPreviewUrls.splice(index, 1);
   }
 }

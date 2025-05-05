@@ -13,7 +13,7 @@ form {
     box-shadow: 0px 2px 8px var(--box-shadow-color);
 }
 
-form > div {
+form > div:not(:last-child) {
     margin-bottom: 2.5rem;
 }
 
@@ -27,6 +27,7 @@ hr {
 
 h1 {
     text-align: center;
+    margin-bottom: 1rem;
 }
 
 h1, h2, h3 {
@@ -37,6 +38,42 @@ h1, h2, h3 {
 
 h3:not(:first-of-type) {
     padding-top: 1rem;
+}
+
+h3:last-of-type {
+    margin-top: 1.5rem;
+}
+
+#poster, #gallery {
+    margin-top: 1rem;
+}
+
+.preview {
+    width: 150px; 
+    height: 100px; 
+    object-fit: cover;
+}
+
+.imagePreview {
+    position: relative
+}
+
+.gallery-preview, .poster-preview {
+    display: flex; 
+    gap: 10px; 
+    flex-wrap: wrap; 
+    margin-top: 10px;
+}
+
+.close {
+    position: absolute; 
+    top: 0; 
+    right: 0;
+    background: rgba(255,255,255,0.85);
+}
+
+.close:hover {
+    filter: brightness(95%);
 }
 
 .custom-checkbox {
@@ -68,7 +105,7 @@ h3:not(:first-of-type) {
     color: white !important;
 }
 
-button {
+.add, .remove, .submit {
     padding: 0.5em 1em;
     background-color: var(--navbar-color);
     color: white;
@@ -79,6 +116,11 @@ button {
 
 button:hover {
     filter: brightness(105%);
+}
+
+#submit {
+    display: flex;
+    justify-content: center;
 }
 
 .add {
@@ -99,9 +141,9 @@ button:hover {
 }
 
   
-  .remove {
+.remove {
     margin-bottom: 1rem;
-  }
+}
 
 .add-items h2 {
     padding-right: 0.5rem;

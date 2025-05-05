@@ -27,7 +27,7 @@ class SecurityConfig(val authenticationProvider: AuthenticationProvider, val jwt
                     .requestMatchers(
                         "/api/auth/**",
                         "/api/recipes/search",
-                        "/api/categories"
+                        "/api/categories/**"
                     ).permitAll()
                     .requestMatchers(
                         HttpMethod.GET, "/api/recipes", "/api/recipes/**"

@@ -13,7 +13,8 @@ import org.springframework.stereotype.Service
 class RecipeService(
     private val _recipeRepository: RecipeRepository,
     private val _categoryRepository: CategoryRepository,
-    private val _reviewRepository: ReviewRepository
+    private val _reviewRepository: ReviewRepository,
+    private val ingredientIndexService: IngredientIndexService
 
 ) {
     fun getAllRecipes(): List<Recipe> = _recipeRepository.findAll()
@@ -40,7 +41,9 @@ class RecipeService(
             poster = 0,
             steps = recipeDto.steps.toMutableList(),
         )
-        return _recipeRepository.save(recipe)
+        val savedRecipe = _recipeRepository.save(recipe)
+        ingredientIndexService.updateIndex(savedRecipe)
+        return savedRecipe
     }
 
     fun editRecipe(

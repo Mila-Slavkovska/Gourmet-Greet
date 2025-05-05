@@ -50,23 +50,20 @@
     @if (showAdvancedSearch) {
     <div class="advanced-search">
       <div class="advanced-search-fields">
-        <label>Ingredient</label>
-        <div class="ingredient-section">
-          <input
-            type="text"
-            formControlName="ingredient"
-            placeholder="Enter ingredient"
-            (keyup.enter)="addIngredient()"
-          />
-          <button
-            class="add-ingredient"
-            type="button"
-            (click)="addIngredient()"
-          >
-            +
-          </button>
+        <div class="filter-ingredient">
+          <label>Ingredients</label>
+          <div class="filter-buttons">
+            @for (ingredient of ingredients; track ingredient) {
+            <button
+              type="button"
+              [class.active]="isIngredientSelected(ingredient)"
+              (click)="selectIngredient(ingredient)"
+            >
+              {{ ingredient.ingredient }}
+            </button>
+            }
+          </div>
         </div>
-
         <label>Number of Servings</label>
         <input
           type="number"

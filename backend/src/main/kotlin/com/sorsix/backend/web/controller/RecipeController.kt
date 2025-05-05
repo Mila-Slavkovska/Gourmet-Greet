@@ -4,7 +4,9 @@ import org.springframework.http.MediaType
 import com.sorsix.backend.domain.dto.RecipeAddDto
 import com.sorsix.backend.domain.dto.RecipeDto
 import com.sorsix.backend.domain.dto.RecipeSearchDto
+import com.sorsix.backend.domain.dto.TopIngredientDto
 import com.sorsix.backend.service.ImageService
+import com.sorsix.backend.service.IngredientIndexService
 import com.sorsix.backend.service.RecipeService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -18,6 +20,7 @@ import java.io.IOException
 class RecipeController(
     private val _recipeService: RecipeService,
     private val _imageService: ImageService,
+    private  val ingredientIndexService: IngredientIndexService
 ) {
     @GetMapping
     fun getAllRecipes(): List<RecipeDto> = _recipeService.getAllRecipes().map { it.toDto() }
@@ -101,20 +104,6 @@ class RecipeController(
             .contentType(MediaType.IMAGE_PNG)
             .body(image)
     }
-
-//    @GetMapping("/search")
-//    fun searchByAll(
-//        @RequestParam(required = false) title: String = "",
-//        @RequestParam(required = false) cookingTime: Int = 0,
-//        @RequestParam(required = false) servings: Int = 0,
-//        @RequestParam(required = false) categoryIds: List<Long> = emptyList(),
-//        @RequestParam(required = false) ingredients: List<String> = emptyList()
-//    ): List<RecipeDto> {
-//        val filteredRecipes = _recipeService.search(title, cookingTime, servings, categoryIds,ingredients).map { it.toDto() }
-//        return filteredRecipes
-//    }
-
-    //TODO return total results, in order to show/hide Load More button on FE
     @GetMapping("/search")
     fun searchByAll(
             @RequestParam(required = false) title: String = "",
@@ -129,7 +118,6 @@ class RecipeController(
         val totalCount = allFilteredRecipes.size
 
         val paginatedRecipes = allFilteredRecipes
-//            .drop(page * pageSize)
             .take(pageSize)
             .map { it.toDto() }
 
@@ -144,4 +132,6 @@ class RecipeController(
         return _recipeService.getTopRatedRecipes().map{ it.toDto() }
     }
 
+    @GetMapping("/top-ingredients")
+    fun getTopIngredients(): List<TopIngredientDto> = ingredientIndexService.getTop10Ingredients()
 }

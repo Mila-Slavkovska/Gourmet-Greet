@@ -39,13 +39,10 @@ export class LoginComponent {
       email: formValue.email,
       password: formValue.password,
     };
-    console.log("auth req"+ authRequest.email)
     this.service.login(authRequest).subscribe((response: LoginResponse) => {
       if (response.error) {
         this.errorMessage = true;
-        console.log("eror")
       }
-      console.log("success")
       if (response.token) {
         this.userService.getUserDetails().subscribe((user) => {
           this.userService.setCurrentUser(user);

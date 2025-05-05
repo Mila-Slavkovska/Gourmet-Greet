@@ -86,4 +86,6 @@ class ReviewService(
 
         _recipeRepository.save(recipe.copy(rating = currenRating, numberOfReviews = currentNumberOfReviews))
     }
+
+    fun getNumberOfReviewsForUser(user: User): Int = _reviewRepository.findAllByAuthorId(user.id).size
 }

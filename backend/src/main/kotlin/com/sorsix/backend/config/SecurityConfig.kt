@@ -31,7 +31,7 @@ class SecurityConfig(val authenticationProvider: AuthenticationProvider, val jwt
                         "/api/categories/**"
                     ).permitAll()
                     .requestMatchers(
-                        HttpMethod.GET, "/api/recipes", "/api/recipes/**"
+                        HttpMethod.GET, "/api/recipes", "/api/recipes/**","/api/recipes/*/image/**"
                     ).permitAll()
                     .dispatcherTypeMatchers(DispatcherType.ASYNC).permitAll()
                     .anyRequest().authenticated()

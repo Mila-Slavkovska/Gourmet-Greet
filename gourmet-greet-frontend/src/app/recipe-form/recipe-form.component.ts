@@ -10,11 +10,11 @@ import { CategoryService } from '../services/category.service';
 import { Category } from '../interfaces/category.interface';
 import { forkJoin, map, merge, mergeMap, Observable, of, switchMap } from 'rxjs';
 import { RecipeAddDto } from '../interfaces/recipe-add.interface';
-import { UserService } from '../user.service';
 import { RecipeService } from '../services/recipe.service';
 import { Recipe } from '../interfaces/recipe.interface';
 import { Router } from '@angular/router';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
+import { UserService } from '../services/user.service';
 
 @Component({
   selector: 'app-recipe-form',
@@ -61,7 +61,7 @@ export class RecipeFormComponent implements OnInit {
     this.ingredients.valueChanges.subscribe(() => {
       this.ingredientErrorMessage();
     });
-  
+
     this.ingredients.statusChanges.subscribe(() => {
       this.ingredientErrorMessage();
     });
@@ -69,7 +69,7 @@ export class RecipeFormComponent implements OnInit {
     this.steps.valueChanges.subscribe(() => {
       this.stepErrorMessage();
     });
-  
+
     this.steps.statusChanges.subscribe(() => {
       this.stepErrorMessage();
     });
@@ -114,7 +114,7 @@ export class RecipeFormComponent implements OnInit {
       this.ingredientsErrorMessage.set('');
       this.ingredientErrorMessage()
     }
-  
+
     if (this.steps.length === 0) {
       this.stepsErrorMessage.set('Add at least one step!');
     } else {
@@ -228,9 +228,9 @@ export class RecipeFormComponent implements OnInit {
   onPosterSelected(event: Event) {
     const input = event.target as HTMLInputElement;
     if (!input.files?.length) return;
-  
+
     this.posterFile = input.files[0];
-  
+
     const reader = new FileReader();
     reader.onload = () => {
       this.posterPreviewUrl = reader.result as string;
@@ -246,20 +246,20 @@ export class RecipeFormComponent implements OnInit {
   onGallerySelected(event: Event) {
     const input = event.target as HTMLInputElement;
     if (!input.files?.length) return;
-  
+
     Array.from(input.files).forEach(file => {
       this.galleryFiles.push(file);
-  
+
       const reader = new FileReader();
       reader.onload = () => {
         this.galleryPreviewUrls.push(reader.result as string);
       };
       reader.readAsDataURL(file);
     });
-  
+
     input.value = '';
   }
-  
+
   removeGalleryImage(index: number) {
     this.galleryFiles.splice(index, 1);
     this.galleryPreviewUrls.splice(index, 1);

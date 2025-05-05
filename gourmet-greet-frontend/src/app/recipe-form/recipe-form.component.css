@@ -147,4 +147,10 @@ button:hover {
 
 .add-items h2 {
     padding-right: 0.5rem;
+    text-align: start;
+}
+
+.error {
+    font-size: x-small;
+    text-align: start;
 }

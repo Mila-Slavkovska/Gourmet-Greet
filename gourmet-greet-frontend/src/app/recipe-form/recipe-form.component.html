@@ -7,6 +7,9 @@
             <mat-form-field>
                 <mat-label>Title</mat-label>
                 <input matInput formControlName="title" />
+                @if(recipeForm.get('title')?.invalid){
+                    <mat-error>{{titleErrorMessage()}}</mat-error>
+                }
             </mat-form-field>
             <br/>
     
@@ -62,7 +65,12 @@
         <hr>
         <div>
             <div class="add-items">
-                <h2>Ingredients </h2> 
+                <div>
+                    <h2>Ingredients </h2>
+                    @if(ingredientsErrorMessage() !== ''){
+                        <mat-error class="error">{{ingredientsErrorMessage()}}</mat-error>
+                    } 
+                </div>
                 <button class="add" type="button" (click)="addIngredient()">+</button>
             </div>
             <div formArrayName="ingredients">
@@ -71,6 +79,11 @@
                         <mat-form-field class="field">
                             <mat-label>Ingredient</mat-label>
                             <input matInput [formControlName]="i" />
+                            @if(ing.invalid && ing.touched){
+                                <mat-error>
+                                    Ingredient is required!
+                                </mat-error>
+                            }
                         </mat-form-field>
                         <button class="remove" type="button" (click)="removeIngredient(i)">-</button>
                     </div>
@@ -80,7 +93,12 @@
         <hr>
         <div>
             <div class="add-items">
-                <h2>Steps </h2> 
+                <div>
+                    <h2>Steps </h2> 
+                    @if(stepsErrorMessage() !== ''){
+                        <mat-error class="error">{{stepsErrorMessage()}}</mat-error>
+                    } 
+                </div>
                 <button class="add" type="button" (click)="addStep()">+</button>
             </div>
             <div formArrayName="steps">
@@ -89,6 +107,11 @@
                     <mat-form-field class="field">
                         <mat-label>Step</mat-label>
                         <textarea matInput [formControlName]="i" rows="2" cols="100"></textarea>
+                        @if(step.invalid && step.touched){
+                            <mat-error>
+                                Step is required!
+                            </mat-error>
+                        }
                     </mat-form-field>
                     <button class="remove" type="button" (click)="removeStep(i)">-</button>
                 </div>

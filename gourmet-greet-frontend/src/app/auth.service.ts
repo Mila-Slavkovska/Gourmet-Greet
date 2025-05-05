@@ -20,11 +20,9 @@ export class AuthService {
     return this.httpClient.post<AuthenticationResponse>(`/api/auth/authenticate`, request).pipe(
       map((response: AuthenticationResponse) => {
         localStorage.setItem('token', response.token);
-        console.log("token"+ response.token )
         return response;
       }),
       catchError((error: HttpErrorResponse) => {
-        console.error('Login failed:', error);
         return of({ error: error.message } as any);
       })
     );

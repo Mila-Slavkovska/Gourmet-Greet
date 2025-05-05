@@ -69,4 +69,16 @@ export class RecipeService {
   getTop10Ingredients(): Observable<TopIngredient[]> {
     return this.httpClient.get<TopIngredient[]>(`/api/recipes/top-ingredients`);
   }
+
+  addToFavorites(recipeId: number): Observable<void> {
+    return this.httpClient.post<void>(`/api/recipes/favourites/${recipeId}`, null);
+  }
+
+  removeFromFavorites(recipeId: number): Observable<void> {
+    return this.httpClient.delete<void>(`/api/recipes/favourites/${recipeId}`);
+  }
+
+  isFavourite(recipeId: number): Observable<boolean> {
+    return this.httpClient.get<boolean>(`/api/recipes/is-favourite/${recipeId}`);
+  }
 }

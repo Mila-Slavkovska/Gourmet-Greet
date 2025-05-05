@@ -2,9 +2,11 @@ package com.sorsix.backend.service
 
 import com.sorsix.backend.domain.dto.RecipeAddDto
 import com.sorsix.backend.domain.model.Recipe
+import com.sorsix.backend.domain.model.User
 import com.sorsix.backend.repository.CategoryRepository
 import com.sorsix.backend.repository.RecipeRepository
 import com.sorsix.backend.repository.ReviewRepository
+import com.sorsix.backend.repository.UserRepository
 import jakarta.transaction.Transactional
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
@@ -14,7 +16,8 @@ class RecipeService(
     private val _recipeRepository: RecipeRepository,
     private val _categoryRepository: CategoryRepository,
     private val _reviewRepository: ReviewRepository,
-    private val ingredientIndexService: IngredientIndexService
+    private val ingredientIndexService: IngredientIndexService,
+    private val userRepository: UserRepository
 
 ) {
     fun getAllRecipes(): List<Recipe> = _recipeRepository.findAll()
@@ -110,10 +113,23 @@ class RecipeService(
                 }
             }
         }
-
-
         return recipes.sortedBy { it.title }
     }
 
+    fun addRecipeToFavourites(user: User, recipeId: Long) {
+        val recipe = getRecipeById(recipeId) ?: return
+        user.favouriteRecipes.add(recipe)
+        userRepository.save(user)
+    }
 
+    fun removeFromFavourites(user: User, recipeId: Long) {
+        val recipe = getRecipeById(recipeId) ?: return
+        user.favouriteRecipes.remove(recipe)
+        userRepository.save(user)
+    }
+
+    fun isFavouriteRecipe(user: User, recipeId: Long): Boolean {
+        val recipe = getRecipeById(recipeId) ?: return false
+        return user.favouriteRecipes.contains(recipe)
+    }
 }

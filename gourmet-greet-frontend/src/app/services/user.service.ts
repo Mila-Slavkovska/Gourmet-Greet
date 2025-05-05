@@ -24,7 +24,6 @@ export class UserService {
     return new Observable<User>((observer) => {
       this.httpClient.get<User>(`/api/users/self`).subscribe({
         next: (user) => {
-          console.log(user)
           this.setCurrentUser(user);
           observer.next(user);
           observer.complete();

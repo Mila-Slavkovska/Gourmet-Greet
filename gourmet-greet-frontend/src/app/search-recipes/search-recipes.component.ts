@@ -29,6 +29,7 @@ export class SearchRecipesComponent implements OnInit {
   skillLevels: Category[] = [];
   recipeCategories: Category[] = [];
   dietaryOptions: Category[] = [];
+  cuisineOptions: Category[] = [];
   ingredients: TopIngredient[] = [];
 
   subject: Subject<number> = new Subject();
@@ -44,6 +45,7 @@ export class SearchRecipesComponent implements OnInit {
   selectedSkillLevels: Category[] = [];
   selectedRecipeCategories: Category[] = [];
   selectedDietaries: Category[] = [];
+  selectedCuisines: Category[] = [];
   selectedIngredients: string[] = [];
 
   recipesLoaded = false;
@@ -57,6 +59,7 @@ export class SearchRecipesComponent implements OnInit {
     recipeCategories: new FormControl([]),
     ingredients: new FormControl([]),
     dietaryOptions: new FormControl([]),
+    cuisineOptions: new FormControl([])
   });
   activatedRoute = inject(ActivatedRoute);
   router = inject(Router);
@@ -70,11 +73,13 @@ export class SearchRecipesComponent implements OnInit {
       dietary: this.categoryService.getCategoriesByType('DIETARY'),
       recipe: this.categoryService.getCategoriesByType('RECIPE_TYPE'),
       skill: this.categoryService.getCategoriesByType('SKILL_LEVEL'),
+      cuisine: this.categoryService.getCategoriesByType('CUISINE_TYPE'),
       topIngredients: this.recipeService.getTop10Ingredients()
-    }).subscribe(({ dietary, recipe, skill, topIngredients }) => {
+    }).subscribe(({ dietary, recipe, skill, cuisine, topIngredients }) => {
       this.dietaryOptions = dietary;
       this.recipeCategories = recipe;
       this.skillLevels = skill;
+      this.cuisineOptions = cuisine;
       this.ingredients = topIngredients;
       this.patchFormValues();
     });
@@ -97,6 +102,9 @@ export class SearchRecipesComponent implements OnInit {
     const selectedDietariesIds = queryParams['dietaryOptions']
       ? queryParams['dietaryOptions'].split(',')
       : [];
+     const selectedCuisineIds = queryParams['cuisineOptions']
+    ? queryParams['cuisineOptions'].split(',')
+    : [];
     const selectedIngredients = queryParams['ingredients']
       ? queryParams['ingredients'].split(',')
       : [];
@@ -110,7 +118,9 @@ export class SearchRecipesComponent implements OnInit {
     this.selectedDietaries = this.dietaryOptions.filter((diet) =>
       selectedDietariesIds.includes(diet.id.toString())
     );
-
+    this.selectedCuisines = this.cuisineOptions.filter((diet) =>
+      selectedCuisineIds.includes(diet.id.toString())
+    );
     this.selectedIngredients = selectedIngredients;
   }
 
@@ -135,6 +145,7 @@ export class SearchRecipesComponent implements OnInit {
         .map((c) => c.id)
         .join(','),
       dietaryOptions: this.selectedDietaries.map((d) => d.id).join(','),
+      cuisineOptions: this.selectedCuisines.map((d) => d.id).join(','),
       ingredients: this.selectedIngredients.join(','),
       pageSize: 9,
     };
@@ -159,9 +170,18 @@ export class SearchRecipesComponent implements OnInit {
     this.subject.next(this.pageSize);
   }
 
+  createParams(queryParams: any) {
+    const categoryIds = [
+      ...(queryParams.skillLevels ?? []),
+      ...(queryParams.recipeCategories ?? []),
+      ...(queryParams.dietaryOptions ?? []),
+      ...(queryParams.cuisineOptions ?? []),
+    ];
+    return categoryIds;
+  }
+
   loadRecipes(queryParams: any) {
     const oldQueryParams = this.cleanQueryParams(this.form.value);
-
     this.recipeService
       .getFilteredRecipes({
         ...oldQueryParams,
@@ -217,6 +237,12 @@ export class SearchRecipesComponent implements OnInit {
       : this.selectedDietaries.push(diet);
   }
 
+  selectCuisine(diet: Category) {
+    const index = this.selectedCuisines.findIndex((d) => d.id === diet.id);
+    index > -1
+      ? this.selectedCuisines.splice(index, 1)
+      : this.selectedCuisines.push(diet);
+  }
 
   selectIngredient(ingredient: TopIngredient) {
     const index = this.selectedIngredients.findIndex(
@@ -238,6 +264,10 @@ export class SearchRecipesComponent implements OnInit {
 
   isDietarySelected(diet: Category): boolean {
     return this.selectedDietaries.some((d) => d.id === diet.id);
+  }
+
+  isCuisineSelected(diet: Category): boolean {
+    return this.selectedCuisines.some((d) => d.id === diet.id);
   }
 
   isIngredientSelected(ingredient: TopIngredient): boolean {

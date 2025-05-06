@@ -7,6 +7,7 @@ form {
     width: fit-content;
     padding: 5vh 4vw;
     margin: auto;
+    margin-top: 1rem;
     border: 1px solid #e0e0e0;
     border-radius: var(--border-radius);
     background-color: var(--advanced-search-color);
@@ -40,7 +41,7 @@ h3:not(:first-of-type) {
     padding-top: 1rem;
 }
 
-h3:last-of-type {
+#gallery-header {
     margin-top: 1.5rem;
 }
 
@@ -119,8 +120,7 @@ button:hover {
 }
 
 #submit {
-    display: flex;
-    justify-content: center;
+    color: white;
 }
 
 .add {
@@ -153,4 +153,9 @@ button:hover {
 .error {
     font-size: x-small;
     text-align: start;
+}
+
+#done {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
 }

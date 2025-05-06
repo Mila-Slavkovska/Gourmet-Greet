@@ -1,11 +1,12 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, FormsModule, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatStepperModule} from '@angular/material/stepper';
 import { CategoryService } from '../services/category.service';
 import { Category } from '../interfaces/category.interface';
 import { forkJoin, map, merge, mergeMap, Observable, of, switchMap } from 'rxjs';
@@ -20,10 +21,15 @@ import { UserService } from '../services/user.service';
   selector: 'app-recipe-form',
   templateUrl: './recipe-form.component.html',
   styleUrls: ['./recipe-form.component.css'],
-  imports: [MatFormFieldModule, MatInputModule, MatButtonModule, MatCheckboxModule, MatIconModule, CommonModule, ReactiveFormsModule]
+  imports: [MatFormFieldModule, MatInputModule, MatButtonModule, MatCheckboxModule, MatIconModule, CommonModule, 
+    MatStepperModule, FormsModule, ReactiveFormsModule]
 })
 export class RecipeFormComponent implements OnInit {
-  recipeForm: FormGroup;
+  generalFG: FormGroup;
+  categoriesFG: FormGroup;
+  ingredientsFG: FormGroup;
+  stepsFG: FormGroup;
+
   categoryService = inject(CategoryService);
   userService = inject(UserService);
   recipeService = inject(RecipeService);
@@ -43,18 +49,26 @@ export class RecipeFormComponent implements OnInit {
   stepsErrorMessage = signal('');
 
   constructor(private fb: FormBuilder) {
-    this.recipeForm = this.fb.group({
+    this.generalFG = this.fb.group({
       title: ['', Validators.required],
       description: [''],
-      ingredients: this.fb.array([]),
-      steps: this.fb.array([]),
-      categories: this.fb.array([]),
       cookingTime: [0],
       servings: [0]
     });
 
-    const titleControl = this.recipeForm.get('title') as FormControl;
-    merge(titleControl?.statusChanges, titleControl?.valueChanges)
+    this.categoriesFG = this.fb.group({
+      categories: this.fb.array([])
+    })
+
+    this.ingredientsFG = this.fb.group({
+      ingredients: this.fb.array([])
+    })
+
+    this.stepsFG = this.fb.group({
+      steps: this.fb.array([]),
+    })
+
+    merge(this.title?.statusChanges, this.title?.valueChanges)
     .pipe(takeUntilDestroyed())
     .subscribe(() => this.updateTitleErrorMessage())
 
@@ -98,7 +112,7 @@ export class RecipeFormComponent implements OnInit {
   }
 
   updateTitleErrorMessage(){
-    if(this.recipeForm.get('title')?.hasError('required')){
+    if(this.title?.hasError('required')){
       this.titleErrorMessage.set('You must enter a value');
     } else {
       this.titleErrorMessage.set('');
@@ -136,7 +150,7 @@ export class RecipeFormComponent implements OnInit {
   }
 
   get categoriesArray(): FormArray {
-    return this.recipeForm.get('categories') as FormArray;
+    return this.categoriesFG.get('categories') as FormArray;
   }
 
   onCheckboxChange(event: any, categoryId: number){
@@ -150,12 +164,16 @@ export class RecipeFormComponent implements OnInit {
     }
   }
 
+  get title(): FormControl {
+    return this.generalFG.get('title') as FormControl;
+  }
+
   get ingredients(): FormArray {
-    return this.recipeForm.get('ingredients') as FormArray;
+    return this.ingredientsFG.get('ingredients') as FormArray;
   }
 
   get steps(): FormArray {
-    return this.recipeForm.get('steps') as FormArray;
+    return this.stepsFG.get('steps') as FormArray;
   }
 
   addIngredient() {
@@ -175,18 +193,25 @@ export class RecipeFormComponent implements OnInit {
   }
 
   onSubmit() {
-    const formValue = this.recipeForm.value;
+    const formValue1 = this.generalFG.value;
+    const formValue2 = this.categoriesFG.value;
+    const formValue3 = this.ingredientsFG.value;
+    const formValue4 = this.stepsFG.value;
+
     const recipeDto: RecipeAddDto = {
-      ...formValue,
-      categories: formValue.categories,
+      ...formValue1,
+      ...formValue3,
+      ...formValue4,
+      categories: formValue2.categories,
       poster: 0,
       images: []
     };
-
+    
     const ingredients = recipeDto.ingredients.filter(ingredient => ingredient.length > 0)
     const steps = recipeDto.steps.filter(step => step.length > 0)
-
-    if(this.recipeForm.invalid || ingredients.length<1 || steps.length<1){
+    
+    const recipeFormInvalid = this.generalFG.invalid || this.ingredientsFG.invalid || this.categoriesFG.invalid
+    if(recipeFormInvalid || ingredients.length<1 || steps.length<1){
       this.updateFormErrorMessages()
       return
     }

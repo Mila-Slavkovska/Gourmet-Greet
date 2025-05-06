@@ -1,183 +1,225 @@
 <div id="create">
-    <form [formGroup]="recipeForm" (ngSubmit)="onSubmit()">
-        <h1>Create Recipe</h1>
+    <mat-stepper orientation="vertical" linear="true" #stepper>
+        <mat-step [stepControl]="generalFG">
+            <form [formGroup]="generalFG">
+                <h1>Create Recipe</h1>
 
-        <div>
-            <h2>General details</h2>
-            <mat-form-field>
-                <mat-label>Title</mat-label>
-                <input matInput formControlName="title" />
-                @if(recipeForm.get('title')?.invalid){
-                    <mat-error>{{titleErrorMessage()}}</mat-error>
-                }
-            </mat-form-field>
-            <br/>
-    
-            <mat-form-field>
-                <mat-label>Description</mat-label>
-                <textarea matInput formControlName="description" rows="4" cols="100"></textarea>
-            </mat-form-field>
-            <br/>
-    
-            <mat-form-field>
-                <mat-label>Cooking Time (minutes)</mat-label>
-                <input matInput type="number" class="right-align" formControlName="cookingTime" />
-                <span matTextSuffix>min</span>
-            </mat-form-field>
-            <br/>
-    
-            <mat-form-field>
-                <mat-label>Servings</mat-label>
-                <input matInput type="number" class="right-align" formControlName="servings" />
-            </mat-form-field>
-        </div>
-        <hr>
-        <div>
-            <h2>Categories</h2>
-            <h3>Skill Level</h3>
-            @for(category of skillLevels; track category.id){
-                <mat-checkbox
-                class="custom-checkbox"
-                [value]="category.id.toString()" 
-                (change)="onCheckboxChange($event, category.id)" >
-                    {{ category.name }}
-                </mat-checkbox>
-            }
-            <h3>Recipe Type</h3>
-            @for(category of recipeCategories; track category.id){
-                <mat-checkbox
-                class="custom-checkbox"
-                [value]="category.id.toString()" 
-                (change)="onCheckboxChange($event, category.id)" >
-                    {{ category.name }}
-                </mat-checkbox>
-            }
-            <h3>Dietary</h3>
-            @for(category of dietaryOptions; track category.id){
-                <mat-checkbox
-                class="custom-checkbox"
-                [value]="category.id.toString()" 
-                (change)="onCheckboxChange($event, category.id)" >
-                    {{ category.name }}
-                </mat-checkbox>
-            }
-        </div>
-        <hr>
-        <div>
-            <div class="add-items">
+                <ng-template matStepLabel>General details</ng-template>
+                <mat-form-field>
+                    <mat-label>Title</mat-label>
+                    <input matInput formControlName="title" />
+                    @if(title?.invalid){
+                        <mat-error>{{titleErrorMessage()}}</mat-error>
+                    }
+                </mat-form-field>
+                <br/>
+        
+                <mat-form-field>
+                    <mat-label>Description</mat-label>
+                    <textarea matInput formControlName="description" rows="4" cols="100"></textarea>
+                </mat-form-field>
+                <br/>
+        
+                <mat-form-field>
+                    <mat-label>Cooking Time (minutes)</mat-label>
+                    <input matInput type="number" min="0" class="right-align" formControlName="cookingTime" />
+                    <span matTextSuffix>min</span>
+                </mat-form-field>
+                <br/>
+        
+                <mat-form-field>
+                    <mat-label>Servings</mat-label>
+                    <input matInput type="number" min="0" class="right-align" formControlName="servings" />
+                </mat-form-field>
+
                 <div>
-                    <h2>Ingredients </h2>
-                    @if(ingredientsErrorMessage() !== ''){
-                        <mat-error class="error">{{ingredientsErrorMessage()}}</mat-error>
-                    } 
+                    <button mat-button matStepperNext>Next</button>
                 </div>
-                <button class="add" type="button" (click)="addIngredient()">+</button>
-            </div>
-            <div formArrayName="ingredients">
-                <div *ngFor="let ing of ingredients.controls; let i = index">
-                    <div class="item">
-                        <mat-form-field class="field">
-                            <mat-label>Ingredient</mat-label>
-                            <input matInput [formControlName]="i" />
-                            @if(ing.invalid && ing.touched){
-                                <mat-error>
-                                    Ingredient is required!
-                                </mat-error>
-                            }
-                        </mat-form-field>
-                        <button class="remove" type="button" (click)="removeIngredient(i)">-</button>
+            </form>
+        </mat-step>
+
+        <mat-step [stepControl]="categoriesFG">
+            <form [formGroup]="categoriesFG">
+                <ng-template matStepLabel>Categories</ng-template>
+                <h3>Skill Level</h3>
+                @for(category of skillLevels; track category.id){
+                    <mat-checkbox
+                    class="custom-checkbox"
+                    [value]="category.id.toString()" 
+                    (change)="onCheckboxChange($event, category.id)" >
+                        {{ category.name }}
+                    </mat-checkbox>
+                }
+                <h3>Recipe Type</h3>
+                @for(category of recipeCategories; track category.id){
+                    <mat-checkbox
+                    class="custom-checkbox"
+                    [value]="category.id.toString()" 
+                    (change)="onCheckboxChange($event, category.id)" >
+                        {{ category.name }}
+                    </mat-checkbox>
+                }
+                <h3>Dietary</h3>
+                @for(category of dietaryOptions; track category.id){
+                    <mat-checkbox
+                    class="custom-checkbox"
+                    [value]="category.id.toString()" 
+                    (change)="onCheckboxChange($event, category.id)" >
+                        {{ category.name }}
+                    </mat-checkbox>
+                }
+
+                <div>
+                    <button mat-button matStepperPrevious>Back</button>
+                    <button mat-button matStepperNext>Next</button>
+                </div>
+            </form>
+        </mat-step>
+
+        <mat-step [stepControl]="ingredientsFG">
+            <form [formGroup]="ingredientsFG">
+                <ng-template matStepLabel>Ingredients</ng-template>
+                <div class="add-items">
+                    <div>
+                        <h2>Add Ingredients </h2>
+                        @if(ingredientsErrorMessage() !== ''){
+                            <mat-error class="error">{{ingredientsErrorMessage()}}</mat-error>
+                        } 
+                    </div>
+                    <button class="add" type="button" (click)="addIngredient()">+</button>
+                </div>
+                <div formArrayName="ingredients">
+                    <div *ngFor="let ing of ingredients.controls; let i = index">
+                        <div class="item">
+                            <mat-form-field class="field">
+                                <mat-label>Ingredient</mat-label>
+                                <input matInput [formControlName]="i" />
+                                @if(ing.invalid && ing.touched){
+                                    <mat-error>
+                                        Ingredient is required!
+                                    </mat-error>
+                                }
+                            </mat-form-field>
+                            <button class="remove" type="button" (click)="removeIngredient(i)">-</button>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
-        <hr>
-        <div>
-            <div class="add-items">
+
                 <div>
-                    <h2>Steps </h2> 
-                    @if(stepsErrorMessage() !== ''){
-                        <mat-error class="error">{{stepsErrorMessage()}}</mat-error>
-                    } 
+                    <button mat-button matStepperPrevious>Back</button>
+                    <button mat-button matStepperNext>Next</button>
                 </div>
-                <button class="add" type="button" (click)="addStep()">+</button>
-            </div>
-            <div formArrayName="steps">
-            <div *ngFor="let step of steps.controls; let i = index">
-                <div class="item">
-                    <mat-form-field class="field">
-                        <mat-label>Step</mat-label>
-                        <textarea matInput [formControlName]="i" rows="2" cols="100"></textarea>
-                        @if(step.invalid && step.touched){
-                            <mat-error>
-                                Step is required!
-                            </mat-error>
-                        }
-                    </mat-form-field>
-                    <button class="remove" type="button" (click)="removeStep(i)">-</button>
+            </form>
+        </mat-step>
+
+        <mat-step [stepControl]="stepsFG">
+            <form [formGroup]="stepsFG">
+                <ng-template matStepLabel>Steps</ng-template>
+                
+                <div class="add-items">
+                    <div>
+                        <h2>Add Steps </h2> 
+                        @if(stepsErrorMessage() !== ''){
+                            <mat-error class="error">{{stepsErrorMessage()}}</mat-error>
+                        } 
+                    </div>
+                    <button class="add" type="button" (click)="addStep()">+</button>
                 </div>
-            </div>
-            </div>
-        </div>
-        <hr>
-        <div>
-            <h2>Media</h2>
+                <div formArrayName="steps">
+                    <div *ngFor="let step of steps.controls; let i = index">
+                        <div class="item">
+                            <mat-form-field class="field">
+                                <mat-label>Step</mat-label>
+                                <textarea matInput [formControlName]="i" rows="2" cols="100"></textarea>
+                                @if(step.invalid && step.touched){
+                                    <mat-error>
+                                        Step is required!
+                                    </mat-error>
+                                }
+                            </mat-form-field>
+                            <button class="remove" type="button" (click)="removeStep(i)">-</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <button mat-button matStepperPrevious>Back</button>
+                    <button mat-button matStepperNext>Next</button>
+                </div>
+            </form>
+        </mat-step>
+
+        <mat-step>
+            <ng-template matStepLabel>Media</ng-template>
+
             <h3>Poster</h3>
-            <p>This image will be used as the main visual for your recipe.</p>
-            <div id="poster">
-                <input
+                <p>This image will be used as the main visual for your recipe.</p>
+                <div id="poster">
+                    <input
+                        type="file"
+                        #posterInput
+                        (change)="onPosterSelected($event)"
+                        accept="image/*"
+                        hidden
+                    />
+                    <button mat-raised-button type="button" color="primary" (click)="posterInput.click()">
+                        <mat-icon>upload</mat-icon>
+                        Choose Poster
+                    </button>
+                </div>
+                @if(posterPreviewUrl){
+                    <div class="poster-preview">
+                        <div class="imagePreview">
+                            <img class="preview" [src]="posterPreviewUrl"/>
+                            <button class="close" mat-icon-button color="warn" type="button" (click)="removePoster()">
+                                <mat-icon>close</mat-icon>
+                            </button>
+                        </div>
+                    </div>
+                }
+                
+                <h3 id="gallery-header">Gallery</h3>
+                <p>You can add multiple images to showcase your recipe.</p>
+                <div id="gallery">
+                    <input
                     type="file"
-                    #posterInput
-                    (change)="onPosterSelected($event)"
+                    multiple
                     accept="image/*"
+                    #galleryInput
+                    (change)="onGallerySelected($event)"
                     hidden
-                />
-                <button mat-raised-button type="button" color="primary" (click)="posterInput.click()">
+                    />
+                    <button mat-raised-button type="button" color="primary" (click)="galleryInput.click()">
                     <mat-icon>upload</mat-icon>
-                    Choose Poster
-                </button>
-            </div>
-            @if(posterPreviewUrl){
-                <div class="poster-preview">
-                    <div class="imagePreview">
-                        <img class="preview" [src]="posterPreviewUrl"/>
-                        <button class="close" mat-icon-button color="warn" type="button" (click)="removePoster()">
+                    Add Gallery Images
+                    </button>
+                
+                    <div class="gallery-preview">
+                    <ng-container *ngFor="let imageUrl of galleryPreviewUrls; let i = index">
+                        <div class="imagePreview">
+                        <img class="preview" [src]="imageUrl" />
+                        <button class="close" mat-icon-button color="warn" type="button" (click)="removeGalleryImage(i)">
                             <mat-icon>close</mat-icon>
                         </button>
+                        </div>
+                    </ng-container>
                     </div>
                 </div>
-            }
-            
-            <h3>Gallery</h3>
-            <p>You can add multiple images to showcase your recipe.</p>
-            <div id="gallery">
-                <input
-                  type="file"
-                  multiple
-                  accept="image/*"
-                  #galleryInput
-                  (change)="onGallerySelected($event)"
-                  hidden
-                />
-                <button mat-raised-button type="button" color="primary" (click)="galleryInput.click()">
-                  <mat-icon>upload</mat-icon>
-                  Add Gallery Images
-                </button>
-              
-                <div class="gallery-preview">
-                  <ng-container *ngFor="let imageUrl of galleryPreviewUrls; let i = index">
-                    <div class="imagePreview">
-                      <img class="preview" [src]="imageUrl" />
-                      <button class="close" mat-icon-button color="warn" type="button" (click)="removeGalleryImage(i)">
-                        <mat-icon>close</mat-icon>
-                      </button>
-                    </div>
-                  </ng-container>
+                
+                <div>
+                    <button mat-button matStepperPrevious>Back</button>
+                    <button mat-button matStepperNext>Next</button>
                 </div>
-              </div>
-        </div>
-        
-        <div id="submit">
-            <button class="submit" type="submit">Create Recipe</button>
-        </div>
-    </form>    
+        </mat-step>
+
+        <mat-step>
+            <ng-template matStepLabel>Done</ng-template>
+            <p id="done">You are now done.</p>
+            <div>
+              <button mat-button matStepperPrevious>Back</button>
+              <button id="submit" class="submit" mat-button (click)="onSubmit()">Create Recipe</button>
+            </div>
+        </mat-step>
+
+    </mat-stepper>
 </div>

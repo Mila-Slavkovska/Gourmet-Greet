@@ -21,16 +21,16 @@ export const routes: Routes = [
     component: HomeComponent,
   },
   {
+    path: 'recipes/add',
+    component: RecipeFormComponent
+  },
+  {
     path: 'recipes/:id',
     component: RecipeDetailsComponent,
   },
   {
     path: 'search',
     component: SearchRecipesComponent
-  },
-  {
-    path: 'recipe/add',
-    component: RecipeFormComponent
   },
   {
     path: 'profile/:id',

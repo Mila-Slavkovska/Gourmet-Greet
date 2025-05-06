@@ -57,14 +57,24 @@ export class RecipeService {
     title?: string;
     cookingTime?: number;
     numberOfServings?: number;
-    categoryIds?: number[];
+    dietaryOptions: number[];
+    cuisineOptions: number[];
+    skillLevels: number[];
+    recipeCategories: number[];
     ingredients?: string[];
     page?: number;
     pageSize?: number;
   }): Observable<RecipeSearch> {
+    const categoryIds = [
+      ...params.dietaryOptions,
+      ...params.cuisineOptions,
+      ...params.skillLevels,
+      ...params.recipeCategories,
+    ];
     return this.httpClient.get<RecipeSearch>('/api/recipes/search', {
       params: {
         ...params,
+        categoryIds: categoryIds.join(','),
         page: params.page?.toString() || '0',
         pageSize: params.pageSize?.toString() || '9',
       },

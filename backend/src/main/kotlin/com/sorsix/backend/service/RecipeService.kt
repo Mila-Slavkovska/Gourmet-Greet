@@ -34,7 +34,6 @@ class RecipeService(
                 RuntimeException("Category Not Found")
             }
         }
-        val users = userRepository.findAll()
         val owner = userRepository.findById(recipeDto.ownerId).orElseThrow {
             RuntimeException("User not found")
         }
@@ -91,7 +90,13 @@ class RecipeService(
         return true
     }
 
-    fun search(title: String, cookingTime: Int, servings: Int, categoryIds: List<Long>,ingredients:List<String>): List<Recipe> {
+    fun search(
+        title: String,
+        cookingTime: Int,
+        numberOfServings: Int,
+        categoryIds: List<Long>,
+        ingredients: List<String>
+    ): List<Recipe> {
         var recipes = if (title.isNotBlank()) {
             _recipeRepository.findByTitleContainsIgnoreCase(title)
         } else {
@@ -102,7 +107,7 @@ class RecipeService(
             recipes = recipes.filter { it.cookingTime == time }
         }
 
-        servings.takeIf { it > 0 }?.let { size ->
+        numberOfServings.takeIf { it > 0 }?.let { size ->
             recipes = recipes.filter { it.servings == size }
         }
 

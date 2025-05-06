@@ -56,7 +56,7 @@ export class RecipeService {
   getFilteredRecipes(params: {
     title?: string;
     cookingTime?: number;
-    servings?: number;
+    numberOfServings?: number;
     categoryIds?: number[];
     ingredients?: string[];
     page?: number;

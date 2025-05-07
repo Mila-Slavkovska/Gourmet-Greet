@@ -65,16 +65,10 @@ export class RecipeService {
     page?: number;
     pageSize?: number;
   }): Observable<RecipeSearch> {
-    const categoryIds = [
-      ...params.dietaryOptions,
-      ...params.cuisineOptions,
-      ...params.skillLevels,
-      ...params.recipeCategories,
-    ];
+
     return this.httpClient.get<RecipeSearch>('/api/recipes/search', {
       params: {
         ...params,
-        categoryIds: categoryIds.join(','),
         page: params.page?.toString() || '0',
         pageSize: params.pageSize?.toString() || '9',
       },
@@ -110,4 +104,9 @@ export class RecipeService {
 
     return this.httpClient.post(`/api/recipes/${id}/upload-image`, formData)
   }
+
+  editRecipe(id: number, recipeData: RecipeAddDto): Observable<RecipeAddDto> {
+    return this.httpClient.put<RecipeAddDto>(`/api/recipes/${id}`, recipeData);
+  }
+
 }

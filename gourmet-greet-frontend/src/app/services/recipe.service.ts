@@ -33,6 +33,9 @@ export class RecipeService {
     return this.httpClient.post<Recipe>('/api/recipes', recipe);
   }
 
+  deleteRecipe(id: number): Observable<Recipe> {
+    return this.httpClient.delete<Recipe>(`/api/recipes/${id}`);
+  }
   getHighestRatedRecipes(
     page: number = 0,
     size: number = 6

@@ -5,9 +5,10 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { RecipeService } from '../services/recipe.service';
 import { Review } from '../interfaces/review.interface';
-import { ReviewService } from '../services/review.service';
+import { RecipeService } from '../services/recipe.service';
+import { ReviewService } from '../review-notifier.service';
+import { ReviewNotifierService } from '../services/review-notifier.service';
 
 @Component({
   selector: 'app-review-form',
@@ -18,8 +19,9 @@ import { ReviewService } from '../services/review.service';
 export class ReviewFormComponent {
   @Input() recipeId?: number;
 
-  reviewService = inject(RecipeService);
-  reviewNotifierService = inject(ReviewService);
+  recipeService = inject(RecipeService);
+  reviewService = inject(ReviewService);
+  reviewNotifierService = inject(ReviewNotifierService)
 
   form = new FormGroup({
     grade: new FormControl<number>(1, [Validators.required]),
@@ -45,13 +47,14 @@ export class ReviewFormComponent {
       recipeId: this.recipeId,
     };
 
-    this.reviewService.createReviewForRecipe(reviewPayload).subscribe({
+    this.recipeService.createReviewForRecipe(reviewPayload).subscribe({
       next: (res: Review) => {
         this.form.reset({
           grade: 1,
           comment: '',
         });
         this.selectedRating = 0;
+        console.log("review")
         this.reviewNotifierService.notifyReviewSubmitted();
       },
     });

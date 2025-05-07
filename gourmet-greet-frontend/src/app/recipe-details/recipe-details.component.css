@@ -323,6 +323,18 @@ main {
   color: #ff4081;
 }
 
+.delete-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 1.5em;
+  transition: transform 0.2s ease;
+}
+
+.delete-btn:hover {
+  transform: scale(1.2);
+}
+
 .form-group {
   margin-bottom: 1.5em;
 }

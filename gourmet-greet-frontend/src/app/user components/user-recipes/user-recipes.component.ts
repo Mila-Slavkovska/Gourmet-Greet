@@ -3,10 +3,11 @@ import { Recipe } from '../../interfaces/recipe.interface';
 import { CommonModule } from '@angular/common';
 import { RecipeCardComponent } from '../../recipe-card/recipe-card.component';
 import { RecipeService } from '../../services/recipe.service';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-user-recipes',
-  imports: [RecipeCardComponent, CommonModule],
+  imports: [RecipeCardComponent, CommonModule, RouterLink],
   templateUrl: './user-recipes.component.html',
   styleUrl: './user-recipes.component.css'
 })

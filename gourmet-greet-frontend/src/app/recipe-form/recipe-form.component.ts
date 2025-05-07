@@ -38,6 +38,7 @@ export class RecipeFormComponent implements OnInit {
   skillLevels: Category[] = [];
   recipeCategories: Category[] = [];
   dietaryOptions: Category[] = [];
+  cuisineTypes: Category[] = [];
 
   posterFile: File | null = null;
   posterPreviewUrl: string | null = null;
@@ -142,10 +143,12 @@ export class RecipeFormComponent implements OnInit {
           dietary: this.categoryService.getCategoriesByType('DIETARY'),
           recipe: this.categoryService.getCategoriesByType('RECIPE_TYPE'),
           skill: this.categoryService.getCategoriesByType('SKILL_LEVEL'),
-        }).subscribe(({ dietary, recipe, skill }) => {
+          cuisine: this.categoryService.getCategoriesByType('CUISINE_TYPE'),
+        }).subscribe(({ dietary, recipe, skill, cuisine }) => {
           this.dietaryOptions = dietary;
           this.recipeCategories = recipe;
           this.skillLevels = skill;
+          this.cuisineTypes = cuisine;
     });
   }
 

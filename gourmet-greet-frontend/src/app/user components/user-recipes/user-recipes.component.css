@@ -101,3 +101,30 @@
         justify-content: center;
     }
 }
+
+.header {
+    display: flex;
+    justify-content: space-between;
+}
+
+#add {
+    transition: transform 0.3s ease, color 0.3s ease;
+    display: inline-block;
+    color: var(--user-icon-hover);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+#add:hover {
+    transform: scale(1.05);
+    color: #ff6b6b;
+}
+
+#add i {
+    transition: transform 0.3s ease;
+    display: inline-block;
+}
+
+a#add:hover i {
+transform: rotate(90deg) scale(1.2);
+}

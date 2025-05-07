@@ -68,6 +68,15 @@
                         {{ category.name }}
                     </mat-checkbox>
                 }
+                <h3>Cuisine Type</h3>
+                @for(cuisine of cuisineTypes; track cuisine.id){
+                    <mat-checkbox
+                    class="custom-checkbox"
+                    [value]="cuisine.id.toString()" 
+                    (change)="onCheckboxChange($event, cuisine.id)" >
+                        {{ cuisine.name }}
+                    </mat-checkbox>
+                }
 
                 <div>
                     <button mat-button matStepperPrevious>Back</button>

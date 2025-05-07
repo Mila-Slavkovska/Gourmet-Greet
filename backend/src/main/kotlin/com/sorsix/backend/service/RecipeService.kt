@@ -94,7 +94,10 @@ class RecipeService(
         title: String,
         cookingTime: Int,
         numberOfServings: Int,
-        categoryIds: List<Long>,
+        dietaryOptions: List<Long>,
+        cuisineOptions: List<Long>,
+        skillLevels: List<Long>,
+        recipeCategories: List<Long>,
         ingredients: List<String>
     ): List<Recipe> {
         var recipes = if (title.isNotBlank()) {
@@ -111,7 +114,28 @@ class RecipeService(
             recipes = recipes.filter { it.servings == size }
         }
 
-        categoryIds.takeIf { it.isNotEmpty() }?.let { ids ->
+        dietaryOptions.takeIf { it.isNotEmpty() }?.let { ids ->
+            recipes = recipes
+                .filter { recipe ->
+                    recipe.categories.any { it.id in ids }
+                }
+        }
+
+        cuisineOptions.takeIf { it.isNotEmpty() }?.let { ids ->
+            recipes = recipes
+                .filter { recipe ->
+                    recipe.categories.any { it.id in ids }
+                }
+        }
+
+        skillLevels.takeIf { it.isNotEmpty() }?.let { ids ->
+            recipes = recipes
+                .filter { recipe ->
+                    recipe.categories.any { it.id in ids }
+                }
+        }
+
+        recipeCategories.takeIf { it.isNotEmpty() }?.let { ids ->
             recipes = recipes
                 .filter { recipe ->
                     recipe.categories.any { it.id in ids }

@@ -2,6 +2,7 @@
   <form [formGroup]="form" (ngSubmit)="onSearchSubmit()">
     <div class="search-bar">
       <input
+        id="title-search"
         type="text"
         class="search-input"
         formControlName="title"
@@ -12,167 +13,192 @@
 
     <div class="advanced-search-toggle" (click)="toggleAdvancedSearch()">
       <button type="button">
-        @if (showAdvancedSearch) { Hide Advanced Search }
-        @else { Show Advanced Search }
+        @if (showAdvancedSearch) { Hide Advanced Search } @else { Show Advanced
+        Search }
       </button>
     </div>
 
     <div class="selected-filters">
-      @if (selectedSkillLevels.length > 0) {
-        @for (level of selectedSkillLevels; track level.id) {
-          <span (click)="selectSkillLevel(level)">
-            {{ level.name }} ✖
-          </span>
-        }
-      }
-
-      @if (selectedRecipeCategories.length > 0) {
-        @for (category of selectedRecipeCategories; track category.id) {
-          <span (click)="selectRecipeCategory(category)">
-            {{ category.name }} ✖
-          </span>
-        }
-      }
-
-      @if (selectedDietaries.length > 0) {
-        @for (diet of selectedDietaries; track diet.id) {
-          <span (click)="selectDietary(diet)">
-            {{ diet.name }} ✖
-          </span>
-        }
-      }
-
-      @if (selectedCuisines.length > 0) {
-        @for (cuisine of selectedCuisines; track cuisine.id) {
-          <span (click)="selectCuisine(cuisine)">
-            {{ cuisine.name }} ✖
-          </span>
-        }
-      }
+      @if (selectedSkillLevels.length > 0) { @for (level of selectedSkillLevels;
+      track level.id) {
+      <span>
+        {{ level.name }}
+        <button
+          class="remove-category"
+          type="button"
+          (click)="removeSkillLevel(level)"
+        >
+          ✖
+        </button>
+      </span>
+      } } @if (selectedRecipeCategories.length > 0) { @for (category of
+      selectedRecipeCategories; track category.id) {
+      <span>
+        {{ category.name }}
+        <button
+          class="remove-category"
+          type="button"
+          (click)="removeRecipeCategory(category)"
+        >
+          ✖
+        </button>
+      </span>
+      } } @if (selectedDietaries.length > 0) { @for (diet of selectedDietaries;
+      track diet.id) {
+      <span>
+        {{ diet.name }}
+        <button
+          class="remove-category"
+          type="button"
+          (click)="removeDietary(diet)"
+        >
+          ✖
+        </button>
+      </span>
+      } } @if (selectedCuisines.length > 0) { @for (cuisine of selectedCuisines;
+      track cuisine.id) {
+      <span>
+        {{ cuisine.name }}
+        <button
+          class="remove-category"
+          type="button"
+          (click)="removeCuisine(cuisine)"
+        >
+          ✖
+        </button>
+      </span>
+      } }
 
       <div class="selected-ingredients">
         @for (ingredient of selectedIngredients; track ingredient) {
-          <span>
-            {{ ingredient }}
-            <button
-              class="remove-ingredient"
-              type="button"
-              (click)="removeIngredient(ingredient)"
-            >
-              ✖
-            </button>
-          </span>
+        <span>
+          {{ ingredient }}
+          <button
+            class="remove-ingredient"
+            type="button"
+            (click)="removeIngredient(ingredient)"
+          >
+            ✖
+          </button>
+        </span>
         }
       </div>
     </div>
 
     @if (showAdvancedSearch) {
-      <div class="advanced-search">
-        <div class="advanced-search-fields">
-          <div class="filter-ingredient">
-            <label>Ingredients</label>
-            <div class="filter-buttons">
-              @for (ingredient of ingredients; track ingredient) {
-                <button
-                  type="button"
-                  [class.active]="isIngredientSelected(ingredient)"
-                  (click)="selectIngredient(ingredient)"
-                >
-                  {{ ingredient.ingredient }}
-                </button>
-              }
-            </div>
+    <div class="advanced-search">
+      <div class="advanced-search-fields">
+        <div class="filter-ingredient">
+          <label for="ingredient-filter">Ingredients</label>
+          <div class="filter-buttons" id="ingredient-filter">
+            @for (ingredient of ingredients; track ingredient) {
+            <button
+              type="button"
+              [class.active]="isIngredientSelected(ingredient)"
+              (click)="selectIngredient(ingredient)"
+              [id]="'ingredient-' + ingredient.ingredient"
+            >
+              {{ ingredient.ingredient }}
+            </button>
+            }
           </div>
-
-          <label>Number of Servings</label>
-          <input
-            type="number"
-            formControlName="numberOfServings"
-            placeholder="Enter number of servings"
-          />
-
-          <label>Cooking Time (in minutes)</label>
-          <input
-            type="number"
-            formControlName="cookingTime"
-            placeholder="Enter cooking time"
-          />
         </div>
 
-        <div class="filter-options">
-          <div class="filter-category">
-            <label>Skill Level</label>
-            <div class="filter-buttons">
-              @for (level of skillLevels; track level) {
-                <button
-                  type="button"
-                  [class.active]="isSkillLevelSelected(level)"
-                  (click)="selectSkillLevel(level)"
-                >
-                  {{ level.name }}
-                </button>
-              }
-            </div>
-          </div>
+        <label for="number-of-servings">Number of Servings</label>
+        <input
+          id="number-of-servings"
+          type="number"
+          formControlName="numberOfServings"
+          placeholder="Enter number of servings"
+        />
 
-          <div class="filter-category">
-            <label>Recipe Type</label>
-            <div class="filter-buttons">
-              @for (category of recipeCategories; track category) {
-                <button
-                  type="button"
-                  [class.active]="isRecipeCategorySelected(category)"
-                  (click)="selectRecipeCategory(category)"
-                >
-                  {{ category.name }}
-                </button>
-              }
-            </div>
-          </div>
+        <label for="cooking-time">Cooking Time (in minutes)</label>
+        <input
+          id="cooking-time"
+          type="number"
+          formControlName="cookingTime"
+          placeholder="Enter cooking time"
+        />
+      </div>
 
-          <div class="filter-category">
-            <label>Dietary</label>
-            <div class="filter-buttons">
-              @for (diet of dietaryOptions; track diet.id) {
-                <button
-                  type="button"
-                  [class.active]="isDietarySelected(diet)"
-                  (click)="selectDietary(diet)"
-                >
-                  {{ diet.name }}
-                </button>
-              }
-            </div>
+      <div class="filter-options">
+        <div class="filter-category">
+          <label for="skill-level-filter">Skill Level</label>
+          <div class="filter-buttons" id="skill-level-filter">
+            @for (level of skillLevels; track level) {
+            <button
+              [id]="'skill-level-' + level.id"
+              type="button"
+              [class.active]="isSkillLevelSelected(level)"
+              (click)="selectSkillLevel(level)"
+            >
+              {{ level.name }}
+            </button>
+            }
           </div>
+        </div>
 
-          <div class="filter-category">
-            <label>Cuisine Type</label>
-            <div class="filter-buttons">
-              @for (cuisine of cuisineOptions; track cuisine.id) {
-                <button
-                  type="button"
-                  [class.active]="isCuisineSelected(cuisine)"
-                  (click)="selectDietary(cuisine)"
-                >
-                  {{ cuisine.name }}
-                </button>
-              }
-            </div>
+        <div class="filter-category">
+          <label for="recipe-type-filter">Recipe Type</label>
+          <div class="filter-buttons" id="recipe-type-filter">
+            @for (category of recipeCategories; track category) {
+            <button
+              [id]="'recipe-category' + category.id"
+              type="button"
+              [class.active]="isRecipeCategorySelected(category)"
+              (click)="selectRecipeCategory(category)"
+            >
+              {{ category.name }}
+            </button>
+            }
+          </div>
+        </div>
+
+        <div class="filter-category">
+          <label for="dietary-filter">Dietary</label>
+          <div class="filter-buttons" id="dietary-filter">
+            @for (diet of dietaryOptions; track diet.id) {
+            <button
+              [id]="'dietary-' + diet.id"
+              type="button"
+              [class.active]="isDietarySelected(diet)"
+              (click)="selectDietary(diet)"
+            >
+              {{ diet.name }}
+            </button>
+            }
+          </div>
+        </div>
+
+        <div class="filter-category">
+          <label for="cuisine-filter" id="cuisine-filter">Cuisine Type</label>
+          <div class="filter-buttons">
+            @for (cuisine of cuisineOptions; track cuisine.id) {
+            <button
+              [id]="'cuisine-' + cuisine.id"
+              type="button"
+              [class.active]="isCuisineSelected(cuisine)"
+              (click)="selectCuisine(cuisine)"
+            >
+              {{ cuisine.name }}
+            </button>
+            }
           </div>
         </div>
       </div>
+    </div>
     }
   </form>
 
   <div class="recipe-results">
     @for (recipe of allRecipes; track recipe.id) {
-      <app-recipe-card [recipe]="recipe"></app-recipe-card>
+    <app-recipe-card [recipe]="recipe"></app-recipe-card>
     }
   </div>
 
   @if (hasMore) {
-    <div class="load-more">
-      <button class="load-more-button" (click)="loadMore()">Load More</button>
-    </div>
+  <div class="load-more">
+    <button class="load-more-button" (click)="loadMore()">Load More</button>
+  </div>
   }
 </div>

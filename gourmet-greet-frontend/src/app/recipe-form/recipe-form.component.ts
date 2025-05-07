@@ -50,11 +50,14 @@ export class RecipeFormComponent implements OnInit {
   stepsErrorMessage = signal('');
 
   constructor(private fb: FormBuilder) {
+    const navigation = this.router.getCurrentNavigation();
+    const data = navigation?.extras.state?.['data'];
+
     this.generalFG = this.fb.group({
-      title: ['', Validators.required],
-      description: [''],
-      cookingTime: [0],
-      servings: [0]
+      title: [data?.title || '', Validators.required],
+      description: [data?.description || ''],
+      cookingTime: [data?.cookingTime || 0],
+      servings: [data?.servings || 0]
     });
 
     this.categoriesFG = this.fb.group({
@@ -62,11 +65,11 @@ export class RecipeFormComponent implements OnInit {
     })
 
     this.ingredientsFG = this.fb.group({
-      ingredients: this.fb.array([])
+      ingredients: this.fb.array(data?.ingredients || [])
     })
 
     this.stepsFG = this.fb.group({
-      steps: this.fb.array([]),
+      steps: this.fb.array(data?.steps || []),
     })
 
     merge(this.title?.statusChanges, this.title?.valueChanges)

@@ -45,7 +45,7 @@
                 @for(category of skillLevels; track category.id){
                     <mat-checkbox
                     class="custom-checkbox"
-                    [value]="category.id.toString()" 
+                    [value]="category.id.toString()"
                     (change)="onCheckboxChange($event, category.id)" >
                         {{ category.name }}
                     </mat-checkbox>
@@ -69,12 +69,12 @@
                     </mat-checkbox>
                 }
                 <h3>Cuisine Type</h3>
-                @for(cuisine of cuisineTypes; track cuisine.id){
+                @for(category of cuisineTypes; track category.id){
                     <mat-checkbox
                     class="custom-checkbox"
-                    [value]="cuisine.id.toString()" 
-                    (change)="onCheckboxChange($event, cuisine.id)" >
-                        {{ cuisine.name }}
+                    [value]="category.id.toString()"
+                    (change)="onCheckboxChange($event, category.id)" >
+                        {{ category.name }}
                     </mat-checkbox>
                 }
 

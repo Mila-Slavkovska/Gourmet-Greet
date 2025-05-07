@@ -1,5 +1,6 @@
 <div id="recipe-details">
   <img [src]="getPosterImage()" class="image" alt="{{ recipe?.title }}" />
+  <button id="create" (click)="createSimilarRecipe()">Create Similar Recipe <i class="ri-add-box-fill"></i></button>
   <h3 class="title">{{ recipe?.title }}</h3>
   @if(loggedIn()) {
   <button class="favorite-btn" (click)="toggleFavorite()">

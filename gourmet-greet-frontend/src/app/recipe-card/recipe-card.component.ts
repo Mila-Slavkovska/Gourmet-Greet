@@ -20,7 +20,7 @@ export class RecipeCardComponent {
       this.image = this.recipeService.getFullRecipeImageUrl(this.recipe.id, this.recipe.posterId);
     }
     else {
-      this.image = './default-recipe-poster-image.jpg';
+      this.image = './default-recipe-poster-image.png';
     }
   }
 

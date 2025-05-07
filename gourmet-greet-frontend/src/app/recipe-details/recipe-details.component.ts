@@ -82,7 +82,7 @@ export class RecipeDetailsComponent implements OnInit {
     if (id && posterId) {
       return this.recipeService.getFullRecipeImageUrl(id, posterId);
     }
-    return './default-recipe-poster-image.jpg';
+    return './default-recipe-poster-image.png';
   }
 
   prevImage(): void {
@@ -104,7 +104,7 @@ export class RecipeDetailsComponent implements OnInit {
     if (this.id && imageId) {
       return this.recipeService.getFullRecipeImageUrl(this.id, imageId);
     }
-    return './default-recipe-poster-image.jpg';
+    return './default-recipe-poster-image.png';
   }
 
   goToImage(index: number): void {
@@ -131,5 +131,11 @@ export class RecipeDetailsComponent implements OnInit {
         },
       });
     }
+  }
+
+  createSimilarRecipe(){
+    this.router.navigate(['/recipes/add'], {
+      state: { data: this.recipe }
+    })
   }
 }

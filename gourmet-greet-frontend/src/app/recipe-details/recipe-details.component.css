@@ -323,10 +323,13 @@ main {
   color: #ff4081;
 }
 
+#create-section {
+  grid-column: 2/5;
+}
 
 #create {
   height: fit-content;
-  align-self: flex-end;
+  margin-left: 1rem;
   background-color: var(--user-icon-hover);
   color: white;
   padding: 0.5rem;

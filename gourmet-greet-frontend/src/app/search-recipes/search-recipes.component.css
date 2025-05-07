@@ -205,7 +205,7 @@ form {
   margin-top: 1em;
 }
 
-.remove-ingredient {
+.remove-ingredient, .remove-category {
   background: none;
   border: none;
   color: white;

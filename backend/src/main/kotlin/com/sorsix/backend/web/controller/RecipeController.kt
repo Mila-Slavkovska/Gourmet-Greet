@@ -112,13 +112,17 @@ class RecipeController(
     fun searchByAll(
         @RequestParam(required = false) title: String = "",
         @RequestParam(required = false) cookingTime: Int = 0,
-        @RequestParam(required = false) servings: Int = 0,
-        @RequestParam(required = false) categoryIds: List<Long> = emptyList(),
+        @RequestParam(required = false) numberOfServings: Int = 0,
+        @RequestParam(required = false) dietaryOptions: List<Long> = emptyList(),
+        @RequestParam(required = false) cuisineOptions: List<Long> = emptyList(),
+        @RequestParam(required = false) skillLevels: List<Long> = emptyList(),
+        @RequestParam(required = false) recipeCategories: List<Long> = emptyList(),
+
         @RequestParam(required = false) ingredients: List<String> = emptyList(),
         @RequestParam(required = false, defaultValue = "0") page: Int,
         @RequestParam(required = false, defaultValue = "9") pageSize: Int
     ): RecipeSearchDto {
-        val allFilteredRecipes = _recipeService.search(title, cookingTime, servings, categoryIds, ingredients)
+        val allFilteredRecipes = _recipeService.search(title, cookingTime, numberOfServings, dietaryOptions,cuisineOptions, skillLevels, recipeCategories, ingredients)
         val totalCount = allFilteredRecipes.size
 
         val paginatedRecipes = allFilteredRecipes

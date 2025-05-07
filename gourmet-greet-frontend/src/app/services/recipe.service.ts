@@ -56,12 +56,16 @@ export class RecipeService {
   getFilteredRecipes(params: {
     title?: string;
     cookingTime?: number;
-    servings?: number;
-    categoryIds?: number[];
+    numberOfServings?: number;
+    dietaryOptions: number[];
+    cuisineOptions: number[];
+    skillLevels: number[];
+    recipeCategories: number[];
     ingredients?: string[];
     page?: number;
     pageSize?: number;
   }): Observable<RecipeSearch> {
+
     return this.httpClient.get<RecipeSearch>('/api/recipes/search', {
       params: {
         ...params,
@@ -100,4 +104,9 @@ export class RecipeService {
 
     return this.httpClient.post(`/api/recipes/${id}/upload-image`, formData)
   }
+
+  editRecipe(id: number, recipeData: RecipeAddDto): Observable<RecipeAddDto> {
+    return this.httpClient.put<RecipeAddDto>(`/api/recipes/${id}`, recipeData);
+  }
+
 }

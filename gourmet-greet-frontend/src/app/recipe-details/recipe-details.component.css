@@ -323,6 +323,119 @@ main {
   color: #ff4081;
 }
 
+.form-group {
+  margin-bottom: 1.5em;
+}
+
+.form-control {
+  width: 100%;
+  padding: 0.8em;
+  border: 1px solid #ddd;
+  border-radius: var(--border-radius);
+  font-size: 1em;
+}
+
+textarea.form-control {
+  min-height: 100px;
+}
+
+.form-row {
+  display: flex;
+  gap: 1em;
+  margin-bottom: 1.5em;
+}
+
+.form-row .form-group {
+  flex: 1;
+}
+
+.form-section {
+  margin-bottom: 2em;
+  padding: 1.5em;
+  background-color: var(--lighter-color);
+  border-radius: var(--border-radius);
+}
+
+.categories-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 0.8em;
+}
+
+.category-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  padding: 0.5em;
+  background-color: rgba(0, 0, 0, 0.05);
+  border-radius: var(--border-radius);
+}
+
+.ingredient-row, .step-row {
+  display: flex;
+  gap: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+.ingredient-row input, .step-row textarea {
+  flex: 1;
+}
+
+.btn-remove {
+  background: #ff6b6b;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+}
+
+.btn-add {
+  background: var(--home-page-title-color);
+  color: white;
+  border: none;
+  padding: 0.5em 1em;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  margin-top: 0.5em;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1em;
+  margin-top: 2em;
+}
+
+.btn-save {
+  background: #4caf50;
+  color: white;
+  padding: 0.8em 1.5em;
+  border: none;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+}
+
+.btn-cancel {
+  background: #f44336;
+  color: white;
+  padding: 0.8em 1.5em;
+  border: none;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+}
+
+.edit-btn {
+  background: var(--home-page-title-color);
+  color: white;
+  padding: 0.5em 1em;
+  border: none;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  margin-left: 1em;
+}
+
 #create-section {
   grid-column: 2/5;
 }

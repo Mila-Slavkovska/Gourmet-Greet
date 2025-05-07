@@ -8,7 +8,6 @@ import { CategoryService } from '../services/category.service';
 import { Recipe } from '../interfaces/recipe.interface';
 import { Category } from '../interfaces/category.interface';
 import { RecipeCardComponent } from '../recipe-card/recipe-card.component';
-import { ViewportScroller } from '@angular/common';
 import { TopIngredient } from '../interfaces/top-ingredient.interface';
 
 @Component({
@@ -29,13 +28,10 @@ export class SearchRecipesComponent implements OnInit {
   skillLevels: Category[] = [];
   recipeCategories: Category[] = [];
   dietaryOptions: Category[] = [];
+  cuisineOptions: Category[] = [];
   ingredients: TopIngredient[] = [];
 
   subject: Subject<number> = new Subject();
-
-  private viewportScroller = inject(ViewportScroller);
-
-  private scrollPosition: [number, number] = [0, 0];
 
   currentPage = 0;
   pageSize = 9;
@@ -44,9 +40,8 @@ export class SearchRecipesComponent implements OnInit {
   selectedSkillLevels: Category[] = [];
   selectedRecipeCategories: Category[] = [];
   selectedDietaries: Category[] = [];
+  selectedCuisines: Category[] = [];
   selectedIngredients: string[] = [];
-
-  recipesLoaded = false;
 
   form: FormGroup = new FormGroup({
     title: new FormControl(''),
@@ -57,7 +52,9 @@ export class SearchRecipesComponent implements OnInit {
     recipeCategories: new FormControl([]),
     ingredients: new FormControl([]),
     dietaryOptions: new FormControl([]),
+    cuisineOptions: new FormControl([]),
   });
+
   activatedRoute = inject(ActivatedRoute);
   router = inject(Router);
 
@@ -70,11 +67,13 @@ export class SearchRecipesComponent implements OnInit {
       dietary: this.categoryService.getCategoriesByType('DIETARY'),
       recipe: this.categoryService.getCategoriesByType('RECIPE_TYPE'),
       skill: this.categoryService.getCategoriesByType('SKILL_LEVEL'),
-      topIngredients: this.recipeService.getTop10Ingredients()
-    }).subscribe(({ dietary, recipe, skill, topIngredients }) => {
+      cuisine: this.categoryService.getCategoriesByType('CUISINE_TYPE'),
+      topIngredients: this.recipeService.getTop10Ingredients(),
+    }).subscribe(({ dietary, recipe, skill, cuisine, topIngredients }) => {
       this.dietaryOptions = dietary;
       this.recipeCategories = recipe;
       this.skillLevels = skill;
+      this.cuisineOptions = cuisine;
       this.ingredients = topIngredients;
       this.patchFormValues();
     });
@@ -97,6 +96,9 @@ export class SearchRecipesComponent implements OnInit {
     const selectedDietariesIds = queryParams['dietaryOptions']
       ? queryParams['dietaryOptions'].split(',')
       : [];
+    const selectedCuisineIds = queryParams['cuisineOptions']
+      ? queryParams['cuisineOptions'].split(',')
+      : [];
     const selectedIngredients = queryParams['ingredients']
       ? queryParams['ingredients'].split(',')
       : [];
@@ -110,7 +112,9 @@ export class SearchRecipesComponent implements OnInit {
     this.selectedDietaries = this.dietaryOptions.filter((diet) =>
       selectedDietariesIds.includes(diet.id.toString())
     );
-
+    this.selectedCuisines = this.cuisineOptions.filter((diet) =>
+      selectedCuisineIds.includes(diet.id.toString())
+    );
     this.selectedIngredients = selectedIngredients;
   }
 
@@ -135,6 +139,7 @@ export class SearchRecipesComponent implements OnInit {
         .map((c) => c.id)
         .join(','),
       dietaryOptions: this.selectedDietaries.map((d) => d.id).join(','),
+      cuisineOptions: this.selectedCuisines.map((d) => d.id).join(','),
       ingredients: this.selectedIngredients.join(','),
       pageSize: 9,
     };
@@ -145,6 +150,10 @@ export class SearchRecipesComponent implements OnInit {
       relativeTo: this.activatedRoute,
       queryParams: cleanedParams,
     });
+  }
+
+  toggleAdvancedSearch() {
+    this.showAdvancedSearch = !this.showAdvancedSearch;
   }
 
   onSearchSubmit() {
@@ -161,7 +170,6 @@ export class SearchRecipesComponent implements OnInit {
 
   loadRecipes(queryParams: any) {
     const oldQueryParams = this.cleanQueryParams(this.form.value);
-
     this.recipeService
       .getFilteredRecipes({
         ...oldQueryParams,
@@ -170,13 +178,12 @@ export class SearchRecipesComponent implements OnInit {
         size: +(queryParams.pageSize ?? 9),
       })
       .subscribe((recipes) => {
+        console.log(oldQueryParams);
+        console.log(queryParams);
+        console.log(recipes);
         this.allRecipes = recipes.recipes;
         this.hasMore = this.allRecipes.length < recipes.totalResults;
       });
-  }
-
-  toggleAdvancedSearch() {
-    this.showAdvancedSearch = !this.showAdvancedSearch;
   }
 
   addIngredient() {
@@ -192,6 +199,28 @@ export class SearchRecipesComponent implements OnInit {
     this.selectedIngredients = this.selectedIngredients.filter(
       (i) => i !== ingredient
     );
+  }
+
+  removeDietary(category: Category) {
+    this.selectedDietaries = this.selectedDietaries.filter(
+      (i) => i !== category
+    );
+  }
+
+  removeSkillLevel(category: Category) {
+    this.selectedSkillLevels = this.selectedSkillLevels.filter(
+      (i) => i !== category
+    );
+  }
+
+  removeRecipeCategory(category: Category) {
+    this.selectedRecipeCategories = this.selectedRecipeCategories.filter(
+      (i) => i !== category
+    );
+  }
+
+  removeCuisine(category: Category) {
+    this.selectedCuisines = this.selectedCuisines.filter((i) => i !== category);
   }
 
   selectSkillLevel(level: Category) {
@@ -217,6 +246,12 @@ export class SearchRecipesComponent implements OnInit {
       : this.selectedDietaries.push(diet);
   }
 
+  selectCuisine(diet: Category) {
+    const index = this.selectedCuisines.findIndex((d) => d.id === diet.id);
+    index > -1
+      ? this.selectedCuisines.splice(index, 1)
+      : this.selectedCuisines.push(diet);
+  }
 
   selectIngredient(ingredient: TopIngredient) {
     const index = this.selectedIngredients.findIndex(
@@ -226,7 +261,6 @@ export class SearchRecipesComponent implements OnInit {
       ? this.selectedIngredients.splice(index, 1)
       : this.selectedIngredients.push(ingredient.ingredient);
   }
-
 
   isSkillLevelSelected(level: Category): boolean {
     return this.selectedSkillLevels.some((d) => d.id === level.id);
@@ -238,6 +272,10 @@ export class SearchRecipesComponent implements OnInit {
 
   isDietarySelected(diet: Category): boolean {
     return this.selectedDietaries.some((d) => d.id === diet.id);
+  }
+
+  isCuisineSelected(diet: Category): boolean {
+    return this.selectedCuisines.some((d) => d.id === diet.id);
   }
 
   isIngredientSelected(ingredient: TopIngredient): boolean {

@@ -8,25 +8,25 @@
                 <mat-form-field>
                     <mat-label>Title</mat-label>
                     <input matInput formControlName="title" />
-                    @if(title?.invalid){
+                    @if(title.invalid){
                         <mat-error>{{titleErrorMessage()}}</mat-error>
                     }
                 </mat-form-field>
                 <br/>
-        
+
                 <mat-form-field>
                     <mat-label>Description</mat-label>
                     <textarea matInput formControlName="description" rows="4" cols="100"></textarea>
                 </mat-form-field>
                 <br/>
-        
+
                 <mat-form-field>
                     <mat-label>Cooking Time (minutes)</mat-label>
                     <input matInput type="number" min="0" class="right-align" formControlName="cookingTime" />
                     <span matTextSuffix>min</span>
                 </mat-form-field>
                 <br/>
-        
+
                 <mat-form-field>
                     <mat-label>Servings</mat-label>
                     <input matInput type="number" min="0" class="right-align" formControlName="servings" />
@@ -54,7 +54,7 @@
                 @for(category of recipeCategories; track category.id){
                     <mat-checkbox
                     class="custom-checkbox"
-                    [value]="category.id.toString()" 
+                    [value]="category.id.toString()"
                     (change)="onCheckboxChange($event, category.id)" >
                         {{ category.name }}
                     </mat-checkbox>
@@ -63,7 +63,7 @@
                 @for(category of dietaryOptions; track category.id){
                     <mat-checkbox
                     class="custom-checkbox"
-                    [value]="category.id.toString()" 
+                    [value]="category.id.toString()"
                     (change)="onCheckboxChange($event, category.id)" >
                         {{ category.name }}
                     </mat-checkbox>
@@ -93,7 +93,7 @@
                         <h2>Add Ingredients </h2>
                         @if(ingredientsErrorMessage() !== ''){
                             <mat-error class="error">{{ingredientsErrorMessage()}}</mat-error>
-                        } 
+                        }
                     </div>
                     <button class="add" type="button" (click)="addIngredient()">+</button>
                 </div>
@@ -124,13 +124,13 @@
         <mat-step [stepControl]="stepsFG">
             <form [formGroup]="stepsFG">
                 <ng-template matStepLabel>Steps</ng-template>
-                
+
                 <div class="add-items">
                     <div>
-                        <h2>Add Steps </h2> 
+                        <h2>Add Steps </h2>
                         @if(stepsErrorMessage() !== ''){
                             <mat-error class="error">{{stepsErrorMessage()}}</mat-error>
-                        } 
+                        }
                     </div>
                     <button class="add" type="button" (click)="addStep()">+</button>
                 </div>
@@ -186,7 +186,7 @@
                         </div>
                     </div>
                 }
-                
+
                 <h3 id="gallery-header">Gallery</h3>
                 <p>You can add multiple images to showcase your recipe.</p>
                 <div id="gallery">
@@ -202,7 +202,7 @@
                     <mat-icon>upload</mat-icon>
                     Add Gallery Images
                     </button>
-                
+
                     <div class="gallery-preview">
                     <ng-container *ngFor="let imageUrl of galleryPreviewUrls; let i = index">
                         <div class="imagePreview">
@@ -214,7 +214,7 @@
                     </ng-container>
                     </div>
                 </div>
-                
+
                 <div>
                     <button mat-button matStepperPrevious>Back</button>
                     <button mat-button matStepperNext>Next</button>

@@ -456,7 +456,7 @@ textarea.form-control {
 }
 
 #create-section {
-  grid-column: 2/5;
+  grid-column: 2/3;
 }
 
 #create {
@@ -464,13 +464,17 @@ textarea.form-control {
   margin-left: 1rem;
   background-color: var(--user-icon-hover);
   color: white;
-  padding: 0.5rem;
   border: none;
   border-radius: var(--border-radius);
+  font: var(--font-family);
+  padding: 0.8em 1.2em;
+  transition: all 0.3s ease;
 }
 
 #create:hover{
-  filter: brightness(110%);
+    background-color: #246127;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
 }
 
 
@@ -488,3 +492,12 @@ textarea.form-control {
 #gallery-images {
   grid-column: 1/6;
 }
+
+.ri-lightbulb-flash-fill {
+  font-size: 1.4em;
+}
+
+#calories-section{
+  grid-column: 4/5;
+}
+

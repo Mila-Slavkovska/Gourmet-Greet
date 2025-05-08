@@ -10,12 +10,19 @@ import { filter } from 'rxjs';
 import { UserService } from '../services/user.service';
 import { User } from '../interfaces/user.interface';
 import { ReviewNotifierService } from '../services/review-notifier.service';
+import { CalorieEstimationResponse } from '../interfaces/calorie-estimation-response.interface';
+import { CalorieEstimationComponent } from '../calorie-estimation/calorie-estimation.component';
 
 @Component({
   selector: 'app-recipe-details',
   templateUrl: './recipe-details.component.html',
   styleUrls: ['./recipe-details.component.css'],
-  imports: [ReviewsComponent, ReviewFormComponent, NgClass],
+  imports: [
+    ReviewsComponent,
+    ReviewFormComponent,
+    NgClass,
+    CalorieEstimationComponent,
+  ],
 })
 export class RecipeDetailsComponent implements OnInit {
   recipe?: Recipe;
@@ -33,6 +40,9 @@ export class RecipeDetailsComponent implements OnInit {
   private reviewNotifierService = inject(ReviewNotifierService);
 
   isFavorite = false;
+
+  estimatedCalories: number = 0;
+  popupVisible: boolean = false;
 
   ngOnInit(): void {
     this.router.events
@@ -141,16 +151,15 @@ export class RecipeDetailsComponent implements OnInit {
     }
   }
 
-  createSimilarRecipe(){
+  createSimilarRecipe() {
     this.router.navigate(['/recipes/add'], {
-      state: { data: this.recipe }
-    })
+      state: { data: this.recipe },
+    });
   }
 
   isOwner() {
     return this.currentUser?.id == this.recipe?.ownerId;
   }
 
-  deleteRecipe() {
-  }
+  deleteRecipe() {}
 }

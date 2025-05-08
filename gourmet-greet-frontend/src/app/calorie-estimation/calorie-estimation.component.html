@@ -1,0 +1,49 @@
+<button class="calorie-btn" (click)="estimateCalories()">
+  <i class="ri-calculator-line"></i> Estimate Calories
+</button>
+
+@if(showModal) {
+  <div class="calorie-modal-overlay" (click)="closeModal()">
+    <div class="calorie-modal" (click)="$event.stopPropagation()">
+      <button class="close-modal" (click)="closeModal()">
+        <i class="ri-close-line"></i>
+      </button>
+      <div class="modal-header">
+        <i class="ri-calculator-line"></i>
+        <h3>Nutrition Estimation</h3>
+      </div>
+      @if(calorieEstimation) {
+        <div class="nutrition-results">
+          <div class="nutrition-card">
+            <div class="nutrition-value">{{calorieEstimation.calories}} kcal</div>
+            <div class="nutrition-label">Calories</div>
+          </div>
+          <div class="nutrition-details">
+            <div class="detail-item">
+              <span class="detail-value">{{calorieEstimation.protein}}g</span>
+              <span class="detail-label">Protein</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-value">{{calorieEstimation.carbs}}g</span>
+              <span class="detail-label">Carbs</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-value">{{calorieEstimation.fat}}g</span>
+              <span class="detail-label">Fat</span>
+            </div>
+          </div>
+          <div class="disclaimer">
+            <i class="ri-information-line"></i>
+            <p>These values are AI-generated estimates and may not be 100% accurate.</p>
+          </div>
+        </div>
+      }
+      @else {
+        <div class="loading-animation">
+          <div class="loading-spinner"></div>
+          <p>Analyzing recipe ingredients...</p>
+        </div>
+      }
+    </div>
+  </div>
+}

@@ -1,18 +1,15 @@
 <div id="recipe-details">
   <img [src]="getPosterImage()" class="image" alt="{{ recipe?.title }}" />
   <h3 class="title">{{ recipe?.title }}</h3>
-  @if(loggedIn()) {
-    @if(isOwner()) {
-    <button class="delete-btn" (click)="deleteRecipe()">
-      <i class="ri-delete-bin-line"></i>
-    </button>
-    }
-    @else {
-      <button class="favorite-btn" (click)="toggleFavorite()">
-        <i class="ri-heart-fill" [class.favorited]="isFavorite"></i>
-      </button>
-    }
-}
+  @if(loggedIn()) { @if(isOwner()) {
+  <button class="delete-btn" (click)="deleteRecipe()">
+    <i class="ri-delete-bin-line"></i>
+  </button>
+  } @else {
+  <button class="favorite-btn" (click)="toggleFavorite()">
+    <i class="ri-heart-fill" [class.favorited]="isFavorite"></i>
+  </button>
+  } }
   <div class="description">
     {{ recipe?.description }}
   </div>
@@ -31,7 +28,7 @@
     </span>
     <span><i class="ri-time-line"></i> {{ recipe?.cookingTime }} min</span>
     <span>
-      <i class="ri-star-fill"></i> {{ recipe?.rating?.toFixed(2)}} ({{
+      <i class="ri-star-fill"></i> {{ recipe?.rating?.toFixed(2) }} ({{
         recipe?.numberOfReviews
       }}
       reviews)
@@ -68,12 +65,8 @@
         &#10094;
       </button>
       <div class="carousel">
-        <div
-          class="carousel-track"
-          [style.backgroundImage]="'url(' + getFullImageUrl(recipe?.galleryImageIds?.[currentImageIndex]) + ')'"
-        >
+        <div class="carousel-track">
           <img
-            class="carousel-image"
             [src]="getFullImageUrl(recipe?.galleryImageIds?.[currentImageIndex])"
             alt="Gallery image"
           />

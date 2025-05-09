@@ -1,5 +1,8 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { CalorieEstimationResponse } from '../interfaces/calorie-estimation-response.interface';
+import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
+import { OpenAiService } from '../services/open-ai.service';
+import { Recipe } from '../interfaces/recipe.interface';
+import { CalorieEstimationRequest } from '../interfaces/calorie-estimation-request.interface';
+import { CalorieEstimation } from '../interfaces/calorie-estimation.interface';
 
 @Component({
   selector: 'app-calorie-estimation',
@@ -7,23 +10,29 @@ import { CalorieEstimationResponse } from '../interfaces/calorie-estimation-resp
   styleUrls: ['./calorie-estimation.component.css']
 })
 export class CalorieEstimationComponent {
+
+  @Input() recipe?: Recipe
+
   @Input() showModal = false;
   @Output() modalClosed = new EventEmitter<void>();
 
-  calorieEstimation?: CalorieEstimationResponse | null;
+  calorieEstimation?: CalorieEstimation | null;
+  openAiService = inject(OpenAiService)
 
   estimateCalories() {
     this.showModal = true;
-    this.calorieEstimation = null;
+    if (!this.recipe) return;
 
-    setTimeout(() => {
-      this.calorieEstimation = {
-        calories: Math.round(Math.random() * 500 + 300),
-        protein: Math.round(Math.random() * 30 + 10),
-        carbs: Math.round(Math.random() * 60 + 20),
-        fat: Math.round(Math.random() * 30 + 5)
-      };
-    }, 2000);
+    const request: CalorieEstimationRequest = {
+      ingredients: this.recipe.ingredients,
+      steps: this.recipe.steps
+    };
+
+    this.openAiService.estimateCalories(request)
+    .subscribe(estimation =>{
+      this.calorieEstimation = estimation.calorieEstimation
+
+    })
   }
 
   closeModal() {

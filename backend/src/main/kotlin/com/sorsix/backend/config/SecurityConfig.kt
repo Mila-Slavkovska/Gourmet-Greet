@@ -28,7 +28,8 @@ class SecurityConfig(val authenticationProvider: AuthenticationProvider, val jwt
                         "/api/auth/**",
                         "/api/recipes/search",
                         "/api/recipes/top-ingredients",
-                        "/api/categories/**"
+                        "/api/categories/**",
+                        "/api/openai/**"
                     ).permitAll()
                     .requestMatchers(
                         HttpMethod.GET, "/api/recipes", "/api/recipes/**","/api/recipes/*/image/**"

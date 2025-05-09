@@ -57,4 +57,22 @@ class OpenAIService(
 
         return processDescription(prompt, ingredients)
     }
+
+    fun createAIRecipe(ingredients: String): String{
+        val prompt = "For the given list of ingredients i have at home create or find a recipe containing those ingredients, " +
+                "but you can use additional ingredients, that i can make at home. Answer only with a JSON object that " +
+                "looks like this:\n" +
+                "{\n" +
+                "  \"title\": \"...\",\n" +
+                "  \"description\": \"...\",\n" +
+                "  \"ingredients\": [\"Ingredient1\", \"\", \"ingredient2\", ...],\n" +
+                "  \"steps\": [\"Step1\", \"Step2\", ...],\n" +
+                "  \"cookingTime\": ...,\n" +
+                "  \"servings\": ...\n" +
+                "}\n" +
+                "The cookingTime is in minutes and give a longer description. In the steps don't add the number of the step, " +
+                "just the text of the step. The list of ingredients is given below:"
+
+        return processDescription(prompt, ingredients)
+    }
 }

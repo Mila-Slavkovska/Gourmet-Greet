@@ -15,9 +15,15 @@ import org.springframework.web.bind.annotation.RestController
 class OpenAIController(
     private val openAIService: OpenAIService
 ) {
-    @PostMapping
+    @PostMapping("/suggest")
     fun suggestRecipes(@RequestBody request: OpenAIRequest): ResponseEntity<String>{
         val response = this.openAIService.suggestRecipes(request.ingredients)
+        return ResponseEntity.ok(response)
+    }
+
+    @PostMapping("/cook")
+    fun createAIRecipe(@RequestBody request: OpenAIRequest): ResponseEntity<String>{
+        val response = this.openAIService.createAIRecipe(request.ingredients)
         return ResponseEntity.ok(response)
     }
 }

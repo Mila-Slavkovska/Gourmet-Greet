@@ -5,6 +5,10 @@ import { SearchRecipesComponent } from './search-recipes/search-recipes.componen
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { UserProfileComponent } from './user components/user-profile/user-profile.component';
+import { AdminDashboardComponent } from './user components/admin-dashboard/admin-dashboard.component';
+import { AdminUsersComponent } from './user components/admin-users/admin-users.component';
+import { AdminRequestsComponent } from './user components/admin-requests/admin-requests.component';
+import { AdminCategoriesComponent } from './user components/admin-categories/admin-categories.component';
 import { RecipeFormComponent } from './recipe-form/recipe-form.component';
 
 export const routes: Routes = [
@@ -35,6 +39,15 @@ export const routes: Routes = [
   {
     path: 'profile/:id',
     component: UserProfileComponent
+  },
+  {
+    path: 'admin',
+    component: AdminDashboardComponent,
+    children: [
+      {path: 'users', component: AdminUsersComponent},
+      {path: 'requests', component: AdminRequestsComponent},
+      {path: 'categories', component: AdminCategoriesComponent},
+    ]
   },
   {
     path: '**',

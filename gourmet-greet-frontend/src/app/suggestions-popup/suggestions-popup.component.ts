@@ -1,5 +1,6 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { AISuggestRecipeResponse } from '../interfaces/suggest-recipe-response.interface';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-suggestions-popup',
@@ -19,17 +20,25 @@ export class SuggestionsPopupComponent {
   @Output() close = new EventEmitter();
   @Output() retry = new EventEmitter<string[]>();
 
+  private router = inject(Router)
+
   viewRecipe(recipe: string) {
-    console.log('Clicked recipe:', recipe);
+    this.router.navigate(['/search'], {
+      queryParams: {
+        title: recipe,
+        pageSize: 9
+      }
+    })
+
+    this.closePopup(recipe)
   }
 
   tryAgain() {
-    console.log(this.ingredients)
     this.retry.emit(this.ingredients);
   }
 
-  closePopup() {
+  closePopup(title: string = '') {
     this.visible = false;
-    this.close.emit()
+    this.close.emit(title)
   }
 }

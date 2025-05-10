@@ -212,7 +212,7 @@
   [isLoading]="isLoadingSuggestions"
   [ingredients]="suggestByIngredients"
   (retry)="handleAISuggest($event)"
-  (close)="closeSuggestions()"
+  (close)="closeSuggestions($event)"
 ></app-suggestions-popup>
 
   <div class="recipe-results">

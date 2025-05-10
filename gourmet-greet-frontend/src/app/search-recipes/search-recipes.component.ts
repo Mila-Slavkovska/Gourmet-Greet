@@ -321,9 +321,10 @@ export class SearchRecipesComponent implements OnInit {
     });
   }
 
-  closeSuggestions() {
+  closeSuggestions(title: string) {
     this.showSuggestions = false;
     this.isLoadingSuggestions = false;
+    this.form.get('title')?.setValue(title)
   }
   
   handleAICreation(ingredients: string[]) {

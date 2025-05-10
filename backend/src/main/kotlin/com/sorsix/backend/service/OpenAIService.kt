@@ -1,7 +1,6 @@
 package com.sorsix.backend.service
 
 import com.sorsix.backend.domain.model.CalorieEstimationAIRequest
-import com.sorsix.backend.domain.model.Recipe
 import com.sorsix.backend.repository.OpenAIRepository
 import org.json.JSONArray
 import org.json.JSONObject

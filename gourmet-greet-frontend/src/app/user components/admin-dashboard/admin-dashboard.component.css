@@ -1,0 +1,28 @@
+#admin-layout {
+  display: grid;
+  grid-template-columns:repeat(4,1fr);
+  min-height: calc(100vh - 65px);
+}
+
+.main-content {
+  flex-grow: 1;
+  padding: 2rem;
+  background-color: var(--off-white);
+  border-radius: var(--border-radius);
+  box-shadow: 0 2px 6px var(--box-shadow-color);
+  grid-column: 2/5;
+  margin-top: 5em;
+  margin-right: 2em;
+}
+
+.dashboard-title {
+  font-size: 2rem;
+  color: var(--navbar-color);
+  margin-bottom: 2rem;
+}
+
+#side-nav {
+  margin-top: 10em;
+  grid-column: 1/2;
+  margin-left: 2em;
+}

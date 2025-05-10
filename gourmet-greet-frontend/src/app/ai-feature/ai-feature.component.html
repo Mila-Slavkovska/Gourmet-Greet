@@ -1,0 +1,35 @@
+<div class="ai-feature">
+  <section class="intro">
+    <h2>AI Recipe Assistant</h2>
+    <p>
+      Enter the ingredients you have at home. Our AI will suggest recipes based on your input or help you create a new dish to try out!
+    </p>
+  </section>
+
+  <div class="add-items">
+    <button class="add" type="button" (click)="addIngredient()"><i class="ri-add-large-line"></i> Add Ingredient</button>
+  </div>
+
+  <div [formGroup]="ingredientsFG">
+    <div formArrayName="ingredients" class="ingredients-list">
+      <div *ngFor="let ing of ingredients.controls; let i = index" class="item">
+        <mat-form-field class="field" appearance="outline">
+          <mat-label>Ingredient {{ i + 1 }}</mat-label>
+          <input matInput [formControlName]="i" />
+        </mat-form-field>
+        <button class="remove" type="button" (click)="removeIngredient(i)" aria-label="Remove ingredient">−</button>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button mat-raised-button color="primary" (click)="onSuggest()">
+        <i class="ri-openai-fill"></i>
+        Suggest Recipes
+      </button>
+      <button mat-raised-button color="accent" (click)="onCreate()">
+        <i class="ri-openai-fill"></i>
+        Create a Recipe
+      </button>
+    </div>
+  </div>
+</div>

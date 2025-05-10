@@ -11,11 +11,19 @@
       <button class="search-button" type="submit">Search</button>
     </div>
 
-    <div class="advanced-search-toggle" (click)="toggleAdvancedSearch()">
-      <button type="button">
-        @if (showAdvancedSearch) { Hide Advanced Search } @else { Show Advanced
-        Search }
-      </button>
+    <div class="buttons">
+      <div class="advanced-search-toggle" (click)="toggleAdvancedSearch()">
+        <button type="button">
+          @if (showAdvancedSearch) { Hide Advanced Search } @else { Show Advanced
+          Search }
+        </button>
+      </div>
+  
+      <div class="ai-feature">
+        <button type="button" (click)="toggleAIComponent()">
+          <i class="ri-bard-line"></i> Try our AI feature
+        </button>
+      </div>
     </div>
 
     <div class="selected-filters">
@@ -187,6 +195,12 @@
         </div>
       </div>
     </div>
+    }
+
+    @if (showAIComponent){
+      <div class="advanced-search">
+        <app-ai-feature/>
+      </div>
     }
   </form>
 

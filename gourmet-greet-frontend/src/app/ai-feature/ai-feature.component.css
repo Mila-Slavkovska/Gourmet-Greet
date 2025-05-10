@@ -1,0 +1,137 @@
+.ingredient-input {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+h2 {
+  color: #444;
+  padding-bottom: 1rem;
+}
+
+.ingredient-input input {
+  flex: 1;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.ingredient-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.ingredient-item {
+  background: #e0e0e0;
+  padding: 0.3rem 0.6rem;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.intro {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.add-items {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 1rem;
+}
+
+.ingredients-list .item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.field {
+  flex-grow: 1;
+}
+
+.add {
+  background-color:transparent;
+  color: var(--ai-color);
+  padding: 0.5rem;
+  border: 1px solid var(--ai-color);
+  border-radius: var(--border-radius);
+  font-weight: 600;
+}
+
+.add:hover {
+  filter: brightness(90%);
+}
+
+.add i {
+  display: inline-block;
+  transition: transform 0.9s ease;
+}
+
+.add:hover i {
+  transform: rotateX(180deg);
+}
+
+.remove {
+  background-color: #f44336;
+  color: white;
+  border: none;
+  padding: 0.5rem;
+  cursor: pointer;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+}
+
+.remove:hover{
+  filter: brightness(110%);
+}
+
+.actions {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.actions button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: var(--ai-color);
+  color: white;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  font-size: 1rem;
+  font-weight: 500;
+  border-radius: var(--border-radius);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+@keyframes sparklePulse {
+  0%, 100% {
+    text-shadow: 0 0 4px #fff, 0 0 10px #b3f7ff, 0 0 15px #00e5ff;
+    color: #fff;
+  }
+  50% {
+    text-shadow: 0 0 8px #fff, 0 0 20px #6fffe9, 0 0 30px #00e5ff;
+    color: #ccfaff;
+  }
+}
+
+.actions button i {
+  font-size: 1.1rem;
+}
+
+.actions button:hover i {
+  animation: sparklePulse 1.5s infinite ease-in-out;
+}
+
+.actions button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.12);
+}

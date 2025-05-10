@@ -2,23 +2,24 @@ import { Component, OnInit, inject } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { forkJoin, Subject } from 'rxjs';
-
 import { RecipeService } from '../services/recipe.service';
 import { CategoryService } from '../services/category.service';
 import { Recipe } from '../interfaces/recipe.interface';
 import { Category } from '../interfaces/category.interface';
 import { RecipeCardComponent } from '../recipe-card/recipe-card.component';
 import { TopIngredient } from '../interfaces/top-ingredient.interface';
+import { AiFeatureComponent } from '../ai-feature/ai-feature.component';
 
 @Component({
   selector: 'app-search-recipes',
   standalone: true,
-  imports: [ReactiveFormsModule, RecipeCardComponent],
+  imports: [ReactiveFormsModule, RecipeCardComponent, AiFeatureComponent],
   templateUrl: './search-recipes.component.html',
   styleUrls: ['./search-recipes.component.css'],
 })
 export class SearchRecipesComponent implements OnInit {
   showAdvancedSearch = false;
+  showAIComponent = false;
 
   recipeService = inject(RecipeService);
   categoryService = inject(CategoryService);
@@ -154,6 +155,7 @@ export class SearchRecipesComponent implements OnInit {
 
   toggleAdvancedSearch() {
     this.showAdvancedSearch = !this.showAdvancedSearch;
+    this.showAIComponent = false;
   }
 
   onSearchSubmit() {
@@ -280,5 +282,20 @@ export class SearchRecipesComponent implements OnInit {
 
   isIngredientSelected(ingredient: TopIngredient): boolean {
     return this.selectedIngredients.some((d) => d === ingredient.ingredient);
+  }
+  
+  toggleAIComponent(){
+    this.showAIComponent = !this.showAIComponent;
+    this.showAdvancedSearch = false;
+  }
+
+  handleAISearch(prompt: string) {
+    // TODO: Implement AI search logic
+    console.log('Implement AI search with:', prompt);
+  }
+  
+  handleAICreation(prompt: string) {
+    // TODO: Implement AI create recipe logic
+    console.log('Implement AI creation with:', prompt);
   }
 }

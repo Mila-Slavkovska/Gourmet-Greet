@@ -51,9 +51,14 @@ class OpenAIService(
 
     fun suggestRecipes(ingredients: String): String {
         val prompt = "For the given list of ingredients i have at home suggest recipes i can make at the moment. " +
-                "Answer only with a list of recipe names separated by commas, don't add any additional information. " +
-                "In the first line answer give recipes that contain only the provided ingredients and in the second " +
-                "line give recipe names that contain the provided ingredients and other ingredients as well."
+                "Answer only with a  JSON object containing of two lists of recipe names, don't add any additional information. " +
+                "The JSON object should look like this:\n" +
+                "{\n" +
+                "   \"recipesWithIngredients\": [\"Recipe1\", \"Recipe2\", ...],\n" +
+                "   \"otherRecipes\": [\"Recipe1\", \"Recipe2\", ...] \n" +
+                "}\n" +
+                "In the first list of recipes give recipes that contain only the provided ingredients and in the " +
+                "second list give recipe names that contain the provided ingredients and other ingredients as well."
 
         return processDescription(prompt, ingredients)
     }

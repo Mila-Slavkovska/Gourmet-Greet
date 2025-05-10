@@ -7,6 +7,9 @@
   </section>
 
   <div class="add-items">
+    @if(showError){
+      <p id="error">Please enter at least one ingredient.</p>
+    }
     <button class="add" type="button" (click)="addIngredient()"><i class="ri-add-large-line"></i> Add Ingredient</button>
   </div>
 

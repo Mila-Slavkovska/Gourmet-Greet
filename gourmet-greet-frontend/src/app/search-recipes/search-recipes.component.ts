@@ -9,20 +9,32 @@ import { Category } from '../interfaces/category.interface';
 import { RecipeCardComponent } from '../recipe-card/recipe-card.component';
 import { TopIngredient } from '../interfaces/top-ingredient.interface';
 import { AiFeatureComponent } from '../ai-feature/ai-feature.component';
+import { OpenAiService } from '../services/open-ai.service';
+import { AISuggestRecipeResponse } from '../interfaces/suggest-recipe-response.interface';
+import { SuggestionsPopupComponent } from '../suggestions-popup/suggestions-popup.component';
 
 @Component({
   selector: 'app-search-recipes',
   standalone: true,
-  imports: [ReactiveFormsModule, RecipeCardComponent, AiFeatureComponent],
+  imports: [ReactiveFormsModule, RecipeCardComponent, AiFeatureComponent, SuggestionsPopupComponent],
   templateUrl: './search-recipes.component.html',
   styleUrls: ['./search-recipes.component.css'],
 })
 export class SearchRecipesComponent implements OnInit {
   showAdvancedSearch = false;
   showAIComponent = false;
+  showSuggestions = false;
+
+  aiSuggestions: AISuggestRecipeResponse = {
+    recipesWithIngredients: [],
+    otherRecipes: []
+  };
+  isLoadingSuggestions = false;
+  suggestByIngredients: string[] = [];
 
   recipeService = inject(RecipeService);
   categoryService = inject(CategoryService);
+  openAIService = inject(OpenAiService);
 
   allRecipes: Recipe[] = [];
 
@@ -289,13 +301,33 @@ export class SearchRecipesComponent implements OnInit {
     this.showAdvancedSearch = false;
   }
 
-  handleAISearch(prompt: string) {
-    // TODO: Implement AI search logic
-    console.log('Implement AI search with:', prompt);
+  handleAISuggest(ingredients: string[]) {
+    this.isLoadingSuggestions = true;
+    this.showSuggestions = true;
+    this.suggestByIngredients = ingredients;
+    
+    this.openAIService.suggestRecipes({ingredients: ingredients.join(', ')}).subscribe({
+      next: (suggestions) => {
+        console.log(suggestions)
+        console.log(suggestions.otherRecipes)
+        this.aiSuggestions = suggestions;
+        this.isLoadingSuggestions = false;
+      },
+      error: (err) => {
+        console.error('Error getting suggestions:', err);
+        this.aiSuggestions = {recipesWithIngredients: [], otherRecipes: []};
+        this.isLoadingSuggestions = false;
+      }
+    });
+  }
+
+  closeSuggestions() {
+    this.showSuggestions = false;
+    this.isLoadingSuggestions = false;
   }
   
-  handleAICreation(prompt: string) {
+  handleAICreation(ingredients: string[]) {
     // TODO: Implement AI create recipe logic
-    console.log('Implement AI creation with:', prompt);
+    console.log('Implement AI creation with:', ingredients);
   }
 }

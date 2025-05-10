@@ -196,13 +196,24 @@
       </div>
     </div>
     }
-
+    
     @if (showAIComponent){
       <div class="advanced-search">
-        <app-ai-feature/>
+        <app-ai-feature 
+          (suggest)="handleAISuggest($event)"
+          (create)="handleAICreation($event)"/>
       </div>
     }
   </form>
+
+  <app-suggestions-popup 
+  [suggestions]="aiSuggestions" 
+  [visible]="showSuggestions"
+  [isLoading]="isLoadingSuggestions"
+  [ingredients]="suggestByIngredients"
+  (retry)="handleAISuggest($event)"
+  (close)="closeSuggestions()"
+></app-suggestions-popup>
 
   <div class="recipe-results">
     @for (recipe of allRecipes; track recipe.id) {

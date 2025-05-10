@@ -12,11 +12,15 @@ import { MatInputModule } from '@angular/material/input';
 })
 export class AiFeatureComponent {
   ingredientsFG: FormGroup;
+  showError = false;
+
+  @Output() suggest = new EventEmitter<string[]>();
+  @Output() create = new EventEmitter<string[]>();
 
   constructor(private fb: FormBuilder){
     this.ingredientsFG = this.fb.group({
       ingredients: this.fb.array([])
-    })
+    });
   }
 
   get ingredients(): FormArray {
@@ -32,20 +36,24 @@ export class AiFeatureComponent {
   }
 
   onSuggest() {
-    const ingredients = this.ingredients.value.filter((ingredient: string) => ingredient.length > 0)
+    const ingredients = this.ingredients.value.filter((ingredient: string) => ingredient.length > 0);
+    console.log("clicked: ", ingredients)
     if (ingredients.length > 0) {
-
-      console.log(ingredients)
-      // this.suggest.emit(this.ingredients);
+      this.showError = false;
+      this.suggest.emit(ingredients);
     } else {
-      console.log("empty")
+      this.showError = true;
     }
   }
 
   onCreate() {
-    if (this.ingredients.length > 0) {
-      console.log(this.ingredients)
-      // this.create.emit(this.ingredients);
+    const ingredients = this.ingredients.value.filter((ingredient: string) => ingredient.length > 0);
+    
+    if (ingredients.length > 0) {
+      this.showError = false;
+      this.create.emit(ingredients);
+    } else {
+      this.showError = true;
     }
   }
 }

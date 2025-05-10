@@ -49,9 +49,7 @@ class ReviewController(
     @PutMapping("/{id}")
     fun updateReview(@PathVariable id: Long, @RequestBody reviewDto: ReviewDto): ResponseEntity<ReviewDto> {
         return try {
-            //TODO: change the user
-            //val user = userService.getUserFromAuthentication(SecurityContextHolder.getContext().authentication)
-            val user = _userService.getAllUsers()[0]
+            val user = _userService.getUserFromAuthentication(SecurityContextHolder.getContext().authentication)
             val updatedReview = _reviewService.update(id, reviewDto, user)
             ResponseEntity.ok(updatedReview)
         } catch (e: RuntimeException) {

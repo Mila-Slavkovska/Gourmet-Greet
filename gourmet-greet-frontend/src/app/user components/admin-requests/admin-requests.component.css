@@ -1,0 +1,53 @@
+.requests-container {
+  padding: 2rem;
+  font-family: "Poppins", sans-serif;
+}
+
+.request-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--off-white);
+  border-radius: var(--border-radius);
+  box-shadow: 0 2px 6px var(--box-shadow-color);
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+  transition: transform 0.2s;
+}
+
+.request-card:hover {
+  transform: scale(1.01);
+}
+
+.request-info p {
+  margin: 0.25rem 0;
+}
+
+.request-actions button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 1.75rem;
+  margin-left: 1rem;
+  padding: 0.5rem;
+  border-radius: 50%;
+  transition: background-color 0.2s;
+}
+
+.approve {
+  color: green;
+}
+
+.reject {
+  color: red;
+}
+
+.request-actions button:hover {
+  background-color: var(--lighter-color);
+}
+
+.no-requests {
+  text-align: center;
+  margin-top: 2rem;
+  color: gray;
+}

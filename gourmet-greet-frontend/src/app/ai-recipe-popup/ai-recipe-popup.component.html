@@ -1,0 +1,53 @@
+@if(visible){
+    <div class="recipe-popup-overlay">
+        <div class="recipe-popup-content">
+            <button class="close-btn" (click)="closePopup()">×</button>
+
+            @if(isLoading){
+                <div class="padding">
+                    <div class="loader-wrapper">
+                        <div class="loader"></div>
+                        <p>Creating a delicious recipes just for you...</p>
+                    </div>
+                </div>
+            } @else {
+                <div class="recipe-header">
+                    <h2>{{ recipe?.title }}</h2>
+                    <p class="description">{{ recipe?.description }}</p>
+                    <div class="recipe-meta">
+                        <span class="time"><i class="ri-timer-line"></i> {{ recipe?.cookingTime }}min</span>
+                        <span class="servings"><i class="ri-restaurant-fill"></i> Serves {{ recipe?.servings }}</span>
+                    </div>
+                </div>
+
+                <div class="recipe-sections">
+                    <div class="ingredients-section">
+                        <h3>Ingredients</h3>
+                        <ul>
+                            @for(ingredient of recipe?.ingredients; track ingredient;){
+                                <li>{{ ingredient }}</li>
+                            }
+                        </ul>
+                    </div>
+
+                    <div class="steps-section">
+                        <h3>Steps</h3>
+                        <ol>
+                            @for(step of recipe?.steps; track step;){
+                                <li>{{ step }}</li>
+                            }
+                        </ol>
+                        </div>
+                </div>
+
+                <div class="popup-footer">
+                    <p>Not happy with the results? Try adjusting your ingredients or click below for a new recipe.</p>
+                    <button class="try-again-btn" (click)="tryAgain()">
+                        <i class="ri-refresh-line"></i> Try Again
+                    </button>
+                </div>
+            }
+
+        </div>
+    </div>
+}

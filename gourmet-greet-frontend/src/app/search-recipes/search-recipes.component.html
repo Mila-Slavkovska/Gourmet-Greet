@@ -207,13 +207,22 @@
   </form>
 
   <app-suggestions-popup 
-  [suggestions]="aiSuggestions" 
-  [visible]="showSuggestions"
-  [isLoading]="isLoadingSuggestions"
-  [ingredients]="suggestByIngredients"
-  (retry)="handleAISuggest($event)"
-  (close)="closeSuggestions($event)"
-></app-suggestions-popup>
+    [suggestions]="aiSuggestions" 
+    [visible]="showSuggestions"
+    [isLoading]="isLoadingSuggestions"
+    [ingredients]="suggestByIngredients"
+    (retry)="handleAISuggest($event)"
+    (close)="closeSuggestions($event)"
+  ></app-suggestions-popup>
+
+  <app-ai-recipe-popup 
+    [recipe]="aiRecipe"
+    [visible]="showAIRecipe"
+    [isLoading]="isLoadingRecipe"
+    [ingredients]="suggestByIngredients"
+    (retry)="handleAICreation($event)"
+    (close)="closeRecipe()"
+  />
 
   <div class="recipe-results">
     @for (recipe of allRecipes; track recipe.id) {

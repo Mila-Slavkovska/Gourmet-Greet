@@ -12,11 +12,13 @@ import { AiFeatureComponent } from '../ai-feature/ai-feature.component';
 import { OpenAiService } from '../services/open-ai.service';
 import { AISuggestRecipeResponse } from '../interfaces/suggest-recipe-response.interface';
 import { SuggestionsPopupComponent } from '../suggestions-popup/suggestions-popup.component';
+import { AiRecipePopupComponent } from '../ai-recipe-popup/ai-recipe-popup.component';
+import { AIRecipeResponse } from '../interfaces/ai-recipe-response.interface';
 
 @Component({
   selector: 'app-search-recipes',
   standalone: true,
-  imports: [ReactiveFormsModule, RecipeCardComponent, AiFeatureComponent, SuggestionsPopupComponent],
+  imports: [ReactiveFormsModule, RecipeCardComponent, AiFeatureComponent, SuggestionsPopupComponent, AiRecipePopupComponent],
   templateUrl: './search-recipes.component.html',
   styleUrls: ['./search-recipes.component.css'],
 })
@@ -24,6 +26,7 @@ export class SearchRecipesComponent implements OnInit {
   showAdvancedSearch = false;
   showAIComponent = false;
   showSuggestions = false;
+  showAIRecipe = false;
 
   aiSuggestions: AISuggestRecipeResponse = {
     recipesWithIngredients: [],
@@ -31,6 +34,9 @@ export class SearchRecipesComponent implements OnInit {
   };
   isLoadingSuggestions = false;
   suggestByIngredients: string[] = [];
+
+  aiRecipe: AIRecipeResponse | null = null;
+  isLoadingRecipe = false;
 
   recipeService = inject(RecipeService);
   categoryService = inject(CategoryService);
@@ -308,8 +314,6 @@ export class SearchRecipesComponent implements OnInit {
     
     this.openAIService.suggestRecipes({ingredients: ingredients.join(', ')}).subscribe({
       next: (suggestions) => {
-        console.log(suggestions)
-        console.log(suggestions.otherRecipes)
         this.aiSuggestions = suggestions;
         this.isLoadingSuggestions = false;
       },
@@ -324,11 +328,41 @@ export class SearchRecipesComponent implements OnInit {
   closeSuggestions(title: string) {
     this.showSuggestions = false;
     this.isLoadingSuggestions = false;
-    this.form.get('title')?.setValue(title)
+    this.form.get('title')?.setValue(title);
   }
   
   handleAICreation(ingredients: string[]) {
-    // TODO: Implement AI create recipe logic
-    console.log('Implement AI creation with:', ingredients);
+    this.isLoadingRecipe = true;
+    this.showAIRecipe = true;
+    this.suggestByIngredients = ingredients;
+    
+    // setTimeout(() => {
+    //   this.aiRecipe = {
+    //     "title": "Cheesy Tomato Onion Toast",
+    //     "description": "A delicious and simple toast recipe perfect for a quick breakfast or snack",
+    //     "ingredients": ["onion", "tomato", "cheese", "bread", "olive oil", "salt", "pepper"],
+    //     "steps": ["Slice the onion and tomato thinly", "Grate the cheese", "Drizzle olive oil on bread slices", "Add a layer of tomatoes and onions on top", "Sprinkle salt and pepper", "Cover with grated cheese", "Bake in the oven at 350°F for 10 minutes until cheese is melted and bubbly", "Serve hot"],
+    //     "cookingTime": 15,
+    //     "servings": 2
+    //   }
+    //   this.isLoadingRecipe = false;
+    // }, 1000);
+    this.openAIService.createAIRecipe({ingredients: ingredients.join(', ')}).subscribe({
+      next: (recipe) => {
+        this.aiRecipe = recipe;
+        this.isLoadingRecipe = false;
+      },
+      error: (err) => {
+        console.error('Error getting suggestions:', err);
+        this.aiRecipe = null;
+        this.isLoadingRecipe = false;
+      }
+    });
+
+  }
+
+  closeRecipe() {
+    this.showAIRecipe = false;
+    this.isLoadingRecipe = false;
   }
 }

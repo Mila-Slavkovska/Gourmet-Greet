@@ -1,0 +1,26 @@
+.confirmation-container {
+  text-align: center;
+  padding: 2rem;
+  font-family: "Poppins", sans-serif;
+}
+
+.icon {
+  font-size: 3rem;
+  color: green;
+  margin-bottom: 1rem;
+}
+
+h2 {
+  font-size: 1.8rem;
+  margin-bottom: 0.5rem;
+}
+
+p {
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+button {
+  border-radius: var(--border-radius);
+  padding: 0.5rem 2rem;
+}

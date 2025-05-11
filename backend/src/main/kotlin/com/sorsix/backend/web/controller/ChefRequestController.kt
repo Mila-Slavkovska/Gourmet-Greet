@@ -34,4 +34,7 @@ class ChefRequestController(
     fun rejectRequest(@PathVariable id: Long): ResponseEntity<ChefRequestDto> =
         chefRequestService.rejectRequest(id)?.let { ResponseEntity.ok(it.toDto()) }
             ?: ResponseEntity.notFound().build()
+
+    @GetMapping("/has-pending")
+    fun checkIfUserHasPendingRequest(): ResponseEntity<Boolean> = chefRequestService.userHasPendingRequest().let { ResponseEntity.ok(it) }
 }

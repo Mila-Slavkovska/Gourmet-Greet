@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ChefRequestDto } from '../interfaces/chef-request.interface';
@@ -20,5 +20,14 @@ export class ChefRequestService {
 
   rejectRequest(id: number): Observable<ChefRequestDto> {
     return this.httpClient.post<ChefRequestDto>(`/api/chef-requests/reject/${id}`, {});
+  }
+
+  checkIfUserHasPendingRequest(): Observable<boolean> {
+    return this.httpClient.get<boolean>("/api/chef-requests/has-pending")
+  }
+
+  sendUpgradeRequest(message: string): Observable<any> {
+    const params = new HttpParams().set('requestMessage', message);
+    return this.httpClient.post(`/api/chef-requests`, null, { params });
   }
 }

@@ -2,7 +2,12 @@
   <div id="header">
     <h1><span class="line"></span> User details</h1>
     @if(user?.role == "USER") {
-    <button>Upgrade to Chef</button>
+    <button
+      (click)="openUpgradeDialog()"
+      [disabled]="hasPendingRequest$ | async"
+      [class.disabled-button]="hasPendingRequest$ | async">
+      Upgrade to Chef
+    </button>
     }
   </div>
   <div id="user">

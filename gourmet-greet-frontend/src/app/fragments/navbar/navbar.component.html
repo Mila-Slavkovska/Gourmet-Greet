@@ -22,12 +22,22 @@
           </a>
         </li>
         @if(loggedIn()) {
-          <li class="nav__item" >
-            <a [routerLink]="['/profile/', currentUser?.id]" class="nav__link">
-              <i class="ri-arrow-right-up-line"></i>
-              <span>My Profile</span>
-            </a>
-          </li>
+          @if(currentUser?.role == 'ADMIN') {
+            <li class="nav__item" >
+              <a [routerLink]="['/admin']" class="nav__link">
+                <i class="ri-arrow-right-up-line"></i>
+                <span>My Profile</span>
+              </a>
+            </li>
+          }
+          @else {
+            <li class="nav__item" >
+              <a [routerLink]="['/profile/', currentUser?.id]" class="nav__link">
+                <i class="ri-arrow-right-up-line"></i>
+                <span>My Profile</span>
+              </a>
+            </li>
+          }
         }
           @if(loggedIn()) {
             <li class="nav__item" >

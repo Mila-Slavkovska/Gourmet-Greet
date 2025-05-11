@@ -7,4 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository
 
 interface ChefRequestRepository : JpaRepository<ChefRequest, Long> {
     fun findAllByStatus(type: RequestStatus): List<ChefRequest>
+    fun existsByUserEmailAndStatus(email: String, status: RequestStatus): Boolean
 }

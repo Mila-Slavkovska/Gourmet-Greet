@@ -51,6 +51,11 @@ class UserService(
             _userRepository.save(currentUser)
         }
 
+    fun changeUserRole(id: Long, userRole: UserRole) = getUserById(id)?.let {
+        val currentUser = it.copy(role = userRole)
+        _userRepository.save(currentUser)
+    }
+
     @Transactional
     fun deleteUserById(id: Long): User? {
         val user = _userRepository.findById(id).orElse(null) ?: return null

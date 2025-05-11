@@ -11,6 +11,7 @@ import { AdminRequestsComponent } from './user components/admin-requests/admin-r
 import { AdminCategoriesComponent } from './user components/admin-categories/admin-categories.component';
 import { RecipeFormComponent } from './recipe-form/recipe-form.component';
 import { AdminProfileComponent } from './user components/admin-profile/admin-profile.component';
+import { AuthGuard } from './auth.guard';
 
 export const routes: Routes = [
   {
@@ -27,6 +28,8 @@ export const routes: Routes = [
   },
   {
     path: 'recipes/add',
+    canActivate: [AuthGuard],
+    data: { roles: ['CHEF'] },
     component: RecipeFormComponent
   },
   {
@@ -43,6 +46,8 @@ export const routes: Routes = [
   },
   {
     path: 'admin',
+    canActivate: [AuthGuard],
+    data: { roles: ['ADMIN'] },
     component: AdminDashboardComponent,
     children: [
       {path: 'profile', component: AdminProfileComponent},

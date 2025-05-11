@@ -10,11 +10,13 @@
     <i class="ri-heart-fill" [class.favorited]="isFavorite"></i>
   </button>
   } }
-  <div id="create-section">
-    <button id="create" (click)="createSimilarRecipe()">
-      <i class="ri-lightbulb-flash-fill"></i> Create Similar Recipe
+  @if(loggedIn() && currentUser?.role == 'CHEF') {
+    <div id="create-section">
+      <button id="create" (click)="createSimilarRecipe()">
+        <i class="ri-lightbulb-flash-fill"></i> Create Similar Recipe
       </button>
-  </div>
+    </div>
+}
   <div id="calories-section">
     <app-calorie-estimation [recipe]="recipe"></app-calorie-estimation>
   </div>

@@ -50,6 +50,7 @@ export const routes: Routes = [
     data: { roles: ['ADMIN'] },
     component: AdminDashboardComponent,
     children: [
+      { path: '', redirectTo: 'profile', pathMatch: 'full' },
       {path: 'profile', component: AdminProfileComponent},
       {path: 'users', component: AdminUsersComponent},
       {path: 'requests', component: AdminRequestsComponent},

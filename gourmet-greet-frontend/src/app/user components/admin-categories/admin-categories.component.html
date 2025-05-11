@@ -1,7 +1,7 @@
 <div class="categories-container">
   <h2>Add New Category</h2>
 
-  <form  (ngSubmit)="onSubmit()">
+  <form [formGroup]="categoryForm"  (submit)="onSubmit()">
     <div class="form-group">
       <label for="name">Category Name</label>
       <input id="name" formControlName="name" type="text" placeholder="e.g., Desserts" />
@@ -9,7 +9,7 @@
 
     <div class="form-group">
       <label for="type">Category Type</label>
-      <select id="type" formControlName="type">
+      <select id="type" formControlName="categoryType">
         <option value="" disabled selected>Select a type</option>
         @for(type of categoryTypes; track type) {
           <option  [value]="type">{{ type }}</option>

@@ -11,11 +11,19 @@
       <button class="search-button" type="submit">Search</button>
     </div>
 
-    <div class="advanced-search-toggle" (click)="toggleAdvancedSearch()">
-      <button type="button">
-        @if (showAdvancedSearch) { Hide Advanced Search } @else { Show Advanced
-        Search }
-      </button>
+    <div class="buttons">
+      <div class="advanced-search-toggle" (click)="toggleAdvancedSearch()">
+        <button type="button">
+          @if (showAdvancedSearch) { Hide Advanced Search } @else { Show Advanced
+          Search }
+        </button>
+      </div>
+  
+      <div class="ai-feature">
+        <button type="button" (click)="toggleAIComponent()">
+          <i class="ri-bard-line"></i> Try our AI feature
+        </button>
+      </div>
     </div>
 
     <div class="selected-filters">
@@ -188,7 +196,33 @@
       </div>
     </div>
     }
+    
+    @if (showAIComponent){
+      <div class="advanced-search">
+        <app-ai-feature 
+          (suggest)="handleAISuggest($event)"
+          (create)="handleAICreation($event)"/>
+      </div>
+    }
   </form>
+
+  <app-suggestions-popup 
+    [suggestions]="aiSuggestions" 
+    [visible]="showSuggestions"
+    [isLoading]="isLoadingSuggestions"
+    [ingredients]="suggestByIngredients"
+    (retry)="handleAISuggest($event)"
+    (close)="closeSuggestions($event)"
+  ></app-suggestions-popup>
+
+  <app-ai-recipe-popup 
+    [recipe]="aiRecipe"
+    [visible]="showAIRecipe"
+    [isLoading]="isLoadingRecipe"
+    [ingredients]="suggestByIngredients"
+    (retry)="handleAICreation($event)"
+    (close)="closeRecipe()"
+  />
 
   <div class="recipe-results">
     @for (recipe of allRecipes; track recipe.id) {

@@ -1,0 +1,54 @@
+@if (visible) {
+  <div class="popup-overlay" role="dialog" aria-modal="true" aria-labelledby="suggestionsTitle">
+    <div class="popup-content">
+      <button class="close-btn" (click)="closePopup()" aria-label="Close popup">×</button>
+
+      <h2 id="suggestionsTitle">AI-Powered Recipe Suggestions</h2>
+
+      @if (!isLoading) {
+        <p class="subtitle">Based on the ingredients you entered, here’s what we found:</p>
+        <div class="recipe-section">
+          <h3><i class="ri-restaurant-line"></i> Recipes Using Your Ingredients</h3>
+          <p class="section-desc">Perfect matches you can prepare right away!</p>
+          <ul class="recipe-list">
+            @for (recipe of suggestions.recipesWithIngredients; track recipe;) {
+              <li class="recipe-item" (click)="viewRecipe(recipe)">
+                <p>
+                  <i class="ri-arrow-right-s-line"></i> {{ recipe }}
+                </p>
+                <span class="badge">New</span>
+              </li>
+            }
+          </ul>
+        </div>
+
+        <div class="recipe-section">
+          <h3><i class="ri-lightbulb-line"></i> Other Interesting Suggestions</h3>
+          <p class="section-desc">These include ingredients you might not have but could be worth trying.</p>
+          <ul class="recipe-list">
+            @for (recipe of suggestions.otherRecipes; track recipe;) {
+              <li class="recipe-item" (click)="viewRecipe(recipe)">
+                <p>
+                  <i class="ri-arrow-right-s-line"></i> {{ recipe }}
+                </p>
+                <span class="badge">New</span>
+              </li>
+            }
+          </ul>
+        </div>
+
+        <div class="popup-footer">
+          <p>Not happy with the results? Try adjusting your ingredients or click below for new suggestions.</p>
+          <button class="try-again-btn" (click)="tryAgain()">
+            <i class="ri-refresh-line"></i> Try Again
+          </button>
+        </div>
+      } @else {
+        <div class="loading-spinner">
+          <div class="spinner"></div>
+          <p>Finding delicious recipes just for you...</p>
+        </div>
+      }
+    </div>
+  </div>
+}

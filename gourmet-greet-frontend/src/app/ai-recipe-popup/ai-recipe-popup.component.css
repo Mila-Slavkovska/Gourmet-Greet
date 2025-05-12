@@ -1,0 +1,178 @@
+.recipe-popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.padding {
+    padding-top: 5rem;
+}
+
+.recipe-popup-content {
+  background: white;
+  border-radius: 10px;
+  max-width: 800px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 2rem;
+  position: relative;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.close-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #666;
+}
+
+.recipe-header {
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 1rem;
+}
+
+.recipe-header h2 {
+  margin: 0;
+  color: #333;
+}
+
+.description {
+  color: #666;
+  margin: 0.5rem 0;
+}
+
+.recipe-meta {
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.5rem;
+  color: #555;
+  font-size: 0.9rem;
+}
+
+.recipe-sections {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 2rem;
+}
+
+.ingredients-section, .steps-section {
+  background: #f9f9f9;
+  padding: 1rem;
+  border-radius: 8px;
+}
+
+.ingredients-section h3, .steps-section h3 {
+  margin-top: 0;
+  color: #444;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 0.5rem;
+}
+
+.ingredients-section ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.ingredients-section li {
+  padding: 0.3rem 0;
+  border-bottom: 1px dotted #eee;
+}
+
+.steps-section ol {
+  padding-left: 1.2rem;
+  margin: 0;
+}
+
+.steps-section li {
+  padding: 0.5rem 0;
+  line-height: 1.5;
+}
+
+@media (max-width: 768px) {
+  .recipe-sections {
+    grid-template-columns: 1fr;
+  }
+  
+  .recipe-popup-content {
+    padding: 1.5rem;
+  }
+}
+
+.loader-wrapper {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.8);
+  z-index: 1100;
+  border-radius: 10px;
+  color: #444;
+}
+
+.loader {
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid var(--ai-color);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.popup-footer {
+  border-top: 1px solid #ddd;
+  padding-top: 1rem;
+  text-align: center;
+}
+
+.popup-footer p {
+  font-size: 0.9rem;
+  color: #555;
+  margin-bottom: 1rem;
+}
+
+.try-again-btn {
+  background-color: var(--ai-color, #4caf50);
+  color: white;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.try-again-btn:hover {
+  background-color: #3e9141;
+}
+
+.create {
+  margin-left: 1rem;
+}
+
+.popup-footer p{
+  margin-bottom: 0.1rem;
+}
+
+.popup-footer p:last-of-type {
+  margin-bottom: 1rem;
+}

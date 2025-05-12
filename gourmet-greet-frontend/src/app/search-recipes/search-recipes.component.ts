@@ -2,26 +2,45 @@ import { Component, OnInit, inject } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { forkJoin, Subject } from 'rxjs';
-
 import { RecipeService } from '../services/recipe.service';
 import { CategoryService } from '../services/category.service';
 import { Recipe } from '../interfaces/recipe.interface';
 import { Category } from '../interfaces/category.interface';
 import { RecipeCardComponent } from '../recipe-card/recipe-card.component';
 import { TopIngredient } from '../interfaces/top-ingredient.interface';
+import { AiFeatureComponent } from '../ai-feature/ai-feature.component';
+import { OpenAiService } from '../services/open-ai.service';
+import { AISuggestRecipeResponse } from '../interfaces/suggest-recipe-response.interface';
+import { SuggestionsPopupComponent } from '../suggestions-popup/suggestions-popup.component';
+import { AiRecipePopupComponent } from '../ai-recipe-popup/ai-recipe-popup.component';
+import { AIRecipeResponse } from '../interfaces/ai-recipe-response.interface';
 
 @Component({
   selector: 'app-search-recipes',
   standalone: true,
-  imports: [ReactiveFormsModule, RecipeCardComponent],
+  imports: [ReactiveFormsModule, RecipeCardComponent, AiFeatureComponent, SuggestionsPopupComponent, AiRecipePopupComponent],
   templateUrl: './search-recipes.component.html',
   styleUrls: ['./search-recipes.component.css'],
 })
 export class SearchRecipesComponent implements OnInit {
   showAdvancedSearch = false;
+  showAIComponent = false;
+  showSuggestions = false;
+  showAIRecipe = false;
+
+  aiSuggestions: AISuggestRecipeResponse = {
+    recipesWithIngredients: [],
+    otherRecipes: []
+  };
+  isLoadingSuggestions = false;
+  suggestByIngredients: string[] = [];
+
+  aiRecipe: AIRecipeResponse | null = null;
+  isLoadingRecipe = false;
 
   recipeService = inject(RecipeService);
   categoryService = inject(CategoryService);
+  openAIService = inject(OpenAiService);
 
   allRecipes: Recipe[] = [];
 
@@ -154,6 +173,7 @@ export class SearchRecipesComponent implements OnInit {
 
   toggleAdvancedSearch() {
     this.showAdvancedSearch = !this.showAdvancedSearch;
+    this.showAIComponent = false;
   }
 
   onSearchSubmit() {
@@ -280,5 +300,59 @@ export class SearchRecipesComponent implements OnInit {
 
   isIngredientSelected(ingredient: TopIngredient): boolean {
     return this.selectedIngredients.some((d) => d === ingredient.ingredient);
+  }
+  
+  toggleAIComponent(){
+    this.showAIComponent = !this.showAIComponent;
+    this.showAdvancedSearch = false;
+  }
+
+  handleAISuggest(ingredients: string[]) {
+    this.isLoadingSuggestions = true;
+    this.showSuggestions = true;
+    this.suggestByIngredients = ingredients;
+    
+    this.openAIService.suggestRecipes({ingredients: ingredients.join(', ')}).subscribe({
+      next: (suggestions) => {
+        this.aiSuggestions = suggestions;
+        this.isLoadingSuggestions = false;
+      },
+      error: (err) => {
+        console.error('Error getting suggestions:', err);
+        this.aiSuggestions = {recipesWithIngredients: [], otherRecipes: []};
+        this.isLoadingSuggestions = false;
+      }
+    });
+  }
+
+  closeSuggestions(title: string) {
+    this.showSuggestions = false;
+    this.isLoadingSuggestions = false;
+    this.form.get('title')?.setValue(title);
+  }
+  
+  handleAICreation(ingredients: string[]) {
+    this.isLoadingRecipe = true;
+    this.showAIRecipe = true;
+    this.suggestByIngredients = ingredients;
+
+    this.openAIService.createAIRecipe({ingredients: ingredients.join(', ')}).subscribe({
+      next: (recipe) => {
+        this.aiRecipe = recipe;
+        this.isLoadingRecipe = false;
+        console.log(recipe)
+      },
+      error: (err) => {
+        console.error('Error getting suggestions:', err);
+        this.aiRecipe = null;
+        this.isLoadingRecipe = false;
+      }
+    });
+
+  }
+
+  closeRecipe() {
+    this.showAIRecipe = false;
+    this.isLoadingRecipe = false;
   }
 }

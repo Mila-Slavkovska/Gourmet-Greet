@@ -46,4 +46,8 @@ export class UserService {
     localStorage.removeItem('token');
   }
 
+  getCurrentUser() {
+    const userJson = localStorage.getItem('currentUser');
+    return userJson ? JSON.parse(userJson) : null;
+  }
 }

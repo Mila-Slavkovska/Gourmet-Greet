@@ -335,22 +335,12 @@ export class SearchRecipesComponent implements OnInit {
     this.isLoadingRecipe = true;
     this.showAIRecipe = true;
     this.suggestByIngredients = ingredients;
-    
-    // setTimeout(() => {
-    //   this.aiRecipe = {
-    //     "title": "Cheesy Tomato Onion Toast",
-    //     "description": "A delicious and simple toast recipe perfect for a quick breakfast or snack",
-    //     "ingredients": ["onion", "tomato", "cheese", "bread", "olive oil", "salt", "pepper"],
-    //     "steps": ["Slice the onion and tomato thinly", "Grate the cheese", "Drizzle olive oil on bread slices", "Add a layer of tomatoes and onions on top", "Sprinkle salt and pepper", "Cover with grated cheese", "Bake in the oven at 350°F for 10 minutes until cheese is melted and bubbly", "Serve hot"],
-    //     "cookingTime": 15,
-    //     "servings": 2
-    //   }
-    //   this.isLoadingRecipe = false;
-    // }, 1000);
+
     this.openAIService.createAIRecipe({ingredients: ingredients.join(', ')}).subscribe({
       next: (recipe) => {
         this.aiRecipe = recipe;
         this.isLoadingRecipe = false;
+        console.log(recipe)
       },
       error: (err) => {
         console.error('Error getting suggestions:', err);

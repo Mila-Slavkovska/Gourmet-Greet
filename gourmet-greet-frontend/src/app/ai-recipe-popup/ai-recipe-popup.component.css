@@ -164,3 +164,15 @@
 .try-again-btn:hover {
   background-color: #3e9141;
 }
+
+.create {
+  margin-left: 1rem;
+}
+
+.popup-footer p{
+  margin-bottom: 0.1rem;
+}
+
+.popup-footer p:last-of-type {
+  margin-bottom: 1rem;
+}

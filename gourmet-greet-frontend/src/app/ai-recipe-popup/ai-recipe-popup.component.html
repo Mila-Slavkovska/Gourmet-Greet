@@ -41,10 +41,19 @@
                 </div>
 
                 <div class="popup-footer">
-                    <p>Not happy with the results? Try adjusting your ingredients or click below for a new recipe.</p>
+                    <p>Not happy with the results?</p>
+                    <p><strong>Try Again</strong> to generate a different recipe from the same ingredients.</p>
+                    @if(user?.role == "CHEF"){
+                        <p><strong>Create Recipe</strong> to edit and save this recipe to your profile.</p>
+                    }
                     <button class="try-again-btn" (click)="tryAgain()">
                         <i class="ri-refresh-line"></i> Try Again
                     </button>
+                    @if(user?.role == "CHEF"){
+                        <button class="try-again-btn create" (click)="createRecipe()">
+                            <i class="ri-edit-line"></i> Create Recipe
+                        </button>
+                    }
                 </div>
             }
 

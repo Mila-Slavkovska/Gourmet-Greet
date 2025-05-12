@@ -28,6 +28,9 @@
   font-weight: bold;
   margin-bottom: 0.5em;
   color: var(--home-page-title-color);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .card .rating {

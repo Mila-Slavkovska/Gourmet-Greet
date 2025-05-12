@@ -4,6 +4,7 @@
     <div class="request-card">
       <div class="request-info">
         <p><strong>Email:</strong> {{ request.userEmail }}</p>
+        <p><strong>Message:</strong> {{ request.message }}</p>
         <p><strong>Requested At:</strong> {{ request.timeStamp | date:'medium' }}</p>
       </div>
 

@@ -1,13 +1,24 @@
 <div id="recipe-details">
   <img [src]="getPosterImage()" class="image" alt="{{ recipe?.title }}" />
   <h3 class="title">{{ recipe?.title }}</h3>
-  @if(loggedIn()) {
+  @if(loggedIn()) { @if(isOwner()) {
+  <button class="delete-btn" (click)="deleteRecipe()">
+    <i class="ri-delete-bin-line"></i>
+  </button>
+  } @else {
   <button class="favorite-btn" (click)="toggleFavorite()">
     <i class="ri-heart-fill" [class.favorited]="isFavorite"></i>
   </button>
-  }
-  <div id="create-section">
-    <button id="create" (click)="createSimilarRecipe()">Create Similar Recipe</button>
+  } }
+  @if(loggedIn() && currentUser?.role == 'CHEF') {
+    <div id="create-section">
+      <button id="create" (click)="createSimilarRecipe()">
+        <i class="ri-lightbulb-flash-fill"></i> Create Similar Recipe
+      </button>
+    </div>
+}
+  <div id="calories-section">
+    <app-calorie-estimation [recipe]="recipe"></app-calorie-estimation>
   </div>
   <div class="description">
     {{ recipe?.description }}
@@ -18,7 +29,7 @@
       @for( category of categoryNames; track category) {
       <span class="category-tag">#{{ category }}</span>
       }
-  </div>
+    </div>
   </div>
   }
   <div class="info-card">
@@ -27,7 +38,7 @@
     </span>
     <span><i class="ri-time-line"></i> {{ recipe?.cookingTime }} min</span>
     <span>
-      <i class="ri-star-fill"></i> {{ recipe?.rating?.toFixed(2)}} ({{
+      <i class="ri-star-fill"></i> {{ recipe?.rating?.toFixed(2) }} ({{
         recipe?.numberOfReviews
       }}
       reviews)
@@ -64,12 +75,8 @@
         &#10094;
       </button>
       <div class="carousel">
-        <div
-          class="carousel-track"
-          [style.backgroundImage]="'url(' + getFullImageUrl(recipe?.galleryImageIds?.[currentImageIndex]) + ')'"
-        >
+        <div class="carousel-track">
           <img
-            class="carousel-image"
             [src]="getFullImageUrl(recipe?.galleryImageIds?.[currentImageIndex])"
             alt="Gallery image"
           />

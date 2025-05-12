@@ -19,15 +19,35 @@ export class UserRecipesComponent implements OnInit{
 
   recipeService = inject(RecipeService)
 
+  showAll = false
+
   ngOnInit() {
-    if(this.recipes) {
-      this.recipes.forEach(recipe => {
-        this.recipeService.getRecipeById(recipe).subscribe(fullRecipe => {
-          if (fullRecipe) {
-            this.detailedRecipes.push(fullRecipe);
-          }
-        });
-      });
+    if (this.recipes && this.recipes.length > 0) {
+      const initialIds = this.recipes.slice(0, 3);
+      this.fetchRecipes(initialIds);
     }
+  }
+
+
+toggleViewAll() {
+  this.showAll = !this.showAll;
+  if (this.showAll && this.recipes) {
+    const remainingIds = this.recipes.slice(3).filter(id =>
+      !this.detailedRecipes.some(r => r.id === id)
+    );
+
+    this.fetchRecipes(remainingIds);
+  }
 }
+
+fetchRecipes(ids: number[]) {
+  ids.forEach(id => {
+    this.recipeService.getRecipeById(id).subscribe(recipe => {
+      if (recipe && !this.detailedRecipes.some(r => r.id === recipe.id)) {
+        this.detailedRecipes.push(recipe);
+      }
+    });
+  });
+}
+
 }

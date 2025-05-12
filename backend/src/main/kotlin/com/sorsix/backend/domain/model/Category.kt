@@ -17,7 +17,7 @@ data class Category(
     @Column(nullable = false)
     val categoryType: CategoryType,
 
-@ManyToMany(mappedBy = "categories")
-@JsonIgnore
-val recipes: MutableList<Recipe> = mutableListOf()
+    @ManyToMany(mappedBy = "categories")
+    @JsonIgnore
+    val recipes: MutableList<Recipe> = mutableListOf()
 )

@@ -1,5 +1,6 @@
 package com.sorsix.backend.web.controller
 
+import com.sorsix.backend.domain.model.CalorieEstimationAIRequest
 import com.sorsix.backend.domain.model.OpenAIRequest
 import com.sorsix.backend.service.OpenAIService
 import org.springframework.http.ResponseEntity
@@ -24,6 +25,12 @@ class OpenAIController(
     @PostMapping("/cook")
     fun createAIRecipe(@RequestBody request: OpenAIRequest): ResponseEntity<String>{
         val response = this.openAIService.createAIRecipe(request.ingredients)
+        return ResponseEntity.ok(response)
+    }
+
+    @PostMapping("/nutrition-info")
+    fun estimateCalories(@RequestBody request: CalorieEstimationAIRequest): ResponseEntity<String>{
+        val response = this.openAIService.estimateCalories(request)
         return ResponseEntity.ok(response)
     }
 }

@@ -57,4 +57,8 @@ class CategoryController(
             ResponseEntity.badRequest().body(mapOf("error" to e.message))
         }
     }
+
+    @GetMapping("/types")
+    fun getCategoryTypes(): ResponseEntity<List<String>> =
+        ResponseEntity.ok(CategoryType.entries.map { it.name })
 }

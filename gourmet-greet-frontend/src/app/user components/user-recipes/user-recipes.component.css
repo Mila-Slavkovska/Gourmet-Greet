@@ -73,20 +73,29 @@
     background-color: var(--star-color);
 }
 
-.cards {
-    display: flex;
-}
-
 .cards p {
     padding: 2rem 1rem;
     font-size: large;
 }
+.cards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: 1rem;
+}
 
 .card {
+  flex: 0 1 calc(33.333% - 1rem);
+  max-width: calc(33.333% - 1rem);
+  box-sizing: border-box;
+}
+
+.card-three-items {
     width: 50%;
     margin: 1rem;
     flex-grow: 1;
 }
+
 
 @media (max-width: 1000px) {
     .cards {

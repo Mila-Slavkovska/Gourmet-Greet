@@ -7,13 +7,22 @@ import { ReviewsComponent } from '../reviews/reviews.component';
 import { ReviewFormComponent } from '../review-form/review-form.component';
 import { NgClass } from '@angular/common';
 import { filter } from 'rxjs';
-import { ReviewService } from '../review-notifier.service';
+import { UserService } from '../services/user.service';
+import { User } from '../interfaces/user.interface';
+import { ReviewNotifierService } from '../services/review-notifier.service';
+import { CalorieEstimationResponse } from '../interfaces/calorie-estimation-response.interface';
+import { CalorieEstimationComponent } from '../calorie-estimation/calorie-estimation.component';
 
 @Component({
   selector: 'app-recipe-details',
   templateUrl: './recipe-details.component.html',
   styleUrls: ['./recipe-details.component.css'],
-  imports: [ReviewsComponent, ReviewFormComponent, NgClass],
+  imports: [
+    ReviewsComponent,
+    ReviewFormComponent,
+    NgClass,
+    CalorieEstimationComponent,
+  ],
 })
 export class RecipeDetailsComponent implements OnInit {
   recipe?: Recipe;
@@ -21,13 +30,19 @@ export class RecipeDetailsComponent implements OnInit {
   id?: number;
   currentImageIndex: number = 0;
 
+  userService = inject(UserService);
+  currentUser?: User | null;
+
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private recipeService = inject(RecipeService);
   private categoryService = inject(CategoryService);
-  private reviewNotifierService = inject(ReviewService);
+  private reviewNotifierService = inject(ReviewNotifierService);
 
   isFavorite = false;
+
+  estimatedCalories: number = 0;
+  popupVisible: boolean = false;
 
   ngOnInit(): void {
     this.router.events
@@ -47,9 +62,12 @@ export class RecipeDetailsComponent implements OnInit {
           this.loadRecipe()
         );
       }
+      this.userService.currentUser$.subscribe((user) => {
+        this.currentUser = user;
+      });
     });
 
-    if (this.loggedIn()) {
+    if (this.loggedIn() && this.currentUser?.id !== this.recipe?.ownerId) {
       this.recipeService
         .isFavourite(this.id || 0)
         .subscribe((favourite) => (this.isFavorite = favourite));
@@ -72,7 +90,7 @@ export class RecipeDetailsComponent implements OnInit {
       .getCategoriesByIds(categoryIds)
       .subscribe((categories) => {
         this.categoryNames = categories.map((c) => {
-          return c.name
+          return c.name;
         });
       });
   }
@@ -133,9 +151,15 @@ export class RecipeDetailsComponent implements OnInit {
     }
   }
 
-  createSimilarRecipe(){
+  createSimilarRecipe() {
     this.router.navigate(['/recipes/add'], {
-      state: { data: this.recipe }
-    })
+      state: { data: this.recipe },
+    });
   }
+
+  isOwner() {
+    return this.currentUser?.id == this.recipe?.ownerId;
+  }
+
+  deleteRecipe() {}
 }

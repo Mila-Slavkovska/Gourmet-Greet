@@ -262,8 +262,15 @@ main {
   background-position: center center;
   background-size: cover;
   height: 350px;
+  max-width: 800px;
   transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1);
   will-change: transform;
+}
+
+.carousel img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .carousel-button {
@@ -321,6 +328,18 @@ main {
 
 .ri-heart-fill.favorited {
   color: #ff4081;
+}
+
+.delete-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 1.5em;
+  transition: transform 0.2s ease;
+}
+
+.delete-btn:hover {
+  transform: scale(1.2);
 }
 
 .form-group {
@@ -437,7 +456,7 @@ textarea.form-control {
 }
 
 #create-section {
-  grid-column: 2/5;
+  grid-column: 2/3;
 }
 
 #create {
@@ -445,11 +464,40 @@ textarea.form-control {
   margin-left: 1rem;
   background-color: var(--user-icon-hover);
   color: white;
-  padding: 0.5rem;
   border: none;
   border-radius: var(--border-radius);
+  font: var(--font-family);
+  padding: 0.8em 1.2em;
+  transition: all 0.3s ease;
 }
 
 #create:hover{
-  filter: brightness(110%);
+    background-color: #246127;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
 }
+
+
+.image-card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.image-card img {
+  height: 80%;
+  object-fit: cover;
+}
+
+#gallery-images {
+  grid-column: 1/6;
+}
+
+.ri-lightbulb-flash-fill {
+  font-size: 1.4em;
+}
+
+#calories-section{
+  grid-column: 4/5;
+}
+

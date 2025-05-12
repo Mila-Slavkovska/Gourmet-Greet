@@ -1,0 +1,23 @@
+<div class="requests-container">
+  <h2>Pending Requests</h2>
+  @for(request of requests; track  request) {
+    <div class="request-card">
+      <div class="request-info">
+        <p><strong>Email:</strong> {{ request.userEmail }}</p>
+        <p><strong>Requested At:</strong> {{ request.timeStamp | date:'medium' }}</p>
+      </div>
+
+      <div class="request-actions">
+        <button (click)="approve(request)" class="approve">
+          <i class="ri-check-line"></i>
+        </button>
+        <button (click)="reject(request)" class="reject">
+          <i class="ri-close-line"></i>
+        </button>
+      </div>
+    </div>
+  }
+  @if(requests.length === 0) {
+    <p class="no-requests">No pending requests.</p>
+  }
+</div>

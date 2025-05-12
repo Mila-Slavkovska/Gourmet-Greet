@@ -1,5 +1,6 @@
 package com.sorsix.backend.service
 
+import com.sorsix.backend.domain.model.CalorieEstimationAIRequest
 import com.sorsix.backend.repository.OpenAIRepository
 import org.json.JSONArray
 import org.json.JSONObject
@@ -79,5 +80,12 @@ class OpenAIService(
                 "just the text of the step. The list of ingredients is given below:"
 
         return processDescription(prompt, ingredients)
+    }
+
+    fun estimateCalories(calorieEstimationRequest: CalorieEstimationAIRequest): String {
+        val prompt = "For the given list of ingredients and steps for a recipe I need calorie and nutrition estimation. " +
+                "Answer only with a json called calorieEstimation with calories,protein,carbs and fat as number fields, don't add any additional information. "
+
+        return processDescription(prompt, calorieEstimationRequest.toJson())
     }
 }

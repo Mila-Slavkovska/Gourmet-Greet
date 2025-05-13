@@ -15,7 +15,6 @@ class ImageService(
     private val _imageRepository: ImageRepository,
     private val _recipeRepository: RecipeRepository
 ) {
-    //TODO: only owner of the recipe can add image
     @Transactional
     @Throws(IOException::class)
     fun saveImage(id: Long, file: MultipartFile): Recipe? =
@@ -28,7 +27,6 @@ class ImageService(
             return _recipeRepository.save(r)
         }
 
-    //TODO: only owner of the recipe can add image
     @Transactional
     @Throws(IOException::class)
     fun saveBackgroundImage(id: Long, file: MultipartFile): Recipe? =

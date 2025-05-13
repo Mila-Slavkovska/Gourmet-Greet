@@ -6,9 +6,6 @@ import { mockUsers } from '../mock-data/mock-users';
   providedIn: 'root'
 })
 export class AuthService {
-  //TODO: [BE] and [FE] integration
-  //TODO: Save user in local storage
-  
   private loggedInUser: User | null = null
 
   setUser(id: number) {

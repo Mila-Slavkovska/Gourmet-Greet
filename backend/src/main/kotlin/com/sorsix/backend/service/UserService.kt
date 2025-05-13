@@ -13,7 +13,6 @@ import org.springframework.security.core.Authentication
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UsernameNotFoundException
 
-//TODO: only admin users should have permission
 @Service
 class UserService(
     private val _userRepository: UserRepository,
@@ -26,7 +25,6 @@ class UserService(
     fun getUserByEmail(email: String): User? = _userRepository.findByEmail(email)
 
     fun createUser(userDTO: UserAddDto): User {
-        // TODO: validations
         val user = User(
             firstName = userDTO.firstName,
             lastName = userDTO.lastName,
@@ -40,7 +38,6 @@ class UserService(
     }
 
     fun editUser(id: Long, userDTO: UserEditDto) =
-        // TODO: validations
         getUserById(id)?.let {
             val currentUser = it.copy(
                 firstName = userDTO.firstName,

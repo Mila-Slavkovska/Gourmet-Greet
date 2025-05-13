@@ -75,7 +75,6 @@ class RecipeController(
         @RequestParam("file") file: MultipartFile
     ): ResponseEntity<Any> {
         return try {
-            //            val currentUser = userService.getUserFromAuthentication(SecurityContextHolder.getContext().authentication)
             val recipe = _imageService.saveImage(id, file)
             ResponseEntity.ok(recipe?.toDto())
         } catch (e: IOException) {
@@ -90,7 +89,6 @@ class RecipeController(
         @RequestParam("file") file: MultipartFile
     ): ResponseEntity<Any> {
         return try {
-//            val currentUser = userService.getUserFromAuthentication(SecurityContextHolder.getContext().authentication)
             val recipe = _imageService.saveBackgroundImage(id, file)
             ResponseEntity.ok(recipe?.toDto())
         } catch (e: IOException) {

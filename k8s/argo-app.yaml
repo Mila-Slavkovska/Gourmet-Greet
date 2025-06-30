@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: gourmet-greet
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: 'https://github.com/Mila-Slavkovska/Gourmet-Greet'
+    targetRevision: HEAD
+    path: k8s
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: gourmet-greet
+  syncPolicy:
+    automated:
+      selfHeal: true
+      prune: true

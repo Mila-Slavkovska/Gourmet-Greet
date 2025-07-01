@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: backend
-          image: milaslavkovska/gourmet-backend:latest
+          image: milaslavkovska/gourmet-backend:9ee5fc8
           ports:
             - containerPort: 8080
           env:

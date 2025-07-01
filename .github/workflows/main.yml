@@ -81,4 +81,4 @@ jobs:
           git commit -m "chore: update image tags to ${{ env.TAG }}" || echo "No changes to commit"
       
           # Push changes using HTTPS + token auth
-          git push https://github.com/${{ github.repository }} HEAD:kiii-project
+          git push https://${GIT_TOKEN}@github.com/${{ github.repository }} HEAD:kiii-project

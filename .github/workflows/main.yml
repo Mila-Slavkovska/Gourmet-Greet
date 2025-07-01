@@ -65,10 +65,20 @@ jobs:
           sed -i "s|image: .*/gourmet-backend:.*|image: ${{ env.BACKEND_IMAGE }}:${{ env.TAG }}|g" k8s/backend-deployment.yaml
 
       - name: Commit and push updated manifests
+        shell: bash
         env:
-          PAT_GITHUB: ${{ secrets.PAT_GITHUB }}
+          GIT_TOKEN: ${{ secrets.PAT_GITHUB }}
         run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+      
+          # Configure credentials using token
+          git config --global credential.helper store
+          echo "https://${GIT_TOKEN}:x-oauth-basic@github.com" > ~/.git-credentials
+      
+          # Commit changes
           git add k8s/frontend-deployment.yaml k8s/backend-deployment.yaml
           git commit -m "chore: update image tags to ${{ env.TAG }}" || echo "No changes to commit"
-          git remote set-url origin https://x-access-token:${PAT_GITHUB}@github.com/${{ github.repository }}
-          git push origin kiii-project
+      
+          # Push changes using HTTPS + token auth
+          git push https://github.com/${{ github.repository }} HEAD:kiii-project

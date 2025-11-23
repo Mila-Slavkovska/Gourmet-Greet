@@ -50,4 +50,8 @@ export class UserService {
     const userJson = localStorage.getItem('currentUser');
     return userJson ? JSON.parse(userJson) : null;
   }
+
+  isUserLoggedIn(): boolean {
+    return this.currentUserSubject.value !== null;
+  }
 }

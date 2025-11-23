@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
+import { Component, EventEmitter, inject, input, Input, output, Output } from '@angular/core';
 import { AIRecipeResponse } from '../interfaces/ai-recipe-response.interface';
 import { CommonModule } from '@angular/common';
 import { UserService } from '../services/user.service';
@@ -17,6 +17,8 @@ export class AiRecipePopupComponent {
   @Input() ingredients: string[] = []
   @Input() visible = false;
   @Input() isLoading = false;
+  recipeCreated = input<boolean>();
+  saveRecipe = output<void>();
 
   @Output() close = new EventEmitter();
   @Output() retry = new EventEmitter<IngredientRecipeDto>();
@@ -25,17 +27,19 @@ export class AiRecipePopupComponent {
   userService = inject(UserService);
   user: User = this.userService.getCurrentUser();
 
+  showCreateRecipeButton = output<void>();
+
   tryAgain(){
     this.retry.emit({
       ingredients: this.ingredients,
       recipeType: ''
     });
+
+    this.showCreateRecipeButton.emit();
   }
 
   createRecipe(){
-    this.router.navigate(['/recipes/add'], {
-      state: { data: this.recipe }
-    })
+   this.saveRecipe.emit();
   }
 
   closePopup() {

@@ -18,7 +18,7 @@
           Search }
         </button>
       </div>
-  
+
       <div class="ai-feature">
         <button type="button" (click)="toggleAIComponent()">
           <i class="ri-bard-line"></i> Try our AI feature
@@ -196,18 +196,20 @@
       </div>
     </div>
     }
-    
+
     @if (showAIComponent){
       <div class="advanced-search">
-        <app-ai-feature 
+        <app-ai-feature
           (suggest)="handleAISuggest($event)"
-          (create)="handleAICreation($event)"/>
+          (create)="handleAICreation($event)"
+          (save)="handleAiRecipeSave()"
+          (recipeCreatedChange)="handleAiRecipeCreate($event)"/>
       </div>
     }
   </form>
 
-  <app-suggestions-popup 
-    [suggestions]="aiSuggestions" 
+  <app-suggestions-popup
+    [suggestions]="aiSuggestions"
     [visible]="showSuggestions"
     [isLoading]="isLoadingSuggestions"
     [ingredients]="suggestByIngredients"
@@ -215,13 +217,16 @@
     (close)="closeSuggestions($event)"
   ></app-suggestions-popup>
 
-  <app-ai-recipe-popup 
+  <app-ai-recipe-popup
     [recipe]="aiRecipe"
     [visible]="showAIRecipe"
     [isLoading]="isLoadingRecipe"
     [ingredients]="suggestByIngredients"
+    [recipeCreated]="recipeCreated()"
     (retry)="handleAICreation($event)"
     (close)="closeRecipe()"
+    (saveRecipe)="onRecipeSave()"
+    (showCreateRecipeButton)="showCreatedRecipeButton()"
   />
 
   <div class="recipe-results">

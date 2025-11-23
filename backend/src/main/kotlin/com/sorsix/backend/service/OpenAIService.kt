@@ -1,5 +1,6 @@
 package com.sorsix.backend.service
 
+import com.sorsix.backend.domain.dto.RecipeAddDto
 import com.sorsix.backend.domain.model.CalorieEstimationAIRequest
 import com.sorsix.backend.domain.model.IngredientsRecipeAiRequest
 import com.sorsix.backend.repository.OpenAIRepository
@@ -65,7 +66,26 @@ class OpenAIService(
         return processDescription(prompt, ingredientsRecipeAiRequest.toJson())
     }
 
-    fun createAIRecipe(ingredientsRecipeAiRequest: IngredientsRecipeAiRequest): String{
+    fun createAiRecipeJson(ingredientsRecipeAiRequest: IngredientsRecipeAiRequest): RecipeAddDto {
+        val aiRecipeString = createAIRecipe(ingredientsRecipeAiRequest)
+        val jsonObject = JSONObject(aiRecipeString)
+        return RecipeAddDto(
+            title = jsonObject.getString("title"),
+            description = jsonObject.getString("description"),
+            ingredients = jsonObject.getJSONArray("ingredients").let { array ->
+                (0 until array.length()).map { array.getString(it) }
+            },
+            categories = emptyList(),
+            steps = jsonObject.getJSONArray("steps").let { array ->
+                (0 until array.length()).map { array.getString(it) }
+            },
+            cookingTime = jsonObject.getInt("cookingTime"),
+            servings = jsonObject.getInt("servings"),
+            ownerId = 0
+        )
+    }
+
+    private fun createAIRecipe(ingredientsRecipeAiRequest: IngredientsRecipeAiRequest): String{
         val prompt = "For the given list of ingredients i have at home create or find a recipe containing those ingredients, " +
                 "but you can use additional ingredients and of that recipe type that i can make at home. Answer only with a JSON object that " +
                 "looks like this:\n" +

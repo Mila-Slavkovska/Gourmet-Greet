@@ -1,9 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, computed, EventEmitter, inject, output, Output, signal } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { UserService } from '../services/user.service';
 
  export interface IngredientRecipeDto {
       recipeType: string;
@@ -20,10 +21,13 @@ export class AiFeatureComponent {
   ingredientsFG: FormGroup;
   showError = false;
 
+  #userService = inject(UserService);
 
   @Output() suggest = new EventEmitter<IngredientRecipeDto>();
   @Output() create = new EventEmitter<IngredientRecipeDto>();
 
+  save = output<void>();
+  recipeCreatedChange = output<boolean>();
 
  readonly types = [
   {key: "breakfast", label: "Breakfast"},
@@ -59,6 +63,7 @@ export class AiFeatureComponent {
     if (ingredients.length > 0) {
       this.showError = false;
       this.suggest.emit( {ingredients, recipeType});
+      this.recipeCreatedChange.emit(false);
     } else {
       this.showError = true;
     }
@@ -71,6 +76,9 @@ export class AiFeatureComponent {
     if (ingredients.length > 0) {
       this.showError = false;
       this.create.emit({ingredients, recipeType});
+      if(this.#userService.isUserLoggedIn()) {
+          this.recipeCreatedChange.emit(true);
+      }
     } else {
       this.showError = true;
     }

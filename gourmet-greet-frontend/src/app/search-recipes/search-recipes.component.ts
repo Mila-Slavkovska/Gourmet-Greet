@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { forkJoin, Subject } from 'rxjs';
@@ -14,6 +14,9 @@ import { AISuggestRecipeResponse } from '../interfaces/suggest-recipe-response.i
 import { SuggestionsPopupComponent } from '../suggestions-popup/suggestions-popup.component';
 import { AiRecipePopupComponent } from '../ai-recipe-popup/ai-recipe-popup.component';
 import { AIRecipeResponse } from '../interfaces/ai-recipe-response.interface';
+import { UserService } from '../services/user.service';
+import { RecipeAddDto } from '../interfaces/recipe-add.interface';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-search-recipes',
@@ -28,6 +31,8 @@ export class SearchRecipesComponent implements OnInit {
   showSuggestions = false;
   showAIRecipe = false;
 
+  recipeCreated = signal(false);
+
   aiSuggestions: AISuggestRecipeResponse = {
     recipesWithIngredients: [],
     otherRecipes: []
@@ -41,6 +46,7 @@ export class SearchRecipesComponent implements OnInit {
   recipeService = inject(RecipeService);
   categoryService = inject(CategoryService);
   openAIService = inject(OpenAiService);
+  #userService = inject(UserService);
 
   allRecipes: Recipe[] = [];
 
@@ -76,6 +82,7 @@ export class SearchRecipesComponent implements OnInit {
 
   activatedRoute = inject(ActivatedRoute);
   router = inject(Router);
+  snackBar = inject(MatSnackBar);
 
   ngOnInit(): void {
     this.subject.subscribe((pageSize) => {
@@ -347,6 +354,55 @@ export class SearchRecipesComponent implements OnInit {
     });
 
   }
+
+  handleAiRecipeSave() {
+    const ownerId = this.#userService.getCurrentUser().id
+
+    const aiRecipeDto = {ownerId: ownerId, ...this.aiRecipe } as RecipeAddDto
+    this.recipeService.createRecipe(aiRecipeDto)
+  }
+
+  handleAiRecipeCreate(isCreated: boolean) {
+    if(isCreated) {
+    this.recipeCreated.set(true);
+    }
+    else {
+      this.recipeCreated.set(false);
+    }
+  }
+
+ onRecipeSave() {
+  const ownerId = this.#userService.getCurrentUser().id;
+
+  const recipe: RecipeAddDto = {
+    ...this.aiRecipe!,
+    categories: [],
+    images: [],
+    ownerId: ownerId,
+  };
+
+  this.recipeService.createRecipe(recipe).subscribe({
+    next: () => {
+      this.snackBar.open('Recipe saved successfully!', 'Close', {
+        duration: 4000,
+        horizontalPosition: 'right',
+        verticalPosition: 'top'
+      });
+      this.recipeCreated.set(false);
+    },
+    error: () => {
+      this.snackBar.open('Failed to save recipe.', 'Close', {
+        duration: 4000,
+        horizontalPosition: 'right',
+        verticalPosition: 'top'
+      });
+    }
+  });
+}
+
+showCreatedRecipeButton() {
+  this.recipeCreated.set(true);
+}
 
   closeRecipe() {
     this.showAIRecipe = false;

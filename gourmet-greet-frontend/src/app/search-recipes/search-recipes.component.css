@@ -67,13 +67,15 @@ form {
   grid-column: 2/3;
   display: grid;
   justify-content: center;
+  margin-left: 5rem;
 }
 
 .buttons {
-  grid-column: 1/4;
+  grid-column: 2/3;
   display: flex;
-  gap: 1em;
-  justify-content: center;
+  gap: 0.5em;
+  justify-content: start;
+  margin-right: 2.5rem;
 }
 
 .advanced-search-toggle {

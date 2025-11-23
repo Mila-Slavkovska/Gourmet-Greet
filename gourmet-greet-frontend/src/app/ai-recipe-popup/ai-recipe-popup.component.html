@@ -49,9 +49,9 @@
                     <button class="try-again-btn" (click)="tryAgain()">
                         <i class="ri-refresh-line"></i> Try Again
                     </button>
-                    @if(user?.role == "CHEF"){
+                    @if(recipeCreated()){
                         <button class="try-again-btn create" (click)="createRecipe()">
-                            <i class="ri-edit-line"></i> Create Recipe
+                            <i class="ri-edit-line"></i> Save Recipe
                         </button>
                     }
                 </div>

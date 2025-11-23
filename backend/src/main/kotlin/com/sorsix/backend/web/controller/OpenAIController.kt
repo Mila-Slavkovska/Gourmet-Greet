@@ -1,7 +1,7 @@
 package com.sorsix.backend.web.controller
 
 import com.sorsix.backend.domain.model.CalorieEstimationAIRequest
-import com.sorsix.backend.domain.model.OpenAIRequest
+import com.sorsix.backend.domain.model.IngredientsRecipeAiRequest
 import com.sorsix.backend.service.OpenAIService
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.CrossOrigin
@@ -17,14 +17,14 @@ class OpenAIController(
     private val openAIService: OpenAIService
 ) {
     @PostMapping("/suggest")
-    fun suggestRecipes(@RequestBody request: OpenAIRequest): ResponseEntity<String>{
-        val response = this.openAIService.suggestRecipes(request.ingredients)
+    fun suggestRecipes(@RequestBody request: IngredientsRecipeAiRequest): ResponseEntity<String>{
+        val response = this.openAIService.suggestRecipes(request)
         return ResponseEntity.ok(response)
     }
 
     @PostMapping("/cook")
-    fun createAIRecipe(@RequestBody request: OpenAIRequest): ResponseEntity<String>{
-        val response = this.openAIService.createAIRecipe(request.ingredients)
+    fun createAIRecipe(@RequestBody request: IngredientsRecipeAiRequest): ResponseEntity<String>{
+        val response = this.openAIService.createAIRecipe(request)
         return ResponseEntity.ok(response)
     }
 

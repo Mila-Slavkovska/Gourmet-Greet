@@ -8,7 +8,7 @@ import { Recipe } from '../interfaces/recipe.interface';
 import { Category } from '../interfaces/category.interface';
 import { RecipeCardComponent } from '../recipe-card/recipe-card.component';
 import { TopIngredient } from '../interfaces/top-ingredient.interface';
-import { AiFeatureComponent } from '../ai-feature/ai-feature.component';
+import { AiFeatureComponent, IngredientRecipeDto } from '../ai-feature/ai-feature.component';
 import { OpenAiService } from '../services/open-ai.service';
 import { AISuggestRecipeResponse } from '../interfaces/suggest-recipe-response.interface';
 import { SuggestionsPopupComponent } from '../suggestions-popup/suggestions-popup.component';
@@ -198,9 +198,6 @@ export class SearchRecipesComponent implements OnInit {
         size: +(queryParams.pageSize ?? 9),
       })
       .subscribe((recipes) => {
-        console.log(oldQueryParams);
-        console.log(queryParams);
-        console.log(recipes);
         this.allRecipes = recipes.recipes;
         this.hasMore = this.allRecipes.length < recipes.totalResults;
       });
@@ -301,18 +298,18 @@ export class SearchRecipesComponent implements OnInit {
   isIngredientSelected(ingredient: TopIngredient): boolean {
     return this.selectedIngredients.some((d) => d === ingredient.ingredient);
   }
-  
+
   toggleAIComponent(){
     this.showAIComponent = !this.showAIComponent;
     this.showAdvancedSearch = false;
   }
 
-  handleAISuggest(ingredients: string[]) {
+  handleAISuggest(ingredientRecipeDto: IngredientRecipeDto) {
     this.isLoadingSuggestions = true;
     this.showSuggestions = true;
-    this.suggestByIngredients = ingredients;
-    
-    this.openAIService.suggestRecipes({ingredients: ingredients.join(', ')}).subscribe({
+    this.suggestByIngredients = ingredientRecipeDto.ingredients;
+
+    this.openAIService.suggestRecipes({ingredients: ingredientRecipeDto.ingredients, recipeType: ingredientRecipeDto.recipeType}).subscribe({
       next: (suggestions) => {
         this.aiSuggestions = suggestions;
         this.isLoadingSuggestions = false;
@@ -330,13 +327,13 @@ export class SearchRecipesComponent implements OnInit {
     this.isLoadingSuggestions = false;
     this.form.get('title')?.setValue(title);
   }
-  
-  handleAICreation(ingredients: string[]) {
+
+  handleAICreation(ingredientRecipeDto: IngredientRecipeDto) {
     this.isLoadingRecipe = true;
     this.showAIRecipe = true;
-    this.suggestByIngredients = ingredients;
+    this.suggestByIngredients = ingredientRecipeDto.ingredients;
 
-    this.openAIService.createAIRecipe({ingredients: ingredients.join(', ')}).subscribe({
+    this.openAIService.createAIRecipe({ingredients: ingredientRecipeDto.ingredients, recipeType: ingredientRecipeDto.recipeType}).subscribe({
       next: (recipe) => {
         this.aiRecipe = recipe;
         this.isLoadingRecipe = false;

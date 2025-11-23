@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { UserService } from '../services/user.service';
 import { Router } from '@angular/router';
 import { User } from '../interfaces/user.interface';
+import { IngredientRecipeDto } from '../ai-feature/ai-feature.component';
 
 @Component({
   selector: 'app-ai-recipe-popup',
@@ -18,14 +19,17 @@ export class AiRecipePopupComponent {
   @Input() isLoading = false;
 
   @Output() close = new EventEmitter();
-  @Output() retry = new EventEmitter<string[]>();
+  @Output() retry = new EventEmitter<IngredientRecipeDto>();
 
   router = inject(Router);
   userService = inject(UserService);
   user: User = this.userService.getCurrentUser();
 
   tryAgain(){
-    this.retry.emit(this.ingredients)
+    this.retry.emit({
+      ingredients: this.ingredients,
+      recipeType: ''
+    });
   }
 
   createRecipe(){
@@ -33,7 +37,7 @@ export class AiRecipePopupComponent {
       state: { data: this.recipe }
     })
   }
-  
+
   closePopup() {
     this.visible = false;
     this.close.emit();

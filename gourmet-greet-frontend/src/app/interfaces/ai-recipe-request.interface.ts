@@ -1,3 +1,4 @@
 export interface AIRecipeRequest {
-    ingredients: string
+    ingredients: string[],
+    recipeType: string
 }

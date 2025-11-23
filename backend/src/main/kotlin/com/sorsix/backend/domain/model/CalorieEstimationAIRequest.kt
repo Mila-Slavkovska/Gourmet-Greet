@@ -2,7 +2,8 @@ package com.sorsix.backend.domain.model
 
 data class CalorieEstimationAIRequest(
     val ingredients: List<String>,
-    val steps: List<String>
+    val steps: List<String>,
+    val servings: Int
 ) {
     fun toJson(): String {
         val stepsJson = steps.joinToString(separator = "\", \"", prefix = "[\"", postfix = "\"]")
@@ -10,7 +11,8 @@ data class CalorieEstimationAIRequest(
         return """
         {
             "ingredients": "$ingredientsJson",
-            "steps": $stepsJson
+            "steps": $stepsJson,
+            "servings": $servings
         }
     """.trimIndent()
     }

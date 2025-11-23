@@ -23,7 +23,17 @@
         <button class="remove" type="button" (click)="removeIngredient(i)" aria-label="Remove ingredient">−</button>
       </div>
     </div>
+    <div class="recipe-type">
+      <label class="recipe-type-title">Recipe Type</label>
 
+      <mat-form-field appearance="outline" class="field">
+        <mat-select formControlName="recipeType">
+          @for (type of types; track type.key) {
+            <mat-option [value]="type.key">{{ type.label }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
     <div class="actions">
       <button mat-raised-button color="primary" (click)="onSuggest()">
         <i class="ri-openai-fill"></i>

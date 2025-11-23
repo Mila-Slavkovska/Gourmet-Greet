@@ -1,6 +1,7 @@
 import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { AISuggestRecipeResponse } from '../interfaces/suggest-recipe-response.interface';
 import { Router } from '@angular/router';
+import { IngredientRecipeDto } from '../ai-feature/ai-feature.component';
 
 @Component({
   selector: 'app-suggestions-popup',
@@ -10,7 +11,7 @@ import { Router } from '@angular/router';
 })
 export class SuggestionsPopupComponent {
   @Input() suggestions: AISuggestRecipeResponse = {
-    recipesWithIngredients: [], 
+    recipesWithIngredients: [],
     otherRecipes: []
   };
   @Input() ingredients: string[] = []
@@ -18,7 +19,7 @@ export class SuggestionsPopupComponent {
   @Input() isLoading = false;
 
   @Output() close = new EventEmitter();
-  @Output() retry = new EventEmitter<string[]>();
+  @Output() retry = new EventEmitter<IngredientRecipeDto>();
 
   private router = inject(Router)
 
@@ -33,8 +34,11 @@ export class SuggestionsPopupComponent {
     this.closePopup(recipe)
   }
 
-  tryAgain() {
-    this.retry.emit(this.ingredients);
+  tryAgain(){
+    this.retry.emit({
+      ingredients: this.ingredients,
+      recipeType: ''
+    });
   }
 
   closePopup(title: string = '') {

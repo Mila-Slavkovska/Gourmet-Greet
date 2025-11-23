@@ -139,3 +139,16 @@ h2 {
 #error{
   color: #f44336;
 }
+
+.recipe-type {
+  margin: 0 auto;
+}
+
+.recipe-type-title {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-bottom: 0.4rem;
+  color: #444;
+}
+

@@ -1,6 +1,7 @@
 package com.sorsix.backend.service
 
 import com.sorsix.backend.domain.model.CalorieEstimationAIRequest
+import com.sorsix.backend.domain.model.IngredientsRecipeAiRequest
 import com.sorsix.backend.repository.OpenAIRepository
 import org.json.JSONArray
 import org.json.JSONObject
@@ -50,7 +51,7 @@ class OpenAIService(
             .trim { it <= ' ' }
     }
 
-    fun suggestRecipes(ingredients: String): String {
+    fun suggestRecipes(ingredientsRecipeAiRequest: IngredientsRecipeAiRequest): String {
         val prompt = "For the given list of ingredients i have at home suggest recipes i can make at the moment. " +
                 "Answer only with a  JSON object containing of two lists of recipe names, don't add any additional information. " +
                 "The JSON object should look like this:\n" +
@@ -58,15 +59,15 @@ class OpenAIService(
                 "   \"recipesWithIngredients\": [\"Recipe1\", \"Recipe2\", ...],\n" +
                 "   \"otherRecipes\": [\"Recipe1\", \"Recipe2\", ...] \n" +
                 "}\n" +
-                "In the first list of recipes give recipes that contain only the provided ingredients and in the " +
-                "second list give recipe names that contain the provided ingredients and other ingredients as well."
+                "In the first list of recipes give recipes that contain only the provided ingredients and are of that recipe type and in the " +
+                "second list give recipe names that contain the provided ingredients and are of that recipe type and other ingredients as well."
 
-        return processDescription(prompt, ingredients)
+        return processDescription(prompt, ingredientsRecipeAiRequest.toJson())
     }
 
-    fun createAIRecipe(ingredients: String): String{
+    fun createAIRecipe(ingredientsRecipeAiRequest: IngredientsRecipeAiRequest): String{
         val prompt = "For the given list of ingredients i have at home create or find a recipe containing those ingredients, " +
-                "but you can use additional ingredients, that i can make at home. Answer only with a JSON object that " +
+                "but you can use additional ingredients and of that recipe type that i can make at home. Answer only with a JSON object that " +
                 "looks like this:\n" +
                 "{\n" +
                 "  \"title\": \"...\",\n" +
@@ -79,11 +80,11 @@ class OpenAIService(
                 "The cookingTime is in minutes and give a longer description. In the steps don't add the number of the step, " +
                 "just the text of the step. The list of ingredients is given below:"
 
-        return processDescription(prompt, ingredients)
+        return processDescription(prompt, ingredientsRecipeAiRequest.toJson())
     }
 
     fun estimateCalories(calorieEstimationRequest: CalorieEstimationAIRequest): String {
-        val prompt = "For the given list of ingredients and steps for a recipe I need calorie and nutrition estimation. " +
+        val prompt = "For the given list of ingredients and steps and servings for a recipe I need calorie and nutrition estimation per serving. " +
                 "Answer only with a json called calorieEstimation with calories,protein,carbs and fat as number fields, don't add any additional information. "
 
         return processDescription(prompt, calorieEstimationRequest.toJson())

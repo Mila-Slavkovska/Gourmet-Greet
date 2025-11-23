@@ -3,10 +3,16 @@ import { Component, EventEmitter, Output } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+
+ export interface IngredientRecipeDto {
+      recipeType: string;
+      ingredients: string[];
+  }
 
 @Component({
   selector: 'app-ai-feature',
-  imports: [MatFormFieldModule, MatInputModule, ReactiveFormsModule, CommonModule],
+  imports: [MatFormFieldModule, MatInputModule, ReactiveFormsModule, CommonModule, MatSelectModule],
   templateUrl: './ai-feature.component.html',
   styleUrl: './ai-feature.component.css'
 })
@@ -14,12 +20,23 @@ export class AiFeatureComponent {
   ingredientsFG: FormGroup;
   showError = false;
 
-  @Output() suggest = new EventEmitter<string[]>();
-  @Output() create = new EventEmitter<string[]>();
+
+  @Output() suggest = new EventEmitter<IngredientRecipeDto>();
+  @Output() create = new EventEmitter<IngredientRecipeDto>();
+
+
+ readonly types = [
+  {key: "breakfast", label: "Breakfast"},
+  {key: "main dish", label: "Main Dish"},
+  {key: "dessert", label: "Dessert"},
+  {key: "appetizers", label: "Appetizers"}
+ ]
+
 
   constructor(private fb: FormBuilder){
     this.ingredientsFG = this.fb.group({
-      ingredients: this.fb.array([])
+      ingredients: this.fb.array([]),
+      recipeType: new FormControl('breakfast', Validators.required)
     });
   }
 
@@ -37,10 +54,11 @@ export class AiFeatureComponent {
 
   onSuggest() {
     const ingredients = this.ingredients.value.filter((ingredient: string) => ingredient.length > 0);
-    console.log("clicked: ", ingredients)
+    const recipeType = this.ingredientsFG.get('recipeType')?.value;
+
     if (ingredients.length > 0) {
       this.showError = false;
-      this.suggest.emit(ingredients);
+      this.suggest.emit( {ingredients, recipeType});
     } else {
       this.showError = true;
     }
@@ -48,10 +66,11 @@ export class AiFeatureComponent {
 
   onCreate() {
     const ingredients = this.ingredients.value.filter((ingredient: string) => ingredient.length > 0);
-    
+    const recipeType = this.ingredientsFG.get('recipeType')?.value;
+
     if (ingredients.length > 0) {
       this.showError = false;
-      this.create.emit(ingredients);
+      this.create.emit({ingredients, recipeType});
     } else {
       this.showError = true;
     }
